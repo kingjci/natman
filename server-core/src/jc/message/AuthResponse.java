@@ -5,24 +5,30 @@ package jc.message;
  */
 public class AuthResponse implements Message {
 
-    private String Version;
-    private String MMVersion;
+    private float Version;
+    private float MMVersion;
     private String ClientId;
     private String Error;
 
-    public String getVersion() {
+    public AuthResponse(float version, float MMVersion, String clientId) {
+        this.Version = version;
+        this.MMVersion = MMVersion;
+        this.ClientId = clientId;
+    }
+
+    public float getVersion() {
         return Version;
     }
 
-    public void setVersion(String version) {
+    public void setVersion(float version) {
         Version = version;
     }
 
-    public String getMMVersion() {
+    public float getMMVersion() {
         return MMVersion;
     }
 
-    public void setMMVersion(String MMVersion) {
+    public void setMMVersion(float MMVersion) {
         this.MMVersion = MMVersion;
     }
 

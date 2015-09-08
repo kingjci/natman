@@ -5,27 +5,27 @@ package jc.message;
  */
 public class AuthRequest implements Message {
 
-    private String Version; //当前版本
-    private String MMversion; //major minor client version
+    private float Version; //当前版本
+    private float MMversion; //major minor client version
     private String User;
     private String Password;
     private String OS;
     private String Arch;
     private String ClientId; //当客户端开始一个新的session的时候为空
 
-    public String getVersion() {
+    public float getVersion() {
         return Version;
     }
 
-    public void setVersion(String version) {
+    public void setVersion(float version) {
         Version = version;
     }
 
-    public String getMMversion() {
+    public float getMMversion() {
         return MMversion;
     }
 
-    public void setMMversion(String MMversion) {
+    public void setMMversion(float MMversion) {
         this.MMversion = MMversion;
     }
 

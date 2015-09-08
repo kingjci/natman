@@ -3,6 +3,8 @@ package jc.server.core.connection;
 import jc.server.core.Main;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.util.concurrent.CountDownLatch;
 
@@ -49,20 +51,9 @@ public class Connection {
         return this.socket;
     }
 
-    public static void Join(Connection c1, Connection c2){
 
-        CountDownLatch waitGroup = new CountDownLatch(2);
-        (new Thread(new Pipe(c1, c2, waitGroup))).start();
-        (new Thread(new Pipe(c2, c1, waitGroup))).start();
-        System.out.printf("Joined %s with %s\n", c1.Id(), c2.Id());
 
-        try{
-            waitGroup.await();
-        }catch (InterruptedException e){
-            e.printStackTrace();
-        }
 
-    }
 
 
 }

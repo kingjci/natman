@@ -36,9 +36,9 @@ public class Pipe implements Runnable {
             byte[] buffer = new byte[1024];
             while (len != -1) {
 
-                    len = inputStream.read(buffer);
-                    outputStream.write(buffer, 0, len);
-                    outputStream.flush();
+                len = inputStream.read(buffer);
+                outputStream.write(buffer, 0, len);
+                outputStream.flush();
             }
             inputStream.close();
             outputStream.close();

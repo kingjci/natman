@@ -8,7 +8,12 @@ public class ProxyStart implements Message{
      *   这个消息是服务器在代理连接上发送代理请求字节之前发送给客户端的
      */
     private String Url; //tcp://jincheng.link:8000服务器上远端端口代理的连接url
-    private String ClientAddrress; //来自Internet上客户端的网络地址
+    private String ClientAddress; //来自Internet上客户端的网络地址
+
+    public ProxyStart(String url, String clientAddress){
+        this.Url = url;
+        this.ClientAddress = clientAddress;
+    }
 
     public String getUrl() {
         return Url;
@@ -18,12 +23,12 @@ public class ProxyStart implements Message{
         Url = url;
     }
 
-    public String getClientAddrress() {
-        return ClientAddrress;
+    public String getClientAddress() {
+        return ClientAddress;
     }
 
     public void setClientAddrress(String clientAddrress) {
-        ClientAddrress = clientAddrress;
+        ClientAddress = clientAddrress;
     }
 
     @Override

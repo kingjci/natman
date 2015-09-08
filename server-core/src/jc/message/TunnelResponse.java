@@ -10,6 +10,17 @@ public class TunnelResponse implements Message {
     private String Protocol;
     private String Error;
 
+    public TunnelResponse(String error){
+        this.Error = error;//出现错误的构造方式
+    }
+
+    public TunnelResponse(String url, String protocol, String requestId){
+        this.Url = url;
+        this.Protocol = protocol;
+        this.RequestId = requestId;
+    }
+
+
     public String getRequestId() {
         return RequestId;
     }
