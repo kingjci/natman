@@ -1,4 +1,6 @@
-package jc.server.core.connection;
+package jc.server.core;
+
+import jc.server.core.connection.Connection;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,20 +8,19 @@ import java.io.OutputStream;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * Created by 金成 on 2015/9/8.
+ * Created by 金成 on 2015/9/23.
  */
-public class Pipe implements Runnable {
+public class Pipe implements  Runnable{
 
-    private Connection from;
-    private Connection to;
-    private CountDownLatch waitGroup;
+        private Connection to;
+        private Connection from;
+        private CountDownLatch waitGroup;
 
-    public Pipe(Connection to, Connection from, CountDownLatch waitGroup){
-        this.to = to;
-        this.from = from;
-        this.waitGroup = waitGroup;
-
-    }
+        Pipe(Connection to, Connection from, CountDownLatch waitGroup){
+            this.to = to;
+            this.from = from;
+            this.waitGroup = waitGroup;
+        }
 
 
     @Override
@@ -40,14 +41,19 @@ public class Pipe implements Runnable {
                 outputStream.write(buffer, 0, len);
                 outputStream.flush();
             }
+
             inputStream.close();
             outputStream.close();
+
+
+            from.close();
+            to.close();
+            waitGroup.countDown();
+
         }catch (IOException e){
             e.printStackTrace();
         }
 
-        from.Close();
-        to.Close();
-        waitGroup.countDown();
-    }
+
+        }
 }

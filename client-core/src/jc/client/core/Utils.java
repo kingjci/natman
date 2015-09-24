@@ -1,6 +1,9 @@
-package jc.server.core;
+package jc.client.core;
 
 import jc.server.core.connection.Connection;
+
+import java.io.IOException;
+import java.net.Socket;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -28,6 +31,22 @@ public class Utils {
         }catch (InterruptedException e){
             e.printStackTrace();
         }
+
+    }
+
+    public static Connection Dial(String host, int port, String type){
+
+        Socket socket = null;
+        Connection connection = null;
+        try{
+            socket = new Socket(host, port);
+            connection = new Connection(socket, type);
+            System.out.printf("New connection to: %s\n", connection.getRemoteAddr());
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return connection;
 
     }
 }

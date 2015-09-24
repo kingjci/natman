@@ -9,6 +9,13 @@ public class AuthRequest implements Message {
     private float MMversion; //major minor client version
     private String ClientId; //当客户端开始一个新的session的时候为空
 
+    public AuthRequest(String cliendId, float version, float MMversion){
+        this.ClientId = cliendId;
+        this.Version = version;
+        this.MMversion = MMversion;
+    }
+
+
     public float getVersion() {
         return Version;
     }
@@ -24,6 +31,7 @@ public class AuthRequest implements Message {
     public void setMMversion(float MMversion) {
         this.MMversion = MMversion;
     }
+
 
     public String getClientId() {
         return ClientId;

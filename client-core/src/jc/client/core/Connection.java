@@ -1,11 +1,9 @@
-package jc.server.core.connection;
+package jc.client.core;
 
 import jc.message.Message;
-import jc.server.core.Main;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * Created by ½ð³É on 2015/9/8.
