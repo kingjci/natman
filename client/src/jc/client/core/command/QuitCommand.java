@@ -1,6 +1,4 @@
-package jc.command;
-
-import jc.client.core.PrivateTunnel;
+package jc.client.core.command;
 
 /**
  * Created by ½ð³É on 2015/9/23.

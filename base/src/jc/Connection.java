@@ -1,4 +1,4 @@
-package jc.client.core;
+package jc;
 
 import jc.message.Message;
 
@@ -47,7 +47,7 @@ public class Connection {
         return this.socket;
     }
 
-    public void writeMessage(Message message){
+    public void writeMessage(Message message) throws IOException{
         OutputStream outputStream = null;
         ObjectOutput objectOutput = null;
 
@@ -59,12 +59,12 @@ public class Connection {
             objectOutput.flush();
 
         }catch (IOException e){
-            e.printStackTrace();
+            throw e;
         }
 
     }
 
-    public Message readMessage(){
+    public Message readMessage () throws IOException{
         InputStream inputStream = null;
         ObjectInput objectInput = null;
         Message message = null;
@@ -73,7 +73,7 @@ public class Connection {
             objectInput = new ObjectInputStream(inputStream);
             message =(Message) objectInput.readObject();
         }catch (IOException e){
-            e.printStackTrace();
+            throw e;
         }catch (ClassNotFoundException e){
             e.printStackTrace();
         }

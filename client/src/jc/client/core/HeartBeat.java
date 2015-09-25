@@ -1,7 +1,9 @@
 package jc.client.core;
 
+import jc.Connection;
 import jc.message.PingRequest;
 
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -11,20 +13,20 @@ import java.util.TimerTask;
 public class HeartBeat implements Runnable{
 
     protected long lastPing;
-    protected Long lastPingResponse;
+    protected Time lastPingResponse;
     protected Connection connection;
-    protected Object outOfTime;
+    final protected Object outOfTime;
 
     private Timer pingTimer;
     private Timer pingResponseCheckTimer;
 
-    public HeartBeat(Long lastPingResponse, Connection connection){
+    public HeartBeat(Time lastPingResponse, Connection connection){
         this.lastPingResponse = lastPingResponse;
-        this.lastPing = lastPingResponse - 1*1000;
+        this.lastPing = lastPingResponse.getTime() - 1*1000;
         this.connection = connection;
         this.pingTimer = new Timer();
-
         this.pingResponseCheckTimer = new Timer();
+        this.outOfTime = new Object();
 
     }
 
@@ -32,16 +34,22 @@ public class HeartBeat implements Runnable{
 
     private class PingTimerTask extends TimerTask{
 
-
-
         @Override
         public void run() {
 
             PingRequest pingRequest = new PingRequest();
 
-            connection.writeMessage(pingRequest);
+            try {
+                connection.writeMessage(pingRequest);
+                lastPing = System.currentTimeMillis();
+                System.out.println("ping:" + lastPing);
+            }catch (IOException e){
 
-            lastPing = System.currentTimeMillis();
+                System.out.printf("ping %s failure", connection.getRemoteAddr());
+            }
+
+
+
 
         }
     }
@@ -50,19 +58,23 @@ public class HeartBeat implements Runnable{
 
         @Override
         public void run() {
-            boolean needPingResponse = lastPing - lastPingResponse > 0;
 
-            long pingResponseLatency = System.currentTimeMillis() - lastPing;
+            boolean needPing = System.currentTimeMillis() - lastPing > 30*1000;
 
 
-            if (needPingResponse && pingResponseLatency > 15*1000){
+            if (needPing){
 
                 System.out.printf("Last ping: %s, Last pong: %s\n", lastPing, lastPingResponse);
 
-                outOfTime.notifyAll();
+                synchronized (outOfTime){
+                    outOfTime.notifyAll();
+                    System.out.println("error:heartbeat exit");
+                }
+
                 return;
 
             }
+
         }
     }
 
@@ -73,17 +85,22 @@ public class HeartBeat implements Runnable{
     public void run() {
 
         try{
-            this.pingTimer.schedule(new PingTimerTask(), 20 * 1000);
-            this.pingResponseCheckTimer.schedule(new PingResponseCheckTimerTask(), 1 * 1000);
-            outOfTime.wait();
+
+            this.pingTimer.schedule(new PingTimerTask(),0 , 15 * 1000);
+            this.pingResponseCheckTimer.schedule(new PingResponseCheckTimerTask(), 0, 1000);
+
+            synchronized (outOfTime){
+                outOfTime.wait();
+            }
+
 
             this.pingTimer.cancel();
             this.pingResponseCheckTimer.cancel();
 
-            System.out.println("error:heart exit");
+
         }catch (InterruptedException e){
             e.printStackTrace();
         }
-
+        
     }
 }

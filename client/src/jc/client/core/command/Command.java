@@ -1,4 +1,4 @@
-package jc.command;
+package jc.client.core.command;
 
 /**
  * Created by ½ð³É on 2015/9/23.

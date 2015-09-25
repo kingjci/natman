@@ -2,11 +2,11 @@ package jc.server.core;
 
 import jc.message.ProxyStart;
 import jc.message.TunnelRequest;
-import jc.server.core.connection.Connection;
+import jc.Connection;
 import jc.server.core.control.ControlConnection;
 
 import static jc.server.core.Main.*;
-import static jc.server.core.Utils.*;
+import static jc.Utils.*;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

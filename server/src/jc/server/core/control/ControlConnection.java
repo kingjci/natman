@@ -1,9 +1,10 @@
 package jc.server.core.control;
 
 
+import jc.message.*;
 import jc.server.core.PublicTunnel;
-import jc.server.core.Version;
-import jc.server.core.connection.Connection;
+import jc.Version;
+import jc.Connection;
 
 import java.net.Socket;
 import java.util.LinkedList;

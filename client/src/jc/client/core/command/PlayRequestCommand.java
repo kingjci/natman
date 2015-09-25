@@ -1,4 +1,4 @@
-package jc.command;
+package jc.client.core.command;
 
 import jc.client.core.PrivateTunnel;
 

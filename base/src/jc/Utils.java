@@ -1,12 +1,17 @@
-package jc.server.core;
+package jc;
 
-import jc.server.core.connection.Connection;
+import jc.Connection;
+
+import java.io.IOException;
+import java.net.Socket;
 import java.util.concurrent.CountDownLatch;
 
 /**
  * Created by ½ð³É on 2015/9/8.
  */
 public class Utils {
+
+
 
     public static void Go(Runnable runnable){
 
@@ -28,6 +33,22 @@ public class Utils {
         }catch (InterruptedException e){
             e.printStackTrace();
         }
+
+    }
+
+    public static Connection Dial(String host, int port, String type){
+
+        Socket socket = null;
+        Connection connection = null;
+        try{
+            socket = new Socket(host, port);
+            connection = new Connection(socket, type);
+            System.out.printf("New connection to: %s\n", connection.getRemoteAddr());
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return connection;
 
     }
 }

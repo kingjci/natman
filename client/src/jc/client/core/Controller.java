@@ -1,11 +1,10 @@
 package jc.client.core;
 
-import jc.command.Command;
-import jc.command.PlayRequestCommand;
+import jc.client.core.command.Command;
+import jc.client.core.command.PlayRequestCommand;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import static jc.client.core.Utils.Go;
 
 /**
  * Created by ½ð³É on 2015/9/23.

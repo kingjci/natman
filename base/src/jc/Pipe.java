@@ -1,6 +1,6 @@
-package jc.server.core;
+package jc;
 
-import jc.server.core.connection.Connection;
+import jc.Connection;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,9 +1,12 @@
 package jc.server.core;
 
+import jc.Random;
 import jc.server.core.control.ControlTunnel;
 import jc.server.core.registry.ControlConnectionRegistry;
 import jc.server.core.registry.TunnelRegistry;
-import static jc.server.core.Utils.Go;
+import static jc.Utils.Go;
+
+
 public class Main {
 
     public static int connReadTimeout = 10*1000;

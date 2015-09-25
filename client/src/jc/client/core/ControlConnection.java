@@ -1,10 +1,12 @@
 package jc.client.core;
 
+import jc.Connection;
 import jc.message.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import static jc.client.core.Utils.Dial;
+import static jc.Utils.Dial;
 import static jc.client.core.Main.random;
 
 /**
@@ -57,10 +59,16 @@ public class ControlConnection implements Runnable {
         }
 
         AuthRequest authRequest = new AuthRequest(id, 1.0f, 1.0f);
+        AuthResponse authResponse = null;
 
-        connection.writeMessage(authRequest);
+        try{
+            connection.writeMessage(authRequest);
 
-        AuthResponse authResponse =(AuthResponse) connection.readMessage();
+            authResponse =(AuthResponse) connection.readMessage();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
 
         this.id = authResponse.getClientId();
         this.serverVersion = authResponse.getVersion();
@@ -72,7 +80,12 @@ public class ControlConnection implements Runnable {
             TunnelRequest tunnelRequest =
                     new TunnelRequest(random.getRandomString(8), "tcp", entry.getValue().getRemotePort());
 
-            connection.writeMessage(tunnelRequest);
+            try {
+                connection.writeMessage(tunnelRequest);
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+
 
             requestIdToTunnelConfig.put(tunnelRequest.getRequestId(), entry.getValue());
 
