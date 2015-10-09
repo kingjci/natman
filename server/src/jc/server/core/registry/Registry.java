@@ -5,7 +5,7 @@ package jc.server.core.registry;
  */
 public interface Registry<T> {
 
-    public int register(String key, T value);
+    public void register(String key, T value);
 
     public T get(String key);
 

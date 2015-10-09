@@ -14,6 +14,7 @@ public class ProxyStart implements Message, Serializable{
 
     private String Url; //tcp://jincheng.link:8000服务器上远端端口代理的连接url
     private String ClientAddress; //来自Internet上客户端的网络地址
+    private String ip;
 
     public ProxyStart(String url, String clientAddress){
         this.Url = url;
@@ -39,5 +40,15 @@ public class ProxyStart implements Message, Serializable{
     @Override
     public String getMessageType() {
         return "ProxyStart";
+    }
+
+    @Override
+    public void setIP(String ip) {
+        this.ip = ip;
+    }
+
+    @Override
+    public String getIP() {
+        return ip;
     }
 }

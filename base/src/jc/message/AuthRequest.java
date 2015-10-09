@@ -12,6 +12,7 @@ public class AuthRequest implements Message, Serializable {
     private float Version; //当前版本
     private float MMversion; //major minor client version
     private String ClientId; //当客户端开始一个新的session的时候为空
+    private String IP;
 
     public AuthRequest(String cliendId, float version, float MMversion){
         this.ClientId = cliendId;
@@ -48,5 +49,15 @@ public class AuthRequest implements Message, Serializable {
     @Override
     public String getMessageType() {
         return "AuthRequest";
+    }
+
+    @Override
+    public String getIP() {
+        return IP;
+    }
+
+    @Override
+    public void setIP(String ip) {
+        this.IP = ip;
     }
 }

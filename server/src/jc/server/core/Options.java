@@ -8,7 +8,7 @@ public class Options {
     private String httpAddress;
     private String httpsAddress;
     private String tunnelAddress;
-    private String domain;
+    private String domain = "127.0.0.1";
     private String tlsCrt;
     private String logTo;
     private String logLevel;

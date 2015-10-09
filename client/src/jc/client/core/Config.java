@@ -1,5 +1,6 @@
 package jc.client.core;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -8,13 +9,27 @@ import java.util.Map;
 public class Config {
 
     private String httpProxy;
-    private String serverAddr;
+    private String serverAddr = "127.0.0.1";
     private String authToken;
-    private Map<String, TunnelConfiguration> tunnels;
+    private String command;
+    private Map<String, TunnelConfiguration> tunnels = new HashMap<String, TunnelConfiguration>();
+
+
 
     public String getHttpProxy() {
         return httpProxy;
     }
+
+
+    public String getCommand() {
+        return command;
+    }
+
+    public void setCommand(String command) {
+        this.command = command;
+    }
+
+
 
     public void setHttpProxy(String httpProxy) {
         this.httpProxy = httpProxy;

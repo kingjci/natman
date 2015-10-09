@@ -12,17 +12,21 @@ public class TunnelResponse implements Message, Serializable {
     private String RequestId; //与TunnelRequest中的RequestId相同
     private String Url; // tcp://jincheng.link:8000
     private String Protocol;
-    private String Error;
+    private int LocalPort;
+    private String Error = "";
+
+    private String ip;
 
     public TunnelResponse(String error){
         this.Error = error;//出现错误的构造方式
     }
 
 
-    public TunnelResponse(String url, String protocol, String requestId){
+    public TunnelResponse(String url, String protocol, String requestId, int localPort){
         this.Url = url;
         this.Protocol = protocol;
         this.RequestId = requestId;
+        this.LocalPort = localPort;
     }
 
 
@@ -32,6 +36,14 @@ public class TunnelResponse implements Message, Serializable {
 
     public void setRequestId(String requestId) {
         RequestId = requestId;
+    }
+
+    public int getLocalPort() {
+        return LocalPort;
+    }
+
+    public void setLocalPort(int port) {
+        LocalPort = port;
     }
 
     public String getUrl() {
@@ -58,8 +70,23 @@ public class TunnelResponse implements Message, Serializable {
         Error = error;
     }
 
+    public boolean hasError(){
+
+        return !"".equalsIgnoreCase(Error);
+    }
+
     @Override
     public String getMessageType() {
         return "TunnelResponse";
+    }
+
+    @Override
+    public void setIP(String ip) {
+        this.ip = ip;
+    }
+
+    @Override
+    public String getIP() {
+        return ip;
     }
 }

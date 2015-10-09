@@ -11,6 +11,23 @@ public class TunnelConfiguration {
     private String hostName;
     private Map<String, String> protocols;
     private int remotePort;
+    private int localPort;
+
+    public int getLocalPort() {
+        return localPort;
+    }
+
+    public void setLocalPort(int localPort) {
+        this.localPort = localPort;
+    }
+
+    public String getHostName() {
+        return hostName;
+    }
+
+    public void setHostName(String hostName) {
+        this.hostName = hostName;
+    }
 
     public String getSubDomian() {
         return subDomian;

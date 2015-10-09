@@ -1,11 +1,13 @@
 package jc.client.core;
 
-import jc.Connection;
 import jc.message.PingRequest;
+import jc.Connection;
 
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static jc.client.core.Utils.timeStamp;
 
 /**
  * Created by ½ð³É on 2015/9/24.
@@ -17,10 +19,13 @@ public class HeartBeat implements Runnable{
     protected Connection connection;
     final protected Object outOfTime;
 
+    private ControlConnection controlConnection;
+
     private Timer pingTimer;
     private Timer pingResponseCheckTimer;
 
-    public HeartBeat(Time lastPingResponse, Connection connection){
+    public HeartBeat(Time lastPingResponse, Connection connection, ControlConnection controlConnection){
+        this.controlConnection = controlConnection;
         this.lastPingResponse = lastPingResponse;
         this.lastPing = lastPingResponse.getTime() - 1*1000;
         this.connection = connection;
@@ -37,15 +42,15 @@ public class HeartBeat implements Runnable{
         @Override
         public void run() {
 
-            PingRequest pingRequest = new PingRequest();
+            PingRequest pingRequest = new PingRequest(controlConnection.getClientId(), System.currentTimeMillis());
 
             try {
                 connection.writeMessage(pingRequest);
                 lastPing = System.currentTimeMillis();
-                System.out.println("ping:" + lastPing);
+                System.out.printf("[%s][HeartBeat]ping\n", timeStamp(lastPing));
             }catch (IOException e){
 
-                System.out.printf("ping %s failure", connection.getRemoteAddr());
+                System.out.printf("[%s][HeartBeat]ping %s failure\n", timeStamp(),connection.getRemoteAddr());
             }
 
 
@@ -59,19 +64,20 @@ public class HeartBeat implements Runnable{
         @Override
         public void run() {
 
-            boolean needPing = System.currentTimeMillis() - lastPing > 30*1000;
+            boolean needPingResponse = System.currentTimeMillis() - lastPingResponse.getTime() > 30*1000;
+
+            boolean doNotGetPingResponseFromLastPing = System.currentTimeMillis() - lastPing > 15*1000;
+
+            if (needPingResponse && doNotGetPingResponseFromLastPing){
 
 
-            if (needPing){
-
-                System.out.printf("Last ping: %s, Last pong: %s\n", lastPing, lastPingResponse);
 
                 synchronized (outOfTime){
                     outOfTime.notifyAll();
-                    System.out.println("error:heartbeat exit");
+                    System.out.printf("[%s][HeartBeat]Last ping: %s, Last pong: %s\n",
+                            timeStamp(), timeStamp(lastPing), timeStamp(lastPingResponse.getTime()));
+                    System.out.printf("[%s][HeartBeat]Error:heartbeat exit\n", timeStamp());
                 }
-
-                return;
 
             }
 

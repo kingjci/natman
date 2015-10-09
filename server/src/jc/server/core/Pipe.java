@@ -1,4 +1,4 @@
-package jc;
+package jc.server.core;
 
 import jc.Connection;
 
@@ -29,31 +29,34 @@ public class Pipe implements  Runnable{
         InputStream inputStream = null;
         OutputStream outputStream = null;
 
+
+
         try{
+
             inputStream = this.from.getSocket().getInputStream();
             outputStream = this.to.getSocket().getOutputStream();
 
             int len = 0;
             byte[] buffer = new byte[1024];
-            while (len != -1) {
 
-                len = inputStream.read(buffer);
+            while ((len = inputStream.read(buffer)) != -1) {
+
                 outputStream.write(buffer, 0, len);
                 outputStream.flush();
+
             }
 
-            inputStream.close();
-            outputStream.close();
+            //from.getSocket().shutdownInput();
+            to.getSocket().shutdownOutput();
 
-
-            from.close();
-            to.close();
-            waitGroup.countDown();
 
         }catch (IOException e){
             e.printStackTrace();
+        }finally {
+
+            waitGroup.countDown();
         }
 
 
-        }
+    }
 }

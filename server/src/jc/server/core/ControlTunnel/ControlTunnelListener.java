@@ -1,6 +1,9 @@
-package jc.server.core.control;
+package jc.server.core.ControlTunnel;
 
-import jc.server.core.connection.Connection;
+import jc.Connection;
+
+import static jc.server.core.Main.random;
+import static jc.server.core.Utils.timeStamp;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -34,8 +37,9 @@ public class ControlTunnelListener implements Runnable{
 
             try{
                 Socket socket = serverSocket.accept();
-                Connection connection = new Connection(socket, "control/proxy");
-                System.out.printf("New connection from %s\n",connection.getRemoteAddr());
+                Connection connection = new Connection(socket, "control/proxy", random.getRandomString(8));
+                System.out.printf("[%s][ControlTunnelListener]New control/proxy connection[%s] from %s\n",
+                        timeStamp(),connection.getConnectionId(),connection.getRemoteAddr());
                 listener.put(connection);
             }catch (IOException e){
                 e.printStackTrace();

@@ -13,6 +13,7 @@ public class AuthResponse implements Message, Serializable {
     private String clientId;
     private String error;
     private boolean hasError;
+    private String ip;
 
     public AuthResponse(float version, String clientId) {
         this.version = version;
@@ -51,5 +52,15 @@ public class AuthResponse implements Message, Serializable {
     @Override
     public String getMessageType() {
         return "AuthResponse";
+    }
+
+    @Override
+    public void setIP(String ip) {
+        this.ip = ip;
+    }
+
+    @Override
+    public String getIP() {
+        return ip;
     }
 }

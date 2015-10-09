@@ -9,18 +9,34 @@ public class ProxyResponse implements Message, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String ClientId;
+    private String clientId;
+
+    private String ip;
+
+    public ProxyResponse(String clientId){
+        this.clientId = clientId;
+    }
 
     public String getClientId() {
-        return ClientId;
+        return clientId;
     }
 
     public void setClientId(String clientId) {
-        ClientId = clientId;
+        this.clientId = clientId;
     }
 
     @Override
     public String getMessageType() {
         return "ProxyResponse";
+    }
+
+    @Override
+    public void setIP(String ip) {
+        this.ip = ip;
+    }
+
+    @Override
+    public String getIP() {
+        return ip;
     }
 }

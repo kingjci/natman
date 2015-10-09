@@ -1,6 +1,6 @@
 package jc.server.core.registry;
 
-import jc.server.core.PublicTunnel;
+import jc.server.core.PublicTunnel.PublicTunnel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +21,7 @@ public class TunnelRegistry implements Registry<PublicTunnel>{
     }
 
     @Override
-    public int register(String url, PublicTunnel publicTunnel){
+    public void register(String url, PublicTunnel publicTunnel){
 
         //返回-1代表这个tunnel已经存在，0正常添加
 
@@ -29,14 +29,12 @@ public class TunnelRegistry implements Registry<PublicTunnel>{
 
         if (tunnels.get(url) != null){
             System.out.printf("The tunnel %s is already registered.\n", url);
-            return -1;
+            return ;
         }
 
         tunnels.put(url, publicTunnel);
 
         readWriteLock.writeLock().unlock();
-
-        return 0;
     }
 
     @Override

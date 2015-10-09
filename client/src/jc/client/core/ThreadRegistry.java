@@ -118,7 +118,7 @@ public class ThreadRegistry {
         if (threads.isEmpty()){
             System.out.println("ThreadRegistry:No thread is still alive");
         }else {
-            System.out.printf("ThreadRegistry:%d threads is still alive", size());
+            System.out.printf("ThreadRegistry:%d threads is still alive\n", size());
         }
         for (Map.Entry<String, Thread> entry : threads.entrySet()){
             System.out.printf("thread:%s\n", entry.getKey());
