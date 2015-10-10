@@ -1,10 +1,10 @@
 # NatMan - VPS tunnels to localhost
 ==================================
 
-### "I want to expose some ports(e.g. web 80, mysql 3306, MS Remote desktop ) to the Internet securely behind a router with private address or behind firewall "
+### "I want to expose some ports(e.g. web 80, mysql 3306, MS Remote desktop 3389) to the Internet securely behind a router with private address or behind firewall "
 
 ##What is NatMan?
-      NatMan is a reverse proxy that creates a secure tunnel from a Public Server(VPS) to
+  NatMan is a reverse proxy that creates a secure tunnel from a Public Server(VPS) to
 local computer behind router with private address or behind firewall. NatMan consists of two
 part, the server and the client. It sounds like ngrok, of course it is, When I want to expose
 other port to the Internet besides 80(web), ngrok has many limits . Well, the most important
