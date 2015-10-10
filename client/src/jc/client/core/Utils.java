@@ -205,9 +205,6 @@ public class Utils {
 
                 if (cmd.hasOption("subdomain")){
                     tunnelConfiguration.setSubDomian(cmd.getOptionValue("subdomain"));
-                }else {
-                    System.out.println("please specify one subdomain");
-                    return;
                 }
 
                 if (cmd.hasOption("hostname")){
