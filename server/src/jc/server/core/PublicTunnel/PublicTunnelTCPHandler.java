@@ -1,6 +1,6 @@
 package jc.server.core.PublicTunnel;
 
-import jc.Connection;
+import jc.TCPConnection;
 import jc.message.ProxyStart;
 import jc.server.core.ControlConnection;
 
@@ -12,15 +12,15 @@ import static jc.server.core.Utils.timeStamp;
 /**
  * Created by 金成 on 2015/10/9.
  */
-public class PublicTunnelHandler implements Runnable{
+public class PublicTunnelTCPHandler implements Runnable{
 
     private ControlConnection controlConnection;
-    private Connection publicConnection;
+    private TCPConnection publicTCPConnection;
     private String url;
 
-    public PublicTunnelHandler(ControlConnection controlConnection, Connection publicConnection, String url){
+    public PublicTunnelTCPHandler(ControlConnection controlConnection, TCPConnection publicTCPConnection, String url){
         this.controlConnection = controlConnection;
-        this.publicConnection = publicConnection;
+        this.publicTCPConnection = publicTCPConnection;
         this.url = url;
     }
 
@@ -28,36 +28,30 @@ public class PublicTunnelHandler implements Runnable{
     @Override
     public void run() {
 
-
-
         long start = System.currentTimeMillis();
         //统计来自public connection相关信息开始
 
-        Connection proxyConnection = null;
-
+        TCPConnection proxyTCPConnection = null;
 
         //controlConnection.getProxy(); 方法里面包含了向客户端申请ProxyRequest的过程
-        proxyConnection = controlConnection.getProxy();
+        proxyTCPConnection = controlConnection.getProxy();
 
-
-        if (proxyConnection == null){
+        if (proxyTCPConnection == null){
             //此时任然无法从客户端获取到proxy connection，出错
             System.out.printf("[%s][PublicTunnelHandler]can not get proxy connection from %s[%s]\n", timeStamp(), controlConnection.getIp(),controlConnection.getClientId());
             return;
         }
 
-        ProxyStart proxyStart = new ProxyStart(url, publicConnection.getRemoteAddr());
+        ProxyStart proxyStart = new ProxyStart(url, publicTCPConnection.getRemoteAddr());
 
         try {
-            proxyConnection.writeMessage(proxyStart);
+            proxyTCPConnection.writeMessage(proxyStart);
         }catch (IOException e){
             e.printStackTrace();
         }
 
-
-
         //会阻塞在这里一直传送信息
-        Join(proxyConnection, publicConnection);
+        Join(proxyTCPConnection, publicTCPConnection);
 
     }
 }

@@ -1,6 +1,6 @@
 package jc.server.core;
 
-import jc.Connection;
+import jc.TCPConnection;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -32,7 +32,7 @@ public class Utils {
         thread.start();
     }
 
-    public static void Join(Connection c1, Connection c2){
+    public static void Join(TCPConnection c1, TCPConnection c2){
 
         //这个程序会等到两个Connection的双向传输都传送结束才结束返回
         CountDownLatch waitGroup = new CountDownLatch(2);
@@ -52,21 +52,6 @@ public class Utils {
 
     }
 
-    public static Connection Dial(String host, int port, String type){
-
-        Socket socket = null;
-        Connection connection = null;
-        try{
-            socket = new Socket(host, port);
-            connection = new Connection(socket, type, random.getRandomString(8));
-            System.out.printf("[%s][Utils]New connection to: %s\n", timeStamp(),connection.getRemoteAddr());
-
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        return connection;
-
-    }
 
     public static void Console(Object... args){
 

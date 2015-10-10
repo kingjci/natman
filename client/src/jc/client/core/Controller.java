@@ -1,6 +1,5 @@
 package jc.client.core;
 
-import jc.Connection;
 import jc.client.core.command.Command;
 import jc.client.core.command.PlayRequestCommand;
 import jc.client.core.command.QuitCommand;
@@ -9,7 +8,6 @@ import static jc.client.core.Utils.Dial;
 import static jc.client.core.Utils.Go;
 import static jc.client.core.Utils.timeStamp;
 
-import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 

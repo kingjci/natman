@@ -1,17 +1,13 @@
 package jc.client.core;
 
-import jc.Connection;
-import jc.client.core.command.Command;
+import jc.TCPConnection;
 import jc.message.*;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import static jc.client.core.Main.random;
-import static jc.client.core.Main.timeFormat;
 import static jc.client.core.Utils.*;
 
 /**
@@ -74,14 +70,14 @@ public class ControlConnection implements Runnable {
 
     public void control(){
 
-        Connection connection = Dial(serverAddr, 12345, "control" );
+        TCPConnection TCPConnection = Dial(serverAddr, 12345, "control" );
         AuthRequest authRequest = new AuthRequest(clientId, 1.0f, 1.0f);
         AuthResponse authResponse = null;
 
         try{
-            connection.writeMessage(authRequest);
+            TCPConnection.writeMessage(authRequest);
 
-            authResponse =(AuthResponse) connection.readMessage();
+            authResponse =(AuthResponse) TCPConnection.readMessage();
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -102,7 +98,7 @@ public class ControlConnection implements Runnable {
                     new TunnelRequest(random.getRandomString(8), "tcp", tunnelConfiguration.getRemotePort(), tunnelConfiguration.getLocalPort());
 
             try {
-                connection.writeMessage(tunnelRequest);
+                TCPConnection.writeMessage(tunnelRequest);
             }catch (IOException e){
                 e.printStackTrace();
             }
@@ -114,14 +110,14 @@ public class ControlConnection implements Runnable {
 
         this.lastPingResponse.setTime(System.currentTimeMillis());
 
-        Go(new HeartBeat(lastPingResponse, connection, this));
+        Go(new HeartBeat(lastPingResponse, TCPConnection, this));
 
         while (true){
 
             Message message = null;
 
             try{
-                message = connection.readMessage();
+                message = TCPConnection.readMessage();
             }catch (IOException e){
                 e.printStackTrace();
                 System.out.printf("[%s]control connection is closed,prepare to exit\n", timeStamp());

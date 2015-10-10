@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * Created by ½ð³É on 2015/9/8.
  */
-public class Connection {
+public class TCPConnection {
 
     private Socket socket;
     private String connectionId;
@@ -20,7 +20,7 @@ public class Connection {
     private Lock outputLock;
     private Lock inputLock;
 
-    public Connection(Socket socket, String type, String connectionId){
+    public TCPConnection(Socket socket, String type, String connectionId){
         this.socket = socket;
         this.type = type;
         this.outputLock = new ReentrantLock(false);

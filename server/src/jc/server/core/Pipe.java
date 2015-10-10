@@ -1,10 +1,11 @@
 package jc.server.core;
 
-import jc.Connection;
+import jc.TCPConnection;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.SocketException;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -12,11 +13,11 @@ import java.util.concurrent.CountDownLatch;
  */
 public class Pipe implements  Runnable{
 
-        private Connection to;
-        private Connection from;
+        private TCPConnection to;
+        private TCPConnection from;
         private CountDownLatch waitGroup;
 
-        Pipe(Connection to, Connection from, CountDownLatch waitGroup){
+        Pipe(TCPConnection to, TCPConnection from, CountDownLatch waitGroup){
             this.to = to;
             this.from = from;
             this.waitGroup = waitGroup;
@@ -39,20 +40,31 @@ public class Pipe implements  Runnable{
             int len = 0;
             byte[] buffer = new byte[1024];
 
-            while ((len = inputStream.read(buffer)) != -1) {
+            while (  (len = inputStream.read(buffer)) != -1 ) {
 
                 outputStream.write(buffer, 0, len);
                 outputStream.flush();
 
             }
 
-            //from.getSocket().shutdownInput();
-            to.getSocket().shutdownOutput();
 
+
+
+        }catch (SocketException e){
+            //当浏览器的socket被浏览器关闭的时候，可能会进入到这里
 
         }catch (IOException e){
+
             e.printStackTrace();
+
         }finally {
+
+            try{
+                from.getSocket().shutdownInput();
+                to.getSocket().shutdownOutput();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
 
             waitGroup.countDown();
         }

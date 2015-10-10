@@ -4,7 +4,7 @@ package jc.server.core;
 import jc.message.*;
 import jc.server.core.PublicTunnel.PublicTunnel;
 import jc.Version;
-import jc.Connection;
+import jc.TCPConnection;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -13,23 +13,23 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 import static jc.server.core.Main.random;
 import static jc.server.core.Main.controlConnectionRegistry;
+import static jc.server.core.Utils.Go;
 import static jc.server.core.Utils.timeStamp;
 
 public class ControlConnection implements Runnable{
 
     private AuthRequest authRequest;
 
-    private final Connection connection;
+    private final TCPConnection TCPConnection;
 
     protected Time lastPing = new Time();
 
     private List<PublicTunnel> publicTunnels = new LinkedList<PublicTunnel>();
 
-    private BlockingQueue<Connection> proxies = new LinkedBlockingQueue<Connection>();
+    private BlockingQueue<TCPConnection> proxies = new LinkedBlockingQueue<TCPConnection>();
 
     private String clientId;
 
@@ -45,17 +45,17 @@ public class ControlConnection implements Runnable{
         this.clientId = clientId;
     }
 
-    public Connection getConnection() {
-        return connection;
+    public TCPConnection getTCPConnection() {
+        return TCPConnection;
     }
 
-    public ControlConnection(Connection connection, AuthRequest authRequest){
+    public ControlConnection(TCPConnection TCPConnection, AuthRequest authRequest){
 
-        this.connection = connection;
+        this.TCPConnection = TCPConnection;
 
         this.ip = authRequest.getIP();
 
-        this.connection.setType("control");
+        this.TCPConnection.setType("control");
 
         lastPing.setTime(System.currentTimeMillis());
 
@@ -69,8 +69,8 @@ public class ControlConnection implements Runnable{
             System.out.println("Incompatible versions. Server %s, client %s. Download a new version");
             AuthResponse authResponse = new AuthResponse("Incompatible versions");
             try {
-                connection.writeMessage(authResponse);
-                connection.close();
+                TCPConnection.writeMessage(authResponse);
+                TCPConnection.close();
             }catch (IOException e){
                 e.printStackTrace();
             }
@@ -89,7 +89,7 @@ public class ControlConnection implements Runnable{
         AuthResponse authResponse = new AuthResponse(Version.Current, this.clientId);
         try{
 
-            this.connection.writeMessage(authResponse);
+            this.TCPConnection.writeMessage(authResponse);
 
 
         }catch (IOException e){
@@ -113,7 +113,7 @@ public class ControlConnection implements Runnable{
             long diff = currentTimeMillis - lastPing.getTime();
             if (diff > 30*1000){
                 System.out.printf("[%s][ControlConnection]Lost heartbeat\n", timeStamp());
-                connection.close();//强制关闭这个control connection里面的socket，这样
+                TCPConnection.close();//强制关闭这个control connection里面的socket，这样
                 //control connection 里面的主循环会被强制退出，退出线程
                 //准备关闭控制连接
             }
@@ -128,6 +128,7 @@ public class ControlConnection implements Runnable{
 
         //服务器监听了tunnelRequest中指定的端口
         PublicTunnel publicTunnel = new PublicTunnel(tunnelRequest, this);
+        Go(publicTunnel);
         TunnelResponse tunnelResponse =
                 new TunnelResponse(publicTunnel.getUrl(),
                         tunnelRequest.getProtocol(),
@@ -135,7 +136,7 @@ public class ControlConnection implements Runnable{
                         tunnelRequest.getLocalPort());
         try{
 
-            this.connection.writeMessage(tunnelResponse);
+            this.TCPConnection.writeMessage(tunnelResponse);
 
 
         }catch (IOException e){
@@ -145,9 +146,9 @@ public class ControlConnection implements Runnable{
         publicTunnels.add(publicTunnel);
     }
 
-    public Connection getProxy(){
+    public TCPConnection getProxy(){
 
-        Connection proxyConnection = null;
+        TCPConnection proxyTCPConnection = null;
 
 
             if (proxies.size() == 0){
@@ -155,7 +156,7 @@ public class ControlConnection implements Runnable{
                         timeStamp(),this.ip, this.clientId);
                 ProxyRequest proxyRequest = new ProxyRequest();
                 try{
-                    connection.writeMessage(proxyRequest);
+                    TCPConnection.writeMessage(proxyRequest);
                 }catch (IOException e){
                     e.printStackTrace();
                 }
@@ -163,25 +164,25 @@ public class ControlConnection implements Runnable{
             }
 
             try{
-                proxyConnection = proxies.take();
+                proxyTCPConnection = proxies.take();
             }catch (InterruptedException e){
                 e.printStackTrace();
             }
 
 
 
-        if (proxyConnection == null){
+        if (proxyTCPConnection == null){
             System.out.printf("[%s][ControlConnection]No proxy connections available\n", timeStamp());
         }
 
-        return proxyConnection;
+        return proxyTCPConnection;
 
     }
 
-    public void registerProxy(Connection connection){
+    public void registerProxy(TCPConnection tcpConnection){
 
         try{
-            proxies.put(connection);
+            proxies.put(tcpConnection);
         }catch (InterruptedException e){
             e.printStackTrace();
         }
@@ -196,7 +197,7 @@ public class ControlConnection implements Runnable{
 
     public void close(){
 
-        connection.close();
+        TCPConnection.close();
     }
 
 
@@ -212,7 +213,7 @@ public class ControlConnection implements Runnable{
 
             try{
 
-                Message message = connection.readMessage();
+                Message message = TCPConnection.readMessage();
 
                 switch (message.getMessageType()){
 
@@ -229,7 +230,7 @@ public class ControlConnection implements Runnable{
                         this.lastPing.setTime(System.currentTimeMillis());
                         PingResponse pingResponse = new PingResponse();
                         try{
-                            connection.writeMessage(pingResponse);
+                            TCPConnection.writeMessage(pingResponse);
                         }catch (IOException e){
                             e.printStackTrace();
                         }

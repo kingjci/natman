@@ -2,7 +2,7 @@ package jc.server.core.ControlTunnel;
 
 import jc.message.AuthRequest;
 import jc.message.Message;
-import jc.Connection;
+import jc.TCPConnection;
 import jc.message.ProxyResponse;
 import jc.server.core.ControlConnection;
 
@@ -17,17 +17,17 @@ import static jc.server.core.Utils.timeStamp;
  */
 public class ControlTunnelHandler implements Runnable {
 
-    protected Connection connection;
+    protected TCPConnection tcpConnection;
 
-    ControlTunnelHandler(Connection connection) {
-        this.connection = connection;
+    ControlTunnelHandler(TCPConnection tcpConnection) {
+        this.tcpConnection = tcpConnection;
     }
 
     @Override
     public void run() {
 
 
-            if (connection == null){
+            if (tcpConnection == null){
                 System.out.printf("[%s][ControlTunnelHandler]connection is null\n", timeStamp());
                 return;
             }
@@ -35,7 +35,7 @@ public class ControlTunnelHandler implements Runnable {
             //connection.getSocket().setSoTimeout(10 * 1000);
             Message message = null;
             try {
-                message = connection.readMessage();
+                message = tcpConnection.readMessage();
             }catch (IOException e){
                 e.printStackTrace();
             }
@@ -45,32 +45,45 @@ public class ControlTunnelHandler implements Runnable {
                 return;
             }
 
+            ControlConnection controlConnection = null;
+
             switch (message.getMessageType()) {
+
+
                 case "AuthRequest":
 
-
-                    ControlConnection controlConnection = new ControlConnection(connection, (AuthRequest)message);
+                    //control tunnel收到的这个TCPConnection发送了认证请求，表明该TCPConnection
+                    //是一个controlConnection
+                    controlConnection = new ControlConnection(tcpConnection, (AuthRequest)message);
 
                     Go(controlConnection);
 
-
                     break;
+
                 case "ProxyResponse":{
 
+                    //control tunnel收到的这个TCPConnection发送了ProxyResponse，
+                    //表明该TCPConnection是一个proxy connection，放入到proxy队列中
                     ProxyResponse proxyResponse = (ProxyResponse) message;
 
-                    connection.setType("proxy");
+                    tcpConnection.setType("proxy");
 
-                    System.out.printf("[%s][ControlTunnelHandler]Registering new proxy connection[%s] for %s[%s]\n", timeStamp(),connection.getConnectionId(),proxyResponse.getIP(),proxyResponse.getClientId());
+                    System.out.printf("[%s][ControlTunnelHandler]Registering new proxy connection[%s] for %s[%s]\n", timeStamp(), tcpConnection.getConnectionId(), proxyResponse.getIP(), proxyResponse.getClientId());
 
-                    ControlConnection storedControlConnection = controlConnectionRegistry.get(proxyResponse.getClientId());
+                    controlConnection = controlConnectionRegistry.get(proxyResponse.getClientId());
 
-                    if (storedControlConnection == null){
-                        System.out.printf("[%s][ControlTunnelHandler]No client found for identifier:%s\n" , timeStamp(),proxyResponse.getClientId());
+                    if (controlConnection == null){
+                        //客户端向服务器发送了一个proxy连接，但是通过ProxyResponse中的clientId找不到该客户端的控制连接
+                        //这是一种不正常的状态，一般不会出现。可能是服务器已经删除了该control connection但是客户端的control
+                        //connection 还存在，这个时候直接关闭该proxy connection
+                        tcpConnection.close();
+                        System.out.printf("[%s][ControlTunnelHandler]No client found for identifier:%s\n" ,
+                                timeStamp(),proxyResponse.getClientId());
                         break;
                     }
 
-                    storedControlConnection.registerProxy(connection);
+                    controlConnection.registerProxy(tcpConnection);
+
                     break;
 
                 }

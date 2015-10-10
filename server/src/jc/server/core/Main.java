@@ -31,8 +31,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-
-        Go(new ControlTunnel(12345));
+        ControlTunnel controlTunnel = new ControlTunnel(12345);
+        Go(controlTunnel);
 
     }
 

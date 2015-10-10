@@ -1,10 +1,15 @@
 package jc.server.core.ControlTunnel;
 
-import jc.Connection;
+import jc.TCPConnection;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.PriorityQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import static jc.server.core.Main.random;
 import static jc.server.core.Utils.Go;
 import static jc.server.core.Utils.timeStamp;
 
@@ -13,34 +18,37 @@ import static jc.server.core.Utils.timeStamp;
  */
 public class ControlTunnel implements Runnable{
 
-    protected BlockingQueue<Connection> listener = new LinkedBlockingQueue<Connection>();
-    protected int port;
-
+    //ControlTunnel使用tcp协议，不再做区分
+    private ServerSocket serverSocket;
 
 
     public ControlTunnel(int port){
-        this.port = port;
+
+        try{
+            serverSocket = new ServerSocket(port);
+            System.out.printf("[%s][ControlTunnel]Listening for control and proxy connections on %d\n",
+                    timeStamp(),port);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void run() {
 
-        Go(new ControlTunnelListener(listener, port));
-        System.out.printf("[%s][ControlTunnel]Listening for control and proxy connections on %d\n", timeStamp(),port);
-
         while (true){
 
+
             try{
-                Connection connection = listener.take();
-                Go(new ControlTunnelHandler(connection));
-            }catch (InterruptedException e){
+                Socket socket = serverSocket.accept();
+                //control tunnel收到一个tcp socket 连接，将其包装成TCPConnection
+                TCPConnection tcpConnection = new TCPConnection(socket, "control/proxy", random.getRandomString(8));
+                System.out.printf("[%s][ControlTunnelListener]New control/proxy connection[%s] from %s\n",
+                        timeStamp(), tcpConnection.getConnectionId(), tcpConnection.getRemoteAddr());
+                Go(new ControlTunnelHandler(tcpConnection));
+            }catch (IOException e){
                 e.printStackTrace();
             }
-
-
-
-
-
         }
 
 

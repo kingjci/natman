@@ -1,17 +1,15 @@
 package jc.client.core;
 
-import jc.Connection;
+import jc.TCPConnection;
 import jc.Version;
-import jc.client.core.Pipe;
-import jc.client.core.command.Command;
 import org.apache.commons.cli.*;
 
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.Arrays;
+import java.net.SocketAddress;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.locks.Lock;
 
 import static jc.client.core.Main.config;
 import static jc.client.core.Main.consoleLock;
@@ -33,7 +31,7 @@ public class Utils {
 
     }
 
-    public static void Join(Connection c1, Connection c2){
+    public static void Join(TCPConnection c1, TCPConnection c2){
 
         CountDownLatch waitGroup = new CountDownLatch(2);
         Go(new Pipe(c1, c2, waitGroup));
@@ -53,24 +51,28 @@ public class Utils {
                 timeStamp() ,c1.Id(),  c2.Id());
 
     }
-    public static Connection Dial(String host, String type){
+    public static TCPConnection Dial(String host, String type){
         return Dial(host, 12345, type);
     }
 
-    public static Connection Dial(String host, int port, String type){
+    public static TCPConnection Dial(String host, int port, String type){
 
         Socket socket = null;
-        Connection connection = null;
+        TCPConnection TCPConnection = null;
         try{
-            socket = new Socket(host, port);
-            connection = new Connection(socket, type, random.getRandomString(8));
+            socket = new Socket();
+            SocketAddress address = new InetSocketAddress(host, port);
+            //连接端口，3秒钟超时。当连接本地端口的时候如果端口没有开放会出现异常connect refused
+            socket.connect(address, 3*1000);
+            TCPConnection = new TCPConnection(socket, type, random.getRandomString(8));
             System.out.printf("[%s][Utils]New %s connection[%s] to: %s\n",
-                    timeStamp(),connection.getType(), connection.getConnectionId(),connection.getRemoteAddr());
+                    timeStamp(), TCPConnection.getType(), TCPConnection.getConnectionId(), TCPConnection.getRemoteAddr());
 
         }catch (IOException e){
+            System.out.printf("[%s][Utils]can not connect to %s:%d, perhaps this port is not open\n", timeStamp(), host, port);
             e.printStackTrace();
         }
-        return connection;
+        return TCPConnection;
 
     }
 
@@ -209,6 +211,7 @@ public class Utils {
                 }
 
                 if (cmd.hasOption("hostname")){
+                    config.setServerAddr(cmd.getOptionValue("hostname"));
                     tunnelConfiguration.setHostName(cmd.getOptionValue("hostname"));
                 }else {
                     if (config.getServerAddr()!=null && "".equalsIgnoreCase(config.getServerAddr())) {

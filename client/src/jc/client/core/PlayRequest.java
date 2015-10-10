@@ -1,6 +1,6 @@
 package jc.client.core;
 
-import jc.Connection;
+import jc.TCPConnection;
 
 import java.io.IOException;
 
@@ -25,17 +25,17 @@ public class PlayRequest implements Runnable{
 
     @Override
     public void run() {
-        Connection localConnection =
+        TCPConnection localTCPConnection =
                 Dial(this.tunnel.getLocalAddress(), this.tunnel.getLocalPort(), "private connection");
 
-        if (localConnection == null){
+        if (localTCPConnection == null){
             System.out.printf("[%s][Controller]Failed to open private leg to %s: %d\n", timeStamp(),this.tunnel.getLocalAddress(), this.tunnel.getLocalPort());
             return;
         }
 
         try{
-            localConnection.write(payload);
-            localConnection.readAll();//???????????
+            localTCPConnection.write(payload);
+            localTCPConnection.readAll();//???????????
         }catch (IOException e){
             e.printStackTrace();
         }

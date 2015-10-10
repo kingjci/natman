@@ -1,6 +1,6 @@
 package jc.client.core;
 
-import jc.Connection;
+import jc.TCPConnection;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,11 +12,11 @@ import java.util.concurrent.CountDownLatch;
  */
 public class Pipe implements  Runnable{
 
-        private Connection to;
-        private Connection from;
+        private TCPConnection to;
+        private TCPConnection from;
         private CountDownLatch waitGroup;
 
-        Pipe(Connection to, Connection from, CountDownLatch waitGroup){
+        Pipe(TCPConnection to, TCPConnection from, CountDownLatch waitGroup){
             this.to = to;
             this.from = from;
             this.waitGroup = waitGroup;
@@ -42,12 +42,16 @@ public class Pipe implements  Runnable{
 
             }
 
-            //from.getSocket().shutdownInput();
-            to.getSocket().shutdownOutput();
-
         }catch (IOException e){
             e.printStackTrace();
         }finally {
+
+            try{
+                from.getSocket().shutdownInput();
+                to.getSocket().shutdownOutput();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
 
             waitGroup.countDown();
         }
