@@ -1,14 +1,15 @@
 package jc.client.core;
 
+import jc.Random;
 import jc.TCPConnection;
 import jc.message.ProxyResponse;
 import jc.message.ProxyStart;
 
 import java.io.IOException;
 
-import static jc.client.core.Utils.Dial;
-import static jc.client.core.Utils.Join;
-import static jc.client.core.Utils.timeStamp;
+import static jc.Utils.Dial;
+import static jc.Utils.Join;
+import static jc.Utils.timeStamp;
 
 /**
  * Created by ½ð³É on 2015/10/8.
@@ -16,16 +17,19 @@ import static jc.client.core.Utils.timeStamp;
 public class Proxy implements Runnable {
 
     private ControlConnection controlConnection;
+    private Random random;
 
-    public Proxy(ControlConnection controlConnection){
+    public Proxy(ControlConnection controlConnection, Random random){
         this.controlConnection = controlConnection;
+        this.random = random;
     }
 
 
     @Override
     public void run() {
 
-        TCPConnection proxyTCPConnection = Dial(controlConnection.getServerAddr(),"proxy");
+        TCPConnection proxyTCPConnection =
+                Dial(controlConnection.getServerAddress(),12345,"proxy", random.getRandomString(8));
         TCPConnection localTCPConnection = null;
 
 
@@ -42,8 +46,8 @@ public class Proxy implements Runnable {
         ProxyStart proxyStart = null;
         try{
             proxyStart =(ProxyStart) proxyTCPConnection.readMessage();
-            System.out.printf("[%s][Proxy]New proxy connection[%s] from %s\n",
-                    timeStamp(), proxyTCPConnection.getConnectionId(), proxyStart.getPublicConnectionAddress());
+            //System.out.printf("[%s][Proxy]New proxy connection[%s] from %s\n",
+                    //timeStamp(), proxyTCPConnection.getConnectionId(), proxyStart.getPublicConnectionAddress());
         }catch (IOException e){
             System.out.printf("[%s][Proxy]Proxy connection[%s] is shutdown by server\n",
                     timeStamp(), proxyTCPConnection.getConnectionId());
@@ -59,7 +63,8 @@ public class Proxy implements Runnable {
             return;
         }
 
-        localTCPConnection = Dial(privateTunnel.getLocalAddress(), privateTunnel.getLocalPort(), "private");
+        localTCPConnection =
+                Dial(privateTunnel.getLocalAddress(), privateTunnel.getLocalPort(), "private", random.getRandomString(8));
         if (localTCPConnection == null){
             System.out.printf("[%s][Proxy run]Failed to open private connection %s: %s\n", timeStamp(),privateTunnel.getLocalAddress() ,privateTunnel.getLocalPort());
             return;

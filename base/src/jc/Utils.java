@@ -1,6 +1,10 @@
 package jc;
 
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.CountDownLatch;
 
@@ -23,7 +27,7 @@ public class Utils {
         Go(new Pipe(c1, c2, waitGroup));
         Go(new Pipe(c2, c1, waitGroup));
 
-        System.out.printf("[%s][Utils]Join %s with %s\n", timeStamp(),c1.Id(), c2.Id());
+        //System.out.printf("[%s][Utils]Join %s with %s\n", timeStamp(),c1.Id(), c2.Id());
 
         try{
             waitGroup.await();
@@ -32,7 +36,28 @@ public class Utils {
         }catch (InterruptedException e){
             e.printStackTrace();
         }
-        System.out.printf("[%s][Utils]Separate %s with %s\n", timeStamp(), c1.Id(), c2.Id());
+        //System.out.printf("[%s][Utils]Separate %s with %s\n", timeStamp(), c1.Id(), c2.Id());
+
+    }
+
+    public static TCPConnection Dial(String host, int port, String type, String connectionId){
+
+        Socket socket = null;
+        TCPConnection TCPConnection = null;
+        try{
+            socket = new Socket();
+            SocketAddress address = new InetSocketAddress(host, port);
+            //连接端口，3秒钟超时。当连接本地端口的时候如果端口没有开放会出现异常connect refused
+            socket.connect(address, 3*1000);
+            TCPConnection = new TCPConnection(socket, type, connectionId);
+            //System.out.printf("[%s][Utils]New %s connection[%s] to: %s\n",
+                    //timeStamp(), TCPConnection.getType(), TCPConnection.getConnectionId(), TCPConnection.getRemoteAddr());
+
+        }catch (IOException e){
+            System.out.printf("[%s][Utils]can not connect to %s:%d, perhaps this port is not open\n", timeStamp(), host, port);
+            e.printStackTrace();
+        }
+        return TCPConnection;
 
     }
 

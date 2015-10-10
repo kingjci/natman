@@ -2,7 +2,7 @@ package jc.server.core;
 
 import jc.Random;
 import jc.server.core.ControlConnection.ControlConnectionRegistry;
-import jc.server.core.ControlTunnel.ControlTunnel;
+import jc.server.core.Controller.Controller;
 import jc.server.core.PublicTunnel.PublicTunnelRegistry;
 
 import static jc.Utils.Go;
@@ -17,8 +17,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        ControlTunnel controlTunnel = new ControlTunnel(12345, publicTunnelRegistry,controlConnectionRegistry, random);
-        Go(controlTunnel);
+        Controller controller = new Controller(12345, publicTunnelRegistry,controlConnectionRegistry, random);
+        Go(controller);
 
     }
 

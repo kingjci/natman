@@ -24,12 +24,12 @@ public class Random {
         return stringBuffer.toString();
     }
 
-    public long getRandomLong(){
-        return random.nextLong();
+    public String getRandomConnectionId(){
+        return getRandomString(8);
     }
 
-    public int getRandomInt(){
-        return  random.nextInt();
+    public String getRandomClientId(){
+        return getRandomString(16);
     }
 
 

@@ -10,8 +10,6 @@ import jc.Time;
 import jc.server.core.PublicTunnel.PublicTunnelRegistry;
 
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Timer;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -72,6 +70,10 @@ public class ControlConnection implements Runnable{
 
 
         AuthResponse authResponse = new AuthResponse(Version.Current, this.clientId);
+        if (!authRequest.isNew()){
+            authResponse.setReconnect(true);
+        }
+
         try{
             this.tcpConnection.writeMessage(authResponse);
         }catch (IOException e){
@@ -84,8 +86,8 @@ public class ControlConnection implements Runnable{
 
         TCPConnection proxyTCPConnection = null;
         if (proxies.size() == 0){
-            System.out.printf("[%s][ControlConnection]No proxy in pool, requesting proxy from %s[%s]\n",
-                    timeStamp(),this.ip, this.clientId);
+            //System.out.printf("[%s][ControlConnection]No proxy in pool, requesting proxy from %s[%s]\n",
+                    //timeStamp(),this.ip, this.clientId);
             ProxyRequest proxyRequest = new ProxyRequest();
             try{
                 tcpConnection.writeMessage(proxyRequest);
@@ -140,7 +142,7 @@ public class ControlConnection implements Runnable{
     public void run() {
 
 
-        this.pingChecker.schedule(new PingCheckerTimerTask(tcpConnection, lastPing), 0, 10*1000);
+        this.pingChecker.schedule(new ControlConnectionHeartBeatChecker(tcpConnection, lastPing), 0, 10*1000);
 
         while (true){
 
@@ -151,8 +153,22 @@ public class ControlConnection implements Runnable{
                     case "PublicTunnelRequest":
 
                         PublicTunnelRequest publicTunnelRequest = (PublicTunnelRequest) message;
-                        PublicTunnel publicTunnel = new PublicTunnel(publicTunnelRequest, this, random);
-                        publicTunnelRegistry.register(publicTunnel.getUrl(), publicTunnel);
+                        String url = String.format("tcp://%s:%d", "127.0.0.1", publicTunnelRequest.getRemotePort());
+                        PublicTunnel publicTunnel = publicTunnelRegistry.get(url);
+                        if (publicTunnel != null){
+
+                            PublicTunnelResponse publicTunnelResponse = new PublicTunnelResponse(String.format("tunnel %d is already in use", publicTunnelRequest.getRemotePort()));
+                            try{
+                                tcpConnection.writeMessage(publicTunnelResponse);
+                            }catch (IOException e){
+                                e.printStackTrace();
+                            }
+                            continue;
+                        }
+
+                        publicTunnel = new PublicTunnel(publicTunnelRequest, this, random);
+                        publicTunnelRegistry.register(clientId, url, publicTunnel);
+
                         Go(publicTunnel);
                         PublicTunnelResponse publicTunnelResponse =
                                 new PublicTunnelResponse(publicTunnel.getUrl(),
@@ -189,6 +205,7 @@ public class ControlConnection implements Runnable{
                 System.out.printf("[%s][ControlConnection]control connection to %s[%s] exit\n", timeStamp(), ip,clientId);
                 //需要清理这个control connection对应的public tunnel以及相关的记录
                 this.pingChecker.cancel();
+                publicTunnelRegistry.delete(clientId);
                 return;
             }
 

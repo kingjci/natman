@@ -13,7 +13,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
- * Created by ½ð³É on 2015/9/8.
+ * Created by ï¿½ï¿½ï¿½ on 2015/9/8.
  */
 public class PublicTunnel implements Runnable{
 
@@ -45,7 +45,7 @@ public class PublicTunnel implements Runnable{
 
                 this.port = publicTunnelRequest.getRemotePort();
                 this.protocol = "tcp";
-                //"127.0.0.1" Õâ¸öÊÇ·þÎñÆ÷µÄÓòÃû£¬Ó¦¸Ã´ÓÅäÖÃÎÄ¼þ»òÕßÃüÁîÐÐÖÐ»ñÈ¡
+                //"127.0.0.1" ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Ã´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½È¡
                 this.url = String.format("tcp://%s:%d", "127.0.0.1", publicTunnelRequest.getRemotePort());
 
 
@@ -61,12 +61,12 @@ public class PublicTunnel implements Runnable{
 
             case "http":
 
-                //ÔÝÊ±²»Ê¹ÓÃÕâÀï
+                //ï¿½ï¿½Ê±ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 break;
 
             case "udp":
 
-                //ÔÝÊ±²»Ê¹ÓÃÕâÀï
+                //ï¿½ï¿½Ê±ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 break;
 
             default:
@@ -88,12 +88,15 @@ public class PublicTunnel implements Runnable{
                     try{
                         Socket socket = serverSocket.accept();
                         TCPConnection TCPConnection = new TCPConnection(socket, "public", random.getRandomString(8));
-                        System.out.printf("[%s][PublicTunnel]New public Connection[%s] from %s\n",
-                                timeStamp(), TCPConnection.getConnectionId(),socket.getInetAddress().getHostAddress());
+                        //System.out.printf("[%s][PublicTunnel]New public Connection[%s] from %s\n",
+                                //timeStamp(), TCPConnection.getConnectionId(),socket.getInetAddress().getHostAddress());
                         Go(new PublicTunnelTCPHandler(controlConnection, TCPConnection, url));
                     }catch (IOException e){
-                        e.printStackTrace();
+                        //public connection ä¸»åŠ¨æ–­å¼€çš„æ—¶å€™ä¼šå¼•èµ·è¿™é‡Œçš„å¼‚å¸¸
+                        //e.printStackTrace();
 
+
+                        return;
                     }
                 }
 
@@ -102,16 +105,26 @@ public class PublicTunnel implements Runnable{
 
 
 
-                //ÔÝÊ±²»Ê¹ÓÃÕâÀï
+                //ï¿½ï¿½Ê±ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 break;
 
 
             case "udp":
 
 
-                //ÔÝÊ±²»Ê¹ÓÃÕâÀï
+                //ï¿½ï¿½Ê±ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 break;
 
+        }
+
+    }
+
+    public void close(){
+
+        try{
+            serverSocket.close();
+        }catch (IOException e){
+            e.printStackTrace();
         }
 
     }

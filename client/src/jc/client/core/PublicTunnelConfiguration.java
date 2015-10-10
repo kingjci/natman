@@ -5,13 +5,14 @@ import java.util.Map;
 /**
  * Created by 金成 on 2015/9/23.
  */
-public class TunnelConfiguration {
+public class PublicTunnelConfiguration {
 
-    private String subDomian;
-    private String hostName;
-    private Map<String, String> protocols;
-    private int remotePort;
-    private int localPort;
+    //这个文件是从配置文件或者命令行参数获取， 描述了public tunnel到 private的映射关系
+    private String subDomain; // this is useful when http port is used
+    private String hostName; // server domain or ip
+    private Map<String, String> protocols; //tcp udp http
+    private int remotePort; // public tunnel
+    private int localPort; // private tunnel
 
     public int getLocalPort() {
         return localPort;
@@ -29,12 +30,12 @@ public class TunnelConfiguration {
         this.hostName = hostName;
     }
 
-    public String getSubDomian() {
-        return subDomian;
+    public String getSubDomain() {
+        return subDomain;
     }
 
-    public void setSubDomian(String subDomian) {
-        this.subDomian = subDomian;
+    public void setSubDomain(String subDomain) {
+        this.subDomain = subDomain;
     }
 
     public int getRemotePort() {

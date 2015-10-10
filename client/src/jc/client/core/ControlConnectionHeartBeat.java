@@ -8,12 +8,12 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static jc.client.core.Utils.timeStamp;
+import static jc.Utils.timeStamp;
 
 /**
  * Created by ½ð³É on 2015/9/24.
  */
-public class HeartBeat implements Runnable{
+public class ControlConnectionHeartBeat implements Runnable{
 
     protected long lastPing;
     protected Time lastPingResponse;
@@ -25,7 +25,7 @@ public class HeartBeat implements Runnable{
     private Timer pingTimer;
     private Timer pingResponseCheckTimer;
 
-    public HeartBeat(Time lastPingResponse, TCPConnection TCPConnection, ControlConnection controlConnection){
+    public ControlConnectionHeartBeat(Time lastPingResponse, TCPConnection TCPConnection, ControlConnection controlConnection){
         this.controlConnection = controlConnection;
         this.lastPingResponse = lastPingResponse;
         this.lastPing = lastPingResponse.getTime() - 1*1000;

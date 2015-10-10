@@ -3,6 +3,8 @@ package jc.server.core.PublicTunnel;
 import jc.server.core.PublicTunnel.PublicTunnel;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -13,14 +15,18 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class PublicTunnelRegistry {
 
     private Map<String, PublicTunnel> tunnels;
+
+    private Map<String, List<String>> clientIdToPublicUrl;
+
     private ReadWriteLock readWriteLock;
 
     public PublicTunnelRegistry(){
         this.tunnels = new HashMap<>();
+        this.clientIdToPublicUrl = new HashMap<>();
         this.readWriteLock = new ReentrantReadWriteLock(false);
     }
 
-    public void register(String url, PublicTunnel publicTunnel){
+    public void register(String clientId,String url, PublicTunnel publicTunnel){
 
         //返回-1代表这个tunnel已经存在，0正常添加
 
@@ -32,6 +38,14 @@ public class PublicTunnelRegistry {
         }
 
         tunnels.put(url, publicTunnel);
+        if (clientIdToPublicUrl.get(clientId) != null){
+            List<String> publicUrls = clientIdToPublicUrl.get(clientId);
+            publicUrls.add(url);
+        }else {
+            List<String> publicUrls = new LinkedList<>();
+            publicUrls.add(url);
+            clientIdToPublicUrl.put(clientId, publicUrls);
+        }
 
         readWriteLock.writeLock().unlock();
     }
@@ -40,18 +54,26 @@ public class PublicTunnelRegistry {
 
         readWriteLock.readLock().lock();
         PublicTunnel publicTunnel = tunnels.get(url);
-        readWriteLock.writeLock().unlock();
+        readWriteLock.readLock().unlock();
 
         return publicTunnel;
     }
 
-    public int delete(String url) {
+    public void delete(String clientId) {
 
         readWriteLock.writeLock().lock();
-        PublicTunnel publicTunnel = tunnels.remove(url);
+        List<String> publicUrls = clientIdToPublicUrl.get(clientId);
+        if (publicUrls != null){
+
+            for (String publicUrl: publicUrls){
+                PublicTunnel publicTunnel = tunnels.remove(publicUrl);
+                publicTunnel.close();
+            }
+
+        }
+
         readWriteLock.writeLock().unlock();
 
-        return publicTunnel != null ? 0:1; //返回0正常删除，返回1删除tunnel不存在
     }
 
 

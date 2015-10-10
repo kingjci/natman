@@ -1,7 +1,6 @@
-package jc.server.core.ControlTunnel;
+package jc.server.core.Controller;
 
 import jc.message.AuthRequest;
-import jc.message.AuthResponse;
 import jc.message.Message;
 import jc.TCPConnection;
 import jc.message.ProxyResponse;
@@ -18,11 +17,11 @@ import static jc.server.core.Main.random;
 /**
  * Created by ½ð³É on 2015/9/23.
  */
-public class ControlTunnelHandler implements Runnable {
+public class ControllerHandler implements Runnable {
 
     private TCPConnection tcpConnection;
 
-    ControlTunnelHandler(TCPConnection tcpConnection) {
+    ControllerHandler(TCPConnection tcpConnection) {
         this.tcpConnection = tcpConnection;
     }
 
@@ -84,11 +83,11 @@ public class ControlTunnelHandler implements Runnable {
 
                     tcpConnection.setType("proxy");
 
-                    System.out.printf("[%s][ControlTunnelHandler]Registering new proxy connection[%s] for %s[%s]\n",
-                            timeStamp(),
-                            tcpConnection.getConnectionId(),
-                            tcpConnection.getRemoteAddr(),
-                            proxyResponse.getClientId());
+                    //System.out.printf("[%s][ControllerHandler]Registering new proxy connection[%s] for %s[%s]\n",
+                            //timeStamp(),
+                            //tcpConnection.getConnectionId(),
+                            //tcpConnection.getRemoteAddr(),
+                            //proxyResponse.getClientId());
 
                     controlConnection = controlConnectionRegistry.get(proxyResponse.getClientId());
 

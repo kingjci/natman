@@ -10,12 +10,12 @@ import static jc.Utils.timeStamp;
 /**
  * Created by ½ð³É on 2015/10/10.
  */
-public class PingCheckerTimerTask extends TimerTask {
+public class ControlConnectionHeartBeatChecker extends TimerTask {
 
     private Time lastPing;
     private TCPConnection tcpConnection;
 
-    public PingCheckerTimerTask(TCPConnection tcpConnection,Time lastPing){
+    public ControlConnectionHeartBeatChecker(TCPConnection tcpConnection, Time lastPing){
         this.tcpConnection = tcpConnection;
         this.lastPing = lastPing;
     }

@@ -50,6 +50,6 @@ public class PublicTunnelResponse implements Message, Serializable {
 
     @Override
     public String getMessageType() {
-        return "TunnelResponse";
+        return "PublicTunnelResponse";
     }
 }

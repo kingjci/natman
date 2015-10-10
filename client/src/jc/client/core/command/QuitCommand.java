@@ -5,7 +5,15 @@ package jc.client.core.command;
  */
 public class QuitCommand implements Command {
 
+    private String reason;
 
+    public QuitCommand(String reason){
+        this.reason = new String(reason);
+    }
+
+    public String getReason(){
+        return reason;
+    }
 
     @Override
     public String getCommandType() {

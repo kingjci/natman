@@ -8,18 +8,9 @@ import java.util.Map;
  */
 public class Config {
 
-    private String httpProxy;
-    private String serverAddr = "127.0.0.1";
-    private String authToken;
+    private String serverAddress = "127.0.0.1";
     private String command;
-    private Map<String, TunnelConfiguration> tunnels = new HashMap<String, TunnelConfiguration>();
-
-
-
-    public String getHttpProxy() {
-        return httpProxy;
-    }
-
+    private Map<String, PublicTunnelConfiguration> publicTunnelConfiguration = new HashMap<String, PublicTunnelConfiguration>();
 
     public String getCommand() {
         return command;
@@ -29,33 +20,19 @@ public class Config {
         this.command = command;
     }
 
-
-
-    public void setHttpProxy(String httpProxy) {
-        this.httpProxy = httpProxy;
+    public String getServerAddress() {
+        return serverAddress;
     }
 
-    public String getServerAddr() {
-        return serverAddr;
+    public void setServerAddress(String serverAddress) {
+        this.serverAddress = serverAddress;
     }
 
-    public void setServerAddr(String serverAddr) {
-        this.serverAddr = serverAddr;
+    public Map<String, PublicTunnelConfiguration> getPublicTunnelConfiguration() {
+        return publicTunnelConfiguration;
     }
 
-    public String getAuthToken() {
-        return authToken;
-    }
-
-    public void setAuthToken(String authToken) {
-        this.authToken = authToken;
-    }
-
-    public Map<String, TunnelConfiguration> getTunnels() {
-        return tunnels;
-    }
-
-    public void setTunnels(Map<String, TunnelConfiguration> tunnels) {
-        this.tunnels = tunnels;
+    public void setPublicTunnelConfiguration(Map<String, PublicTunnelConfiguration> publicTunnelConfiguration) {
+        this.publicTunnelConfiguration = publicTunnelConfiguration;
     }
 }

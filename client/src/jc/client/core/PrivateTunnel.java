@@ -5,7 +5,7 @@ package jc.client.core;
  */
 public class PrivateTunnel {
 
-    private String publicUrl;
+    private String publicUrl; //   tcp://jincheng.link:8000, it contains information about public tunnel
     private String protocol;
     private String localAddress = "127.0.0.1";
     private int localPort;

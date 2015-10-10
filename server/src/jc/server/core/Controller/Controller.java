@@ -1,9 +1,8 @@
-package jc.server.core.ControlTunnel;
+package jc.server.core.Controller;
 
 import jc.Random;
 import jc.TCPConnection;
 import jc.server.core.ControlConnection.ControlConnectionRegistry;
-import jc.server.core.PublicTunnel.PublicTunnel;
 import jc.server.core.PublicTunnel.PublicTunnelRegistry;
 
 import java.io.IOException;
@@ -16,7 +15,7 @@ import static jc.Utils.timeStamp;
 /**
  * Created by ��� on 2015/9/23.
  */
-public class ControlTunnel implements Runnable{
+public class Controller implements Runnable{
 
     private PublicTunnelRegistry publicTunnelRegistry;
     private ControlConnectionRegistry controlConnectionRegistry;
@@ -27,7 +26,7 @@ public class ControlTunnel implements Runnable{
     private ServerSocket serverSocket;
 
 
-    public ControlTunnel(
+    public Controller(
             int port,
             PublicTunnelRegistry publicTunnelRegistry,
             ControlConnectionRegistry controlConnectionRegistry,
@@ -41,7 +40,7 @@ public class ControlTunnel implements Runnable{
 
         try{
             serverSocket = new ServerSocket(port);
-            System.out.printf("[%s][ControlTunnel]Listening for control and proxy connections on %d\n",
+            System.out.printf("[%s][Controller]Listening for control and proxy connections on %d\n",
                     timeStamp(),port);
         }catch (IOException e){
             e.printStackTrace();
@@ -58,9 +57,9 @@ public class ControlTunnel implements Runnable{
                 Socket socket = serverSocket.accept();
                 //control tunnel收到一个tcp socket 连接，将其包装成TCPConnection
                 TCPConnection tcpConnection = new TCPConnection(socket, "control/proxy", random.getRandomString(8));
-                System.out.printf("[%s][ControlTunnelListener]New control/proxy connection[%s] from %s\n",
-                        timeStamp(), tcpConnection.getConnectionId(), tcpConnection.getRemoteAddr());
-                Go(new ControlTunnelHandler(tcpConnection));
+                //System.out.printf("[%s][Controller]New control/proxy connection[%s] from %s\n",
+                        //timeStamp(), tcpConnection.getConnectionId(), tcpConnection.getRemoteAddr());
+                Go(new ControllerHandler(tcpConnection));
             }catch (IOException e){
                 e.printStackTrace();
             }

@@ -11,17 +11,27 @@ public class AuthResponse implements Message, Serializable {
     
     private float version;
     private String clientId;
+    private boolean reconnect;
     private String error;
     private boolean hasError;
 
     public AuthResponse(float version, String clientId) {
         this.version = version;
         this.clientId = clientId;
+        this.reconnect = false;
     }
 
     public AuthResponse(String error){
         this.hasError = true;
         this.error = new String(error);
+    }
+
+    public boolean isReconnect() {
+        return reconnect;
+    }
+
+    public void setReconnect(boolean reconnect) {
+        this.reconnect = reconnect;
     }
 
     public float getVersion() {
