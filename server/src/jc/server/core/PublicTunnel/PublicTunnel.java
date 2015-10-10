@@ -1,12 +1,11 @@
 package jc.server.core.PublicTunnel;
 
+import jc.Random;
 import jc.TCPConnection;
-import jc.message.TunnelRequest;
-import jc.server.core.Main;
-import jc.server.core.ControlConnection;
+import jc.message.PublicTunnelRequest;
+import jc.server.core.ControlConnection.ControlConnection;
 
-import static jc.server.core.Main.*;
-import static jc.server.core.Utils.*;
+import static jc.Utils.*;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -18,7 +17,7 @@ import java.net.Socket;
  */
 public class PublicTunnel implements Runnable{
 
-    protected TunnelRequest tunnelRequest;
+    protected PublicTunnelRequest publicTunnelRequest;
     protected long start;
     protected int port;
     protected String url;
@@ -26,31 +25,29 @@ public class PublicTunnel implements Runnable{
     protected ServerSocket serverSocket;
     protected ControlConnection controlConnection;
     protected int closing;
+    private Random random;
 
     public String getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public PublicTunnel(TunnelRequest tunnelRequest, ControlConnection controlConnection){
+    public PublicTunnel(PublicTunnelRequest publicTunnelRequest, ControlConnection controlConnection, Random random){
 
 
-        this.tunnelRequest = tunnelRequest;
+        this.publicTunnelRequest = publicTunnelRequest;
         this.start = System.currentTimeMillis();
         this.controlConnection = controlConnection;
+        this.random = random;
 
-        switch (tunnelRequest.getProtocol()){
+        switch (publicTunnelRequest.getProtocol()){
 
             case "tcp":
 
-                this.port = tunnelRequest.getRemotePort();
+                this.port = publicTunnelRequest.getRemotePort();
                 this.protocol = "tcp";
-                this.url = String.format("tcp://%s:%d", Main.options.getDomain(), tunnelRequest.getRemotePort());
+                //"127.0.0.1" 这个是服务器的域名，应该从配置文件或者命令行中获取
+                this.url = String.format("tcp://%s:%d", "127.0.0.1", publicTunnelRequest.getRemotePort());
 
-                tunnelRegistry.register(url, this);
 
                 try{
                     this.serverSocket = new ServerSocket();
@@ -74,7 +71,7 @@ public class PublicTunnel implements Runnable{
 
             default:
 
-                System.out.printf("[%s][PublicTunnel]Protocol %s is not supported\n", timeStamp(),tunnelRequest.getProtocol());
+                System.out.printf("[%s][PublicTunnel]Protocol %s is not supported\n", timeStamp(), publicTunnelRequest.getProtocol());
 
         }
     }

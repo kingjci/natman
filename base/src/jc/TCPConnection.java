@@ -94,7 +94,6 @@ public class TCPConnection {
             inputStream = socket.getInputStream();
             objectInput = new ObjectInputStream(inputStream);
             message =(Message) objectInput.readObject();
-            message.setIP(socket.getRemoteSocketAddress().toString());
         }catch (IOException e){
             throw e;
         }catch (ClassNotFoundException e){

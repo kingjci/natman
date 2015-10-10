@@ -1,28 +1,43 @@
 package jc.server.core.ControlTunnel;
 
+import jc.Random;
 import jc.TCPConnection;
+import jc.server.core.ControlConnection.ControlConnectionRegistry;
+import jc.server.core.PublicTunnel.PublicTunnel;
+import jc.server.core.PublicTunnel.PublicTunnelRegistry;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.PriorityQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
-import static jc.server.core.Main.random;
-import static jc.server.core.Utils.Go;
-import static jc.server.core.Utils.timeStamp;
+import static jc.Utils.Go;
+import static jc.Utils.timeStamp;
 
 /**
  * Created by ��� on 2015/9/23.
  */
 public class ControlTunnel implements Runnable{
 
+    private PublicTunnelRegistry publicTunnelRegistry;
+    private ControlConnectionRegistry controlConnectionRegistry;
+    private Random random;
+
+
     //ControlTunnel使用tcp协议，不再做区分
     private ServerSocket serverSocket;
 
 
-    public ControlTunnel(int port){
+    public ControlTunnel(
+            int port,
+            PublicTunnelRegistry publicTunnelRegistry,
+            ControlConnectionRegistry controlConnectionRegistry,
+            Random random
+    ){
+
+        //传递给ControlTunnelHandler用来注册创建control connection的时候使用
+        this.publicTunnelRegistry = publicTunnelRegistry;
+        this.controlConnectionRegistry = controlConnectionRegistry;
+        this.random = random;
 
         try{
             serverSocket = new ServerSocket(port);

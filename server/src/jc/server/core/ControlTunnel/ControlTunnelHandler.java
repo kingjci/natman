@@ -1,23 +1,26 @@
 package jc.server.core.ControlTunnel;
 
 import jc.message.AuthRequest;
+import jc.message.AuthResponse;
 import jc.message.Message;
 import jc.TCPConnection;
 import jc.message.ProxyResponse;
-import jc.server.core.ControlConnection;
+import jc.server.core.ControlConnection.ControlConnection;
 
 import java.io.IOException;
 
 import static jc.server.core.Main.controlConnectionRegistry;
-import static jc.server.core.Utils.Go;
-import static jc.server.core.Utils.timeStamp;
+import static jc.Utils.Go;
+import static jc.Utils.timeStamp;
+import static jc.server.core.Main.publicTunnelRegistry;
+import static jc.server.core.Main.random;
 
 /**
  * Created by 金成 on 2015/9/23.
  */
 public class ControlTunnelHandler implements Runnable {
 
-    protected TCPConnection tcpConnection;
+    private TCPConnection tcpConnection;
 
     ControlTunnelHandler(TCPConnection tcpConnection) {
         this.tcpConnection = tcpConnection;
@@ -52,9 +55,22 @@ public class ControlTunnelHandler implements Runnable {
 
                 case "AuthRequest":
 
+                    AuthRequest authRequest = (AuthRequest) message;
                     //control tunnel收到的这个TCPConnection发送了认证请求，表明该TCPConnection
                     //是一个controlConnection
-                    controlConnection = new ControlConnection(tcpConnection, (AuthRequest)message);
+                    controlConnection = new ControlConnection(
+                            tcpConnection,
+                            publicTunnelRegistry,
+                            random,
+                            (AuthRequest)message);
+
+                    if (controlConnectionRegistry.has(authRequest.getClientId())){
+                        ControlConnection oldControlConnection = controlConnectionRegistry.get(authRequest.getClientId());
+                        oldControlConnection.close();
+                        //oldControlConnection.shutDown();
+                    }
+
+                    controlConnectionRegistry.register(controlConnection.getClientId(), controlConnection);
 
                     Go(controlConnection);
 
@@ -68,7 +84,11 @@ public class ControlTunnelHandler implements Runnable {
 
                     tcpConnection.setType("proxy");
 
-                    System.out.printf("[%s][ControlTunnelHandler]Registering new proxy connection[%s] for %s[%s]\n", timeStamp(), tcpConnection.getConnectionId(), proxyResponse.getIP(), proxyResponse.getClientId());
+                    System.out.printf("[%s][ControlTunnelHandler]Registering new proxy connection[%s] for %s[%s]\n",
+                            timeStamp(),
+                            tcpConnection.getConnectionId(),
+                            tcpConnection.getRemoteAddr(),
+                            proxyResponse.getClientId());
 
                     controlConnection = controlConnectionRegistry.get(proxyResponse.getClientId());
 

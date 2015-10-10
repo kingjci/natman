@@ -13,7 +13,6 @@ public class AuthResponse implements Message, Serializable {
     private String clientId;
     private String error;
     private boolean hasError;
-    private String ip;
 
     public AuthResponse(float version, String clientId) {
         this.version = version;
@@ -22,31 +21,23 @@ public class AuthResponse implements Message, Serializable {
 
     public AuthResponse(String error){
         this.hasError = true;
-        this.error = error;
+        this.error = new String(error);
     }
 
     public float getVersion() {
         return version;
     }
 
-    public void setVersion(float version) {
-        this.version = version;
-    }
-
     public String getClientId() {
         return clientId;
-    }
-
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
     }
 
     public String getError() {
         return error;
     }
 
-    public void setError(String error) {
-        this.error = error;
+    public boolean hasError() {
+        return hasError;
     }
 
     @Override
@@ -54,13 +45,4 @@ public class AuthResponse implements Message, Serializable {
         return "AuthResponse";
     }
 
-    @Override
-    public void setIP(String ip) {
-        this.ip = ip;
-    }
-
-    @Override
-    public String getIP() {
-        return ip;
-    }
 }

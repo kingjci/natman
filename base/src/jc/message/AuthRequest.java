@@ -9,41 +9,28 @@ public class AuthRequest implements Message, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private float Version; //当前版本
-    private float MMversion; //major minor client version
-    private String ClientId; //当客户端开始一个新的session的时候为空
-    private String IP;
+    private float version; //当前版本
+    private String clientId; //当客户端开始一个新的session的时候为空
 
-    public AuthRequest(String cliendId, float version, float MMversion){
-        this.ClientId = cliendId;
-        this.Version = version;
-        this.MMversion = MMversion;
+    public AuthRequest(String clientId, float version){
+        this.clientId = clientId;
+        this.version = version;
+
     }
 
 
     public float getVersion() {
-        return Version;
+        return version;
     }
 
-    public void setVersion(float version) {
-        Version = version;
-    }
+    public boolean isNew(){
 
-    public float getMMversion() {
-        return MMversion;
-    }
+        return clientId == null | "".equalsIgnoreCase(clientId);
 
-    public void setMMversion(float MMversion) {
-        this.MMversion = MMversion;
     }
-
 
     public String getClientId() {
-        return ClientId;
-    }
-
-    public void setClientId(String clientId) {
-        ClientId = clientId;
+        return clientId;
     }
 
     @Override
@@ -51,13 +38,4 @@ public class AuthRequest implements Message, Serializable {
         return "AuthRequest";
     }
 
-    @Override
-    public String getIP() {
-        return IP;
-    }
-
-    @Override
-    public void setIP(String ip) {
-        this.IP = ip;
-    }
 }

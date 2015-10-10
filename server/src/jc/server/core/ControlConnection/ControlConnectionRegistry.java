@@ -1,18 +1,16 @@
-package jc.server.core.registry;
-
-import jc.server.core.ControlConnection;
+package jc.server.core.ControlConnection;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import static jc.server.core.Utils.timeStamp;
+import static jc.Utils.timeStamp;
 
 
 /**
  * Created by ½ð³É on 2015/9/23.
  */
-public class ControlConnectionRegistry implements Registry<ControlConnection> {
+public class ControlConnectionRegistry{
 
     private Map<String, ControlConnection> controlConnections = new HashMap<String, ControlConnection>();
     private ReadWriteLock readWriteLock = new ReentrantReadWriteLock(false);
@@ -21,8 +19,6 @@ public class ControlConnectionRegistry implements Registry<ControlConnection> {
 
     }
 
-
-    @Override
     public void register(String clientId, ControlConnection controlConnection) {
 
         readWriteLock.writeLock().lock();
@@ -40,7 +36,6 @@ public class ControlConnectionRegistry implements Registry<ControlConnection> {
 
     }
 
-    @Override
     public ControlConnection get(String clientId) {
 
         ControlConnection controlConnection = controlConnections.get(clientId);
@@ -48,7 +43,6 @@ public class ControlConnectionRegistry implements Registry<ControlConnection> {
         return controlConnection;
     }
 
-    @Override
     public int delete(String clientId) {
         return 0;
     }

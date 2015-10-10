@@ -11,8 +11,6 @@ public class PingRequest implements Message, Serializable {
 
     private String clientId;
 
-    private String ip;
-
     private long pingTime;
 
     public PingRequest(String clientId, long pingTime){
@@ -41,13 +39,4 @@ public class PingRequest implements Message, Serializable {
         return "PingRequest";
     }
 
-    @Override
-    public void setIP(String ip) {
-        this.ip = ip;
-    }
-
-    @Override
-    public String getIP() {
-        return ip;
-    }
 }

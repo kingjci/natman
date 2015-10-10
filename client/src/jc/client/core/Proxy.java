@@ -42,12 +42,14 @@ public class Proxy implements Runnable {
         ProxyStart proxyStart = null;
         try{
             proxyStart =(ProxyStart) proxyTCPConnection.readMessage();
+            System.out.printf("[%s][Proxy]New proxy connection[%s] from %s\n",
+                    timeStamp(), proxyTCPConnection.getConnectionId(), proxyStart.getPublicConnectionAddress());
         }catch (IOException e){
             System.out.printf("[%s][Proxy]Proxy connection[%s] is shutdown by server\n",
                     timeStamp(), proxyTCPConnection.getConnectionId());
             //代理连接被服务器关闭
             proxyTCPConnection.close();
-            //e.printStackTrace();
+            e.printStackTrace();
             return;
         }
 
@@ -64,7 +66,6 @@ public class Proxy implements Runnable {
         }
 
         Join(localTCPConnection, proxyTCPConnection);
-
 
     }
 }

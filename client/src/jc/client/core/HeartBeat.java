@@ -1,5 +1,6 @@
 package jc.client.core;
 
+import jc.Time;
 import jc.message.PingRequest;
 import jc.TCPConnection;
 

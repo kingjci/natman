@@ -7,7 +7,4 @@ public interface Message {
 
     public String getMessageType();
 
-    public void setIP(String ip);
-
-    public String getIP();
 }

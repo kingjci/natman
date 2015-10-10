@@ -1,4 +1,4 @@
-package jc.server.core.registry;
+package jc.server.core.PublicTunnel;
 
 import jc.server.core.PublicTunnel.PublicTunnel;
 
@@ -10,17 +10,16 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 /**
  * Created by 金成 on 2015/9/8.
  */
-public class TunnelRegistry implements Registry<PublicTunnel>{
+public class PublicTunnelRegistry {
 
     private Map<String, PublicTunnel> tunnels;
     private ReadWriteLock readWriteLock;
 
-    public TunnelRegistry(){
-        this.tunnels = new HashMap<String, PublicTunnel>();
+    public PublicTunnelRegistry(){
+        this.tunnels = new HashMap<>();
         this.readWriteLock = new ReentrantReadWriteLock(false);
     }
 
-    @Override
     public void register(String url, PublicTunnel publicTunnel){
 
         //返回-1代表这个tunnel已经存在，0正常添加
@@ -37,7 +36,6 @@ public class TunnelRegistry implements Registry<PublicTunnel>{
         readWriteLock.writeLock().unlock();
     }
 
-    @Override
     public PublicTunnel get(String url) {
 
         readWriteLock.readLock().lock();
@@ -47,7 +45,6 @@ public class TunnelRegistry implements Registry<PublicTunnel>{
         return publicTunnel;
     }
 
-    @Override
     public int delete(String url) {
 
         readWriteLock.writeLock().lock();

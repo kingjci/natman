@@ -1,4 +1,4 @@
-package jc.server.core;
+package jc;
 
 import jc.TCPConnection;
 
@@ -17,7 +17,7 @@ public class Pipe implements  Runnable{
         private TCPConnection from;
         private CountDownLatch waitGroup;
 
-        Pipe(TCPConnection to, TCPConnection from, CountDownLatch waitGroup){
+        public Pipe(TCPConnection to, TCPConnection from, CountDownLatch waitGroup){
             this.to = to;
             this.from = from;
             this.waitGroup = waitGroup;
@@ -37,7 +37,7 @@ public class Pipe implements  Runnable{
             inputStream = this.from.getSocket().getInputStream();
             outputStream = this.to.getSocket().getOutputStream();
 
-            int len = 0;
+            int len;
             byte[] buffer = new byte[1024];
 
             while (  (len = inputStream.read(buffer)) != -1 ) {
@@ -46,9 +46,6 @@ public class Pipe implements  Runnable{
                 outputStream.flush();
 
             }
-
-
-
 
         }catch (SocketException e){
             //当浏览器的socket被浏览器关闭的时候，可能会进入到这里

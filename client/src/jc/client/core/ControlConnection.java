@@ -2,6 +2,7 @@ package jc.client.core;
 
 import jc.TCPConnection;
 import jc.message.*;
+import jc.Time;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -70,14 +71,13 @@ public class ControlConnection implements Runnable {
 
     public void control(){
 
-        TCPConnection TCPConnection = Dial(serverAddr, 12345, "control" );
-        AuthRequest authRequest = new AuthRequest(clientId, 1.0f, 1.0f);
+        TCPConnection tcpConnection = Dial(serverAddr, 12345, "control" );
+        AuthRequest authRequest = new AuthRequest(clientId, 1.0f);
         AuthResponse authResponse = null;
 
         try{
-            TCPConnection.writeMessage(authRequest);
-
-            authResponse =(AuthResponse) TCPConnection.readMessage();
+            tcpConnection.writeMessage(authRequest);
+            authResponse =(AuthResponse) tcpConnection.readMessage();
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -94,30 +94,30 @@ public class ControlConnection implements Runnable {
         for (Map.Entry<String, TunnelConfiguration> entry : tunnelConfiguration.entrySet()){
 
             TunnelConfiguration tunnelConfiguration = entry.getValue();
-            TunnelRequest tunnelRequest =
-                    new TunnelRequest(random.getRandomString(8), "tcp", tunnelConfiguration.getRemotePort(), tunnelConfiguration.getLocalPort());
+            PublicTunnelRequest publicTunnelRequest =
+                    new PublicTunnelRequest(random.getRandomString(8), "tcp", tunnelConfiguration.getRemotePort(), tunnelConfiguration.getLocalPort());
 
             try {
-                TCPConnection.writeMessage(tunnelRequest);
+                tcpConnection.writeMessage(publicTunnelRequest);
             }catch (IOException e){
                 e.printStackTrace();
             }
 
 
-            requestIdToTunnelConfig.put(tunnelRequest.getRequestId(), entry.getValue());
+            requestIdToTunnelConfig.put(publicTunnelRequest.getRequestId(), entry.getValue());
 
         }
 
         this.lastPingResponse.setTime(System.currentTimeMillis());
 
-        Go(new HeartBeat(lastPingResponse, TCPConnection, this));
+        Go(new HeartBeat(lastPingResponse, tcpConnection, this));
 
         while (true){
 
             Message message = null;
 
             try{
-                message = TCPConnection.readMessage();
+                message = tcpConnection.readMessage();
             }catch (IOException e){
                 e.printStackTrace();
                 System.out.printf("[%s]control connection is closed,prepare to exit\n", timeStamp());
@@ -144,9 +144,9 @@ public class ControlConnection implements Runnable {
 
                 case "TunnelResponse":
 
-                    TunnelResponse tunnelResponse = (TunnelResponse) message;
-                    if (tunnelResponse.hasError()){
-                        String error = String.format("[%s]Server failed to allocate tunnel: %s\n", timeStamp(),tunnelResponse.getError());
+                    PublicTunnelResponse publicTunnelResponse = (PublicTunnelResponse) message;
+                    if (publicTunnelResponse.hasError()){
+                        String error = String.format("[%s]Server failed to allocate tunnel: %s\n", timeStamp(), publicTunnelResponse.getError());
                         System.out.printf(error);
                         shutDown(error);
                         //准备退出程序
@@ -154,10 +154,10 @@ public class ControlConnection implements Runnable {
                     }
 
                     PrivateTunnel privateTunnel =
-                            new PrivateTunnel(tunnelResponse.getUrl(), "127.0.0.1", tunnelResponse.getLocalPort(),tunnelResponse.getProtocol());
+                            new PrivateTunnel(publicTunnelResponse.getUrl(), "127.0.0.1", publicTunnelResponse.getLocalPort(), publicTunnelResponse.getProtocol());
 
-                    tunnels.put(tunnelResponse.getUrl(), privateTunnel);
-                    System.out.printf("[%s][ControlConnection]PrivateTunnel established at %s\n", timeStamp(),tunnelResponse.getUrl());
+                    tunnels.put(publicTunnelResponse.getUrl(), privateTunnel);
+                    System.out.printf("[%s][ControlConnection]PrivateTunnel established at %s\n", timeStamp(), publicTunnelResponse.getUrl());
 
                     break;
 

@@ -1,4 +1,4 @@
-package jc.server.core;
+package jc;
 
 /**
  * Created by ½ð³É on 2015/9/24.

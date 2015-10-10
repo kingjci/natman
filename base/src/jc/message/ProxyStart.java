@@ -12,43 +12,28 @@ public class ProxyStart implements Message, Serializable{
 
     private static final long serialVersionUID = 1L;
 
-    private String Url; //tcp://jincheng.link:8000服务器上远端端口代理的连接url
-    private String ClientAddress; //来自Internet上客户端的网络地址
-    private String ip;
+    private String url; //tcp://jincheng.link:8000服务器上远端端口代理的连接url
+    private String publicConnectionAddress; //来自Internet上客户端的网络地址
 
-    public ProxyStart(String url, String clientAddress){
-        this.Url = url;
-        this.ClientAddress = clientAddress;
+    public ProxyStart(String url, String publicConnectionAddress){
+        this.url = url;
+        this.publicConnectionAddress = publicConnectionAddress;
     }
 
     public String getUrl() {
-        return Url;
+        return url;
     }
 
-    public void setUrl(String url) {
-        Url = url;
-    }
-
-    public String getClientAddress() {
-        return ClientAddress;
+    public String getPublicConnectionAddress() {
+        return publicConnectionAddress;
     }
 
     public void setClientAddrress(String clientAddrress) {
-        ClientAddress = clientAddrress;
+        publicConnectionAddress = clientAddrress;
     }
 
     @Override
     public String getMessageType() {
         return "ProxyStart";
-    }
-
-    @Override
-    public void setIP(String ip) {
-        this.ip = ip;
-    }
-
-    @Override
-    public String getIP() {
-        return ip;
     }
 }

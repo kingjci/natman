@@ -1,35 +1,19 @@
-package jc.server.core;
+package jc;
 
-import jc.TCPConnection;
 
-import java.io.IOException;
-import java.net.Socket;
+import java.text.SimpleDateFormat;
 import java.util.concurrent.CountDownLatch;
-
-import static jc.server.core.Main.consoleLock;
-import static jc.server.core.Main.threadRegistry;
-import static jc.server.core.Main.random;
-import static jc.server.core.Main.timeFormat;
 
 /**
  * Created by ½ð³É on 2015/9/8.
  */
 public class Utils {
 
-
-
     public static void Go(Runnable runnable){
 
         Thread thread = new Thread(runnable);
         thread.start();
 
-    }
-
-    public static void Go(String threadName, Runnable runnable){
-
-        Thread thread = new Thread(runnable);
-        threadRegistry.register(threadName,thread);
-        thread.start();
     }
 
     public static void Join(TCPConnection c1, TCPConnection c2){
@@ -48,30 +32,18 @@ public class Utils {
         }catch (InterruptedException e){
             e.printStackTrace();
         }
-        System.out.printf("[%s][Utils]Disjoin %s with %s\n", timeStamp(),c1.Id(), c2.Id());
+        System.out.printf("[%s][Utils]Separate %s with %s\n", timeStamp(), c1.Id(), c2.Id());
 
-    }
-
-
-    public static void Console(Object... args){
-
-        consoleLock.lock();
-
-        Object[] objects = new Object[args.length-1];
-        System.arraycopy(args, 1, objects, 0, args.length - 1);
-        System.out.printf(args[0] + "\n", objects);
-
-        consoleLock.unlock();
     }
 
     public static String timeStamp(long timeMillis){
 
+        SimpleDateFormat timeFormat =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return timeFormat.format(timeMillis);
 
     }
 
     public static String timeStamp(){
-
         return timeStamp(System.currentTimeMillis());
     }
 

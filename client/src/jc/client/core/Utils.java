@@ -1,6 +1,7 @@
 package jc.client.core;
 
 import jc.TCPConnection;
+import jc.Pipe;
 import jc.Version;
 import org.apache.commons.cli.*;
 
