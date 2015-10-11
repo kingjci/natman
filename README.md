@@ -25,8 +25,10 @@ reason is that the official auth website of ngrok is block in China.
 
 ##Download and installing NatMan
 - Just download server.jar and client.jar
-- Run the server on vps, java -jar server.jar
-- Run the client on your local computer, java -jar client.jar -localport 8080 -remoteport 80 -hostname abc.xyz
+- Run the server on vps, 
+  >>java -jar server.jar
+- Run the client on your local computer
+  >>java -jar client.jar -localport 8080 -remoteport 80 -hostname abc.xyz
 - More features is under development
 
 ##Contacts
