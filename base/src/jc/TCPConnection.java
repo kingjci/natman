@@ -1,6 +1,7 @@
 package jc;
 
 import jc.message.Message;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.net.Socket;
@@ -9,30 +10,43 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-/**
- * Created by ½ð³É on 2015/9/8.
- */
 public class TCPConnection {
 
-    private Socket socket;
-    private String connectionId;
+    private final Socket socket;
+    private final String connectionId;
+    private InputStream inputStream;
+    private OutputStream outputStream;
     private String type;
-    private Lock outputLock;
-    private Lock inputLock;
+    private final Lock outputLock;
+    private final Lock inputLock;
 
-    public TCPConnection(Socket socket, String type, String connectionId){
+    private final Logger runtimeLogger;
+    private final Logger accessLogger;
+
+    public TCPConnection(
+            Socket socket,
+            String type,
+            String connectionId,
+            Logger runtimeLogger,
+            Logger accessLogger
+    ){
         this.socket = socket;
         this.type = type;
-        this.outputLock = new ReentrantLock(false);
-        this.inputLock = new ReentrantLock(false);
         this.connectionId = connectionId;
+        this.runtimeLogger = runtimeLogger;
+        this.accessLogger = accessLogger;
+
+        outputLock = new ReentrantLock(false);
+        inputLock = new ReentrantLock(false);
     }
 
     public void close(){
         try {
-            this.socket.close();
+            socket.shutdownInput();
+            socket.shutdownOutput();
+            socket.close();
         }catch (IOException e){
-            e.printStackTrace();
+            runtimeLogger.error(e.getMessage(), e);
         }
     }
 
@@ -40,42 +54,39 @@ public class TCPConnection {
         return connectionId;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public String Id(){
-        return String.format("%s:%s", this.type, this.connectionId);
-    }
-
     public void setType(String type){
         this.type = type;
     }
 
-    public void closeRead(){
-        try{
-            this.socket.shutdownInput();
-        }catch (IOException e){
-            e.printStackTrace();
-        }
+    public String getType() {
+        return type;
     }
 
-    public Socket getSocket(){
-        return this.socket;
+    public InputStream getInputStream() throws IOException{
+        return this.socket.getInputStream();
+    }
+
+    public OutputStream getOutPutStream() throws IOException{
+        return this.socket.getOutputStream();
+    }
+
+    public void shutdownInput() throws IOException{
+        this.socket.shutdownInput();
+    }
+
+    public void shutdownOutput() throws IOException{
+        this.socket.shutdownOutput();
     }
 
     public void writeMessage(Message message) throws IOException{
-        OutputStream outputStream = null;
-        ObjectOutput objectOutput = null;
 
         try{
 
             outputLock.lock();
-            outputStream  = socket.getOutputStream();
-            objectOutput = new ObjectOutputStream(outputStream);
+            OutputStream outputStream  = socket.getOutputStream();
+            ObjectOutput objectOutput = new ObjectOutputStream(outputStream);
             objectOutput.writeObject(message);
             objectOutput.flush();
-
 
         }catch (IOException e){
             throw e;
@@ -86,18 +97,17 @@ public class TCPConnection {
     }
 
     public Message readMessage () throws IOException{
-        InputStream inputStream = null;
-        ObjectInput objectInput = null;
+
         Message message = null;
         try{
             inputLock.lock();
-            inputStream = socket.getInputStream();
-            objectInput = new ObjectInputStream(inputStream);
+            InputStream inputStream = socket.getInputStream();
+            ObjectInput objectInput = new ObjectInputStream(inputStream);
             message =(Message) objectInput.readObject();
         }catch (IOException e){
             throw e;
         }catch (ClassNotFoundException e){
-            e.printStackTrace();
+            runtimeLogger.error(e.getMessage(), e);
         }finally {
             inputLock.unlock();
         }
@@ -105,63 +115,8 @@ public class TCPConnection {
         return message;
     }
 
-    public void write(byte[] payload) throws IOException{
-
-        OutputStream outputStream = null;
-
-        try{
-
-            outputLock.lock();
-            outputStream = socket.getOutputStream();
-            outputStream.write(payload);
-            outputStream.flush();
-
-
-        }catch (IOException e){
-            throw e;
-        }finally {
-            outputLock.unlock();
-        }
-    }
-
-    public byte[] readAll() throws IOException{
-
-        final int bufLength = 100;
-        InputStream inputStream = null;
-        List<byte[]> list = new LinkedList<byte[]>();
-        byte[] result = null;
-
-        byte[] buf = new byte[bufLength];
-
-        try{
-            inputLock.lock();
-            inputStream = socket.getInputStream();
-            while (inputStream.read(buf) != -1){
-                list.add(buf);
-                buf = new byte[bufLength];
-            }
-
-            int length = list.size()*bufLength;
-            result = new byte[length];
-            for (int i=0; i < list.size(); i++){
-                System.arraycopy(list.get(i),0,result,i*bufLength, bufLength);
-            }
-
-
-        }catch (IOException e){
-            throw e;
-        }finally {
-            inputLock.unlock();
-        }
-
-        return result;
-
-    }
-
-    public String getRemoteAddr(){
-
+    public String getRemoteAddress(){
         return this.socket.getRemoteSocketAddress().toString();
-
     }
 
 

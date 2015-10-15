@@ -2,33 +2,38 @@ package jc.server.core.ControlConnection;
 
 import jc.TCPConnection;
 import jc.Time;
+import org.apache.log4j.Logger;
 
 import java.util.TimerTask;
 
-import static jc.Utils.timeStamp;
-
-/**
- * Created by 金成 on 2015/10/10.
- */
 public class ControlConnectionHeartBeatChecker extends TimerTask {
 
     private Time lastPing;
-    private TCPConnection tcpConnection;
+    private final TCPConnection tcpConnection;
+    private final Logger runtimeLogger;
+    private final Logger accessLogger;
 
-    public ControlConnectionHeartBeatChecker(TCPConnection tcpConnection, Time lastPing){
-        this.tcpConnection = tcpConnection;
-        this.lastPing = lastPing;
+    public ControlConnectionHeartBeatChecker(
+            ControlConnection controlConnection
+    ){
+        this.tcpConnection = controlConnection.getTcpConnection();
+        this.lastPing = controlConnection.getLastPing();
+        this.runtimeLogger = controlConnection.getRuntimeLogger();
+        this.accessLogger = controlConnection.getAccessLogger();
     }
 
     @Override
     public void run() {
         long currentTimeMillis = System.currentTimeMillis();
-        long diff = currentTimeMillis - lastPing.getTime();
-        if (diff > 30*1000){
-            System.out.printf("[%s][ControlConnection]Lost heartbeat\n", timeStamp());
-            tcpConnection.close();//强制关闭这个control connection里面的socket，这样
-            //control connection 里面的主循环会被强制退出，退出线程
-            //准备关闭控制连接
+        long latency  = currentTimeMillis - lastPing.getTime();
+        if (latency > 30*1000){
+            runtimeLogger.error(
+                    String.format("Lost heartbeat from %s[%s]",
+                            tcpConnection.getRemoteAddress(),
+                            tcpConnection.getConnectionId()
+                    )
+            );
+
         }
     }
 }

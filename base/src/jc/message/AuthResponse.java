@@ -3,7 +3,7 @@ package jc.message;
 import java.io.Serializable;
 
 /**
- * Created by ½ð³É on 2015/9/8.
+ * Created by ï¿½ï¿½ï¿½ on 2015/9/8.
  */
 public class AuthResponse implements Message, Serializable {
 
@@ -11,27 +11,21 @@ public class AuthResponse implements Message, Serializable {
     
     private float version;
     private String clientId;
-    private boolean reconnect;
     private String error;
     private boolean hasError;
 
-    public AuthResponse(float version, String clientId) {
+
+    public AuthResponse(float version) {
         this.version = version;
-        this.clientId = clientId;
-        this.reconnect = false;
     }
 
-    public AuthResponse(String error){
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public void setError(String error){
         this.hasError = true;
         this.error = new String(error);
-    }
-
-    public boolean isReconnect() {
-        return reconnect;
-    }
-
-    public void setReconnect(boolean reconnect) {
-        this.reconnect = reconnect;
     }
 
     public float getVersion() {

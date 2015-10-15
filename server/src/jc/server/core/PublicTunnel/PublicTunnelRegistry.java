@@ -1,63 +1,79 @@
 package jc.server.core.PublicTunnel;
 
+import jc.server.core.Config;
 import jc.server.core.PublicTunnel.PublicTunnel;
+import org.apache.log4j.Logger;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * Created by ½ð³É on 2015/9/8.
+ * Created by ï¿½ï¿½ï¿½ on 2015/9/8.
  */
 public class PublicTunnelRegistry {
 
     private Map<String, PublicTunnel> tunnels;
-
     private Map<String, List<String>> clientIdToPublicUrl;
-
     private ReadWriteLock readWriteLock;
+    private Logger runtimeLogger;
+    private Logger accessLogger;
+    private Set<String> bannedPort;
 
-    public PublicTunnelRegistry(){
+    public PublicTunnelRegistry(Logger runtimeLogger, Logger accessLogger, Config config){
+        this.runtimeLogger = runtimeLogger;
+        this.accessLogger = accessLogger;
+        this.bannedPort = config.getBannedPort();
         this.tunnels = new HashMap<>();
         this.clientIdToPublicUrl = new HashMap<>();
         this.readWriteLock = new ReentrantReadWriteLock(false);
     }
 
-    public void register(String clientId,String url, PublicTunnel publicTunnel){
+    public String register(String clientId,PublicTunnel publicTunnel){
 
-        //·µ»Ø-1´ú±íÕâ¸ötunnelÒÑ¾­´æÔÚ£¬0Õý³£Ìí¼Ó
+        String publicUrl = publicTunnel.getPublicUrl();
 
         readWriteLock.writeLock().lock();
 
-        if (tunnels.get(url) != null){
-            System.out.printf("The tunnel %s is already registered.\n", url);
-            return ;
+        if (tunnels.get(publicUrl) != null){
+
+            String result = String.format("The public tunnel %s is already registered.", publicUrl);
+            accessLogger.info(result);
+            return result;
         }
 
-        tunnels.put(url, publicTunnel);
+        if (bannedPort.contains(publicUrl)){
+
+            String result =
+                    String.format("The public tunnel %s is banned by the administrator.", publicUrl);
+            accessLogger.info(result);
+
+            return result;
+
+        }
+
+        tunnels.put(publicUrl, publicTunnel);
         if (clientIdToPublicUrl.get(clientId) != null){
-            List<String> publicUrls = clientIdToPublicUrl.get(clientId);
-            publicUrls.add(url);
+
+            List<String> publicUrlsOfClientId = clientIdToPublicUrl.get(clientId);
+            publicUrlsOfClientId.add(publicUrl);
+
         }else {
-            List<String> publicUrls = new LinkedList<>();
-            publicUrls.add(url);
-            clientIdToPublicUrl.put(clientId, publicUrls);
+
+            List<String> publicUrlsOfClientId = new LinkedList<>();
+            publicUrlsOfClientId.add(publicUrl);
+            clientIdToPublicUrl.put(clientId, publicUrlsOfClientId);
+
         }
 
         readWriteLock.writeLock().unlock();
+
+        accessLogger.info(
+                String.format("Register public tunnel %s successfully", publicUrl)
+        );
+        return "success";
     }
 
-    public PublicTunnel get(String url) {
-
-        readWriteLock.readLock().lock();
-        PublicTunnel publicTunnel = tunnels.get(url);
-        readWriteLock.readLock().unlock();
-
-        return publicTunnel;
-    }
 
     public void delete(String clientId) {
 

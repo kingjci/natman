@@ -3,49 +3,47 @@ package jc.message;
 import java.io.Serializable;
 
 /**
- * Created by ½ð³É on 2015/9/8.
+ * Created by ï¿½ï¿½ï¿½ on 2015/9/8.
  */
 public class PublicTunnelResponse implements Message, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String RequestId; //ÓëTunnelRequestÖÐµÄRequestIdÏàÍ¬
-    private String Url; // tcp://jincheng.link:8000
-    private String Protocol;
-    private int LocalPort;
-    private String Error;
+    private String publicUrl; // tcp://jincheng.link:8000
+    private String protocol;
+    private int localPort;
+    private String error;
 
     public PublicTunnelResponse(String error){
-        this.Error = new String(error);//³öÏÖ´íÎóµÄ¹¹Ôì·½Ê½
+        this.error = new String(error);
     }
 
 
-    public PublicTunnelResponse(String url, String protocol, String requestId, int localPort){
-        this.Url = url;
-        this.Protocol = protocol;
-        this.RequestId = requestId;
-        this.LocalPort = localPort;
+    public PublicTunnelResponse(String publicUrl, String protocol,int localPort){
+        this.publicUrl = publicUrl;
+        this.protocol = protocol;
+        this.localPort = localPort;
     }
 
     public int getLocalPort() {
-        return LocalPort;
+        return localPort;
     }
 
-    public String getUrl() {
-        return Url;
+    public String getPublicUrl() {
+        return publicUrl;
     }
 
     public String getProtocol() {
-        return Protocol;
+        return protocol;
     }
 
     public String getError() {
-        return Error;
+        return error;
     }
 
     public boolean hasError(){
 
-        return (Error != null) && (!"".equalsIgnoreCase(Error));
+        return (error != null) && (!"".equalsIgnoreCase(error));
     }
 
     @Override

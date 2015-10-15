@@ -1,6 +1,8 @@
 package jc;
 
 
+import org.apache.log4j.Logger;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -8,9 +10,6 @@ import java.net.SocketAddress;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.CountDownLatch;
 
-/**
- * Created by 金成 on 2015/9/8.
- */
 public class Utils {
 
     public static void Go(Runnable runnable){
@@ -22,7 +21,6 @@ public class Utils {
 
     public static void Join(TCPConnection c1, TCPConnection c2){
 
-        //这个程序会等到两个Connection的双向传输都传送结束才结束返回
         CountDownLatch waitGroup = new CountDownLatch(2);
         Go(new Pipe(c1, c2, waitGroup));
         Go(new Pipe(c2, c1, waitGroup));
@@ -40,36 +38,39 @@ public class Utils {
 
     }
 
-    public static TCPConnection Dial(String host, int port, String type, String connectionId){
+    public static TCPConnection Dial(
+            String host,
+            int port,
+            String type,
+            String connectionId,
+            Logger runtimeLogger,
+            Logger accessLogger
+    ){
 
-        Socket socket = null;
-        TCPConnection TCPConnection = null;
+        TCPConnection tcpConnection = null;
         try{
-            socket = new Socket();
+            Socket socket = new Socket();
             SocketAddress address = new InetSocketAddress(host, port);
-            //连接端口，3秒钟超时。当连接本地端口的时候如果端口没有开放会出现异常connect refused
             socket.connect(address, 3*1000);
-            TCPConnection = new TCPConnection(socket, type, connectionId);
-            //System.out.printf("[%s][Utils]New %s connection[%s] to: %s\n",
-                    //timeStamp(), TCPConnection.getType(), TCPConnection.getConnectionId(), TCPConnection.getRemoteAddr());
-
+            tcpConnection = new TCPConnection(socket, type, connectionId, runtimeLogger, accessLogger);
+            accessLogger.info(
+                    String.format("New %s connection[%s] to: %s",
+                            tcpConnection.getType(),
+                            tcpConnection.getConnectionId(),
+                            tcpConnection.getRemoteAddress())
+            );
         }catch (IOException e){
-            System.out.printf("[%s][Utils]can not connect to %s:%d, perhaps this port is not open\n", timeStamp(), host, port);
-            e.printStackTrace();
+
+            runtimeLogger.error(
+                    String.format("Can not connect to %s:%d, perhaps this port is not open",
+                            host,
+                            port)
+            );
+            runtimeLogger.error(e.getMessage(),e);
+
         }
-        return TCPConnection;
+        return tcpConnection;
 
-    }
-
-    public static String timeStamp(long timeMillis){
-
-        SimpleDateFormat timeFormat =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return timeFormat.format(timeMillis);
-
-    }
-
-    public static String timeStamp(){
-        return timeStamp(System.currentTimeMillis());
     }
 
 

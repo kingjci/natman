@@ -1,64 +1,53 @@
 package jc.client.core;
 
 import jc.Random;
-import jc.Version;
-import jc.client.core.command.Command;
-import jc.client.core.command.QuitCommand;
+import jc.command.Command;
+import jc.command.QuitCommand;
 import org.apache.commons.cli.*;
+import org.apache.log4j.Logger;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static jc.Utils.Go;
-import static jc.Utils.timeStamp;
 
-/**
- * Created by 金成 on 2015/9/5.
- */
+
 public class Main {
 
+    public final static Option OPTION = new Option();
+    public final static Random RANDOM = new Random();
+    public final static Config CONFIG = new Config();
+    public final static Logger RUNTIMELOGGER = Logger.getLogger("Runtime");
+    public final static Logger ACCESSLOGGER = Logger.getLogger("Access");
+    public final static BlockingQueue<Command> COMMANDS = new LinkedBlockingQueue<>();
+    public final static Controller CONTROLLER = new Controller(CONFIG, RANDOM, COMMANDS,RUNTIMELOGGER, ACCESSLOGGER );
 
-    public static Random random = new Random();
-
-    public static Config config = new Config();
-
-    private static BlockingQueue<Command> cmds = new LinkedBlockingQueue<>();
-
-    private static ControlConnection controlConnection= new ControlConnection(config, random, cmds);
 
     public static void main(String[] args) {
-
-
-
-        //解析参数
+        
         LoadConfiguration(args);
 
-        Go(controlConnection);
+        Go(CONTROLLER);
 
         while (true){
             try{
-                Command command = cmds.take();
+                Command command = COMMANDS.take();
                 switch (command.getCommandType()){
 
                     case "QuitCommand":
 
                         QuitCommand quitCommand = (QuitCommand) command;
-                        controlConnection.shutDown(quitCommand.getReason());
-                        System.out.printf("[%s][Controller]QuitCommand\n", timeStamp());
+                        RUNTIMELOGGER.debug(String.format("QuitCommand, Reason:%s", quitCommand.getReason()));
                         //shutdown
-                        System.exit(-2);
+                        System.exit(quitCommand.getExitCode());
 
                     default:
-                        System.out.printf("[%s][Controller]unknown command\n", timeStamp());
-
+                        RUNTIMELOGGER.error("Unknown command");
                 }
             }catch (InterruptedException e){
-                e.printStackTrace();
+                RUNTIMELOGGER.error(e.getMessage(),e);
             }
 
         }
@@ -68,20 +57,188 @@ public class Main {
 
     public static void LoadConfiguration(String[] args){
 
+        Options options = new Options();
+        options.addOption("config", true,"config path");
+
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cmd = null;
+        try{
+            cmd = parser.parse(options, args);
+        }catch (ParseException e){
+            RUNTIMELOGGER.error(e.getMessage(),e);
+        }
+
+        if (cmd == null){
+            RUNTIMELOGGER.error("command is null");
+            return;
+        }
+
+        if (cmd.hasOption("config")){
+
+            File config = null;
+            FileReader fileReader = null;
+            BufferedReader bufferedReader = null;
+            try{
+                fileReader = new FileReader(cmd.getOptionValue("config"));
+                bufferedReader = new BufferedReader(fileReader);
+
+                String line;
+                int count = 0;
+                while ( (line = bufferedReader.readLine()) != null){
+                    count++;
+                    if (line.startsWith("#")){
+                        continue;
+                    }
+
+
+                    switch (line){
+
+                        case "auth":
+
+                            while ( "[/auth]".equals((line = bufferedReader.readLine()))){
+                                count++;
+
+                                if (line.startsWith("#")){
+                                    continue;
+                                }
+                                String[] words = line.split(":");
+                                CONFIG.setUsername(words[0]);
+                                CONFIG.setPassword(words[1]);
+
+                            }
+                            break;
+
+                        case "server":
+                            while ( "[/server]".equals((line = bufferedReader.readLine()))){
+                                count++;
+
+                                if (line.startsWith("#")){
+                                    continue;
+                                }
+                                CONFIG.setServerAddress(line);
+
+                            }
+
+                            if (CONFIG.getServerAddress() ==null | "".equals(CONFIG.getServerAddress())){
+                                RUNTIMELOGGER.error("Please give a server address in the config");
+                            }
+
+                            break;
+
+                        case "tcp":
+
+                            while ( "[/tcp]".equals((line = bufferedReader.readLine()))){
+                                count++;
+
+                                if (line.startsWith("#")){
+                                    continue;
+                                }
+                                String[] words = line.split(":");
+                                PublicTunnelConfiguration publicTunnelConfiguration = new PublicTunnelConfiguration();
+                                publicTunnelConfiguration.setProtocol("tcp");
+                                publicTunnelConfiguration.setName(words[0]);
+                                publicTunnelConfiguration.setLocalPort(Integer.valueOf(words[1]));
+                                publicTunnelConfiguration.setRemotePort(Integer.valueOf(words[2]));
+
+                                CONFIG.putPublicTunnelConfiguration(publicTunnelConfiguration);
+
+                            }
+
+                        case "http":
+
+
+                            while ( "[/http]".equals((line = bufferedReader.readLine()))){
+                                count++;
+
+                                if (line.startsWith("#")){
+                                    continue;
+                                }
+                                String[] words = line.split(":");
+                                PublicTunnelConfiguration publicTunnelConfiguration = new PublicTunnelConfiguration();
+                                publicTunnelConfiguration.setProtocol("http");
+                                publicTunnelConfiguration.setName(words[0]);
+                                publicTunnelConfiguration.setSubDomain(words[1]);
+                                publicTunnelConfiguration.setLocalPort(Integer.valueOf(words[2]));
+                                publicTunnelConfiguration.setRemotePort(Integer.valueOf(words[3]));
+
+                                CONFIG.putPublicTunnelConfiguration(publicTunnelConfiguration);
+
+                            }
+
+                        case "udp":
+
+                            while ( "[/udp]".equals((line = bufferedReader.readLine()))){
+                                count++;
+
+                                if (line.startsWith("#")){
+                                    continue;
+                                }
+                                String[] words = line.split(":");
+                                PublicTunnelConfiguration publicTunnelConfiguration = new PublicTunnelConfiguration();
+                                publicTunnelConfiguration.setProtocol("udp");
+                                publicTunnelConfiguration.setName(words[0]);
+                                publicTunnelConfiguration.setLocalPort(Integer.valueOf(words[1]));
+                                publicTunnelConfiguration.setRemotePort(Integer.valueOf(words[2]));
+
+                                CONFIG.putPublicTunnelConfiguration(publicTunnelConfiguration);
+
+                            }
+
+                            break;
+
+                        case "":
+
+                            //  blank line
+                            break;
+
+                        default:
+
+                            RUNTIMELOGGER.error("Unknown syntax");
+                    }
+                }
+
+                RUNTIMELOGGER.info(String.format("Read %d config lines", count));
+
+            }catch (FileNotFoundException e){
+                RUNTIMELOGGER.error(e.getMessage(),e);
+            }catch (IOException e){
+                RUNTIMELOGGER.error(e.getMessage(),e);
+            }finally {
+                try{
+                    bufferedReader.close();
+                    fileReader.close();
+                }catch (IOException e){
+                    RUNTIMELOGGER.error("Error occurs when  closing the config file");
+                }
+
+
+            }
+
+        }else {
+            PublicTunnelConfiguration publicTunnelConfiguration = new PublicTunnelConfiguration();
+
+            publicTunnelConfiguration.setName("default");
+
+
+            CONFIG.putPublicTunnelConfiguration(publicTunnelConfiguration);
+
+
+        }
+
         switch (args[0]){
 
             case "list":
 
-                //显示配置文件中的tunnels
-                break;
+
+                return;
 
             case "version":
-                System.out.println("natman version:"+ Version.Current);
+                RUNTIMELOGGER.info(String.format("Natman version:%f",OPTION.getVersion()));
                 return;
 
 
             case "help":
-                System.out.println("Examples:\n" +
+                RUNTIMELOGGER.info("Examples:\n" +
                         "\tnatman 80\n" +
                         "\tnatman -subdomain example\n" +
                         "\tnatman -hostname=\"example.com\"" +
@@ -100,118 +257,22 @@ public class Main {
                         "\tnatman version\n" +
                         "\n" +
                         "`");
+
                 return;
 
             case "":
 
-                System.out.println("Error: Specify a local port to tunnel to, or " +
+                RUNTIMELOGGER.error("Error: Specify a local port to tunnel to, or " +
                         "an natman command.\n\nExample: To expose port 80, run " +
                         "'natman 80'");
                 return;
 
             default:
-                //没有指定命令
-                config.setCommand("default");
+
+                //show help
+                RUNTIMELOGGER.error("Unknown command");
         }
 
 
-
-        Options options = new Options();
-        options.addOption("subdomain", true, "-subdomain kingjci");
-        options.addOption("localport", true, "-localport 8080");
-        options.addOption("remoteport", true, "-remoteport 8000");
-        options.addOption("config", true, "-config config.cfg");
-        options.addOption("hostname", true, "-hostname server.jincheng.link");
-
-        CommandLineParser parser = new DefaultParser();
-        CommandLine cmd = null;
-        try{
-            cmd = parser.parse(options, args);
-        }catch (ParseException e){
-            e.printStackTrace();
-        }
-
-        if (cmd == null){
-            System.out.println("command is null");
-            return;
-        }
-
-        if (cmd.hasOption("config")){
-            File config = new File(cmd.getOptionValue("config"));
-            FileReader fileReader   = null;
-            try{
-                fileReader = new FileReader(config);
-            }catch (FileNotFoundException e){
-                e.printStackTrace();
-            }
-
-            if (fileReader == null){
-                System.out.println("config does not exit!");
-                return;
-            }
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            //解析配置文件
-
-        }else {
-
-            //配置文件不存在的情况
-        }
-
-
-
-        switch (config.getCommand()){
-
-            case "default":
-
-                //通过参数产生默认的tunnel,如果是配置文件的话可能会有多个tunnel
-                Map<String, PublicTunnelConfiguration> tunnels = config.getPublicTunnelConfiguration();
-                PublicTunnelConfiguration publicTunnelConfiguration = new PublicTunnelConfiguration();
-
-                if (cmd.hasOption("subdomain")){
-                    publicTunnelConfiguration.setSubDomain(cmd.getOptionValue("subdomain"));
-                }
-
-                if (cmd.hasOption("hostname")){
-                    config.setServerAddress(cmd.getOptionValue("hostname"));
-                    publicTunnelConfiguration.setHostName(cmd.getOptionValue("hostname"));
-                }else {
-                    if (config.getServerAddress()!=null && "".equalsIgnoreCase(config.getServerAddress())) {
-                        publicTunnelConfiguration.setHostName(config.getServerAddress());
-                    }else {
-                        System.out.println("please specify one hostname");
-                    }
-
-                }
-
-                if (cmd.hasOption("remoteport")){
-                    publicTunnelConfiguration.setRemotePort(Integer.valueOf(cmd.getOptionValue("remoteport")));
-                }else {
-                    System.out.println("please specify one port");
-                    return;
-                }
-
-                if (cmd.hasOption("localport")){
-                    publicTunnelConfiguration.setLocalPort(Integer.valueOf(cmd.getOptionValue("localport")));
-                }else {
-                    System.out.println("please specify one port");
-                    return;
-                }
-
-                tunnels.put("default", publicTunnelConfiguration);
-
-                break;
-
-            case "list":
-
-                break;
-
-            case "start":
-
-                break;
-
-            default:
-
-                System.out.println("unknown command");
-        }
     }
 }

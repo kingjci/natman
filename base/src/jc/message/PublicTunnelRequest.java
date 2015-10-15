@@ -3,38 +3,38 @@ package jc.message;
 import java.io.Serializable;
 
 /**
- * Created by ½ð³É on 2015/9/8.
+ * Created by ï¿½ï¿½ï¿½ on 2015/9/8.
  */
 public class PublicTunnelRequest implements Message, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String RequestId;
-    private String Protocol; // Ä¿Ç°Ö»ÓÐtcp
-    private int RemotePort;
-    private int LocalPort;
+    private String clientId;
+    private String protocol;
+    private int remotePort;
+    private int localPort;
 
-    public PublicTunnelRequest(String requestId, String protocol, int remotePort, int localPort){
-        this.RequestId = requestId;
-        this.Protocol = protocol;
-        this.RemotePort = remotePort;
-        this.LocalPort = localPort;
+    public PublicTunnelRequest(String clientId, String protocol, int remotePort, int localPort){
+        this.clientId = clientId;
+        this.protocol = protocol;
+        this.remotePort = remotePort;
+        this.localPort = localPort;
     }
 
     public int getLocalPort() {
-        return LocalPort;
+        return localPort;
     }
 
-    public String getRequestId() {
-        return RequestId;
+    public String getClientId() {
+        return clientId;
     }
 
     public String getProtocol() {
-        return Protocol;
+        return protocol;
     }
 
     public int getRemotePort() {
-        return RemotePort;
+        return remotePort;
     }
 
     @Override

@@ -3,7 +3,7 @@ package jc.message;
 import java.io.Serializable;
 
 /**
- * Created by ½ð³É on 2015/9/8.
+ * Created by ï¿½ï¿½ï¿½ on 2015/9/8.
  */
 public class PingRequest implements Message, Serializable {
 
@@ -12,6 +12,10 @@ public class PingRequest implements Message, Serializable {
     private String clientId;
 
     private long pingTime;
+
+    public PingRequest(String clientId){
+        this(clientId, System.currentTimeMillis());
+    }
 
     public PingRequest(String clientId, long pingTime){
         this.clientId = clientId;

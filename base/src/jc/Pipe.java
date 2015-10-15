@@ -9,7 +9,7 @@ import java.net.SocketException;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * Created by ½ğ³É on 2015/9/23.
+ * Created by ï¿½ï¿½ï¿½ on 2015/9/23.
  */
 public class Pipe implements  Runnable{
 
@@ -34,8 +34,8 @@ public class Pipe implements  Runnable{
 
         try{
 
-            inputStream = this.from.getSocket().getInputStream();
-            outputStream = this.to.getSocket().getOutputStream();
+            inputStream = from.getInputStream();
+            outputStream = to.getOutPutStream();
 
             int len;
             byte[] buffer = new byte[1024];
@@ -48,17 +48,18 @@ public class Pipe implements  Runnable{
             }
 
         }catch (SocketException e){
-            //µ±ä¯ÀÀÆ÷µÄsocket±»ä¯ÀÀÆ÷¹Ø±ÕµÄÊ±ºò£¬¿ÉÄÜ»á½øÈëµ½ÕâÀï
+            //å½“pipeçš„ä¸€ç«¯è¢«closeè€Œæ²¡æœ‰shutdownçš„æ—¶å€™ä¼šå‘ç”Ÿè¿™ä¸ªå¼‚å¸¸ï¼Œè¿è¡Œåˆ°è¿™é‡Œã€‚è¿™ä¸ç®—
+            //æ˜¯ä¸€ä¸ªå¼‚å¸¸
 
         }catch (IOException e){
-
+            //è¿è¡Œåˆ°è¿™é‡ŒçœŸçš„å‘ç”Ÿäº†å¼‚å¸¸
             e.printStackTrace();
 
         }finally {
 
             try{
-                from.getSocket().shutdownInput();
-                to.getSocket().shutdownOutput();
+                from.shutdownInput();
+                to.shutdownOutput();
             }catch (IOException e){
                 e.printStackTrace();
             }

@@ -1,13 +1,14 @@
 package jc.server.core.ControlConnection;
 
-
 import jc.Random;
 import jc.message.*;
+import jc.server.core.Config;
+import jc.server.core.Controller.ControllerHandler;
 import jc.server.core.PublicTunnel.PublicTunnel;
-import jc.Version;
 import jc.TCPConnection;
 import jc.Time;
 import jc.server.core.PublicTunnel.PublicTunnelRegistry;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Timer;
@@ -15,134 +16,109 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static jc.Utils.Go;
-import static jc.Utils.timeStamp;
 
-public class ControlConnection implements Runnable{
+public class ControlConnection extends Thread{
 
-    private final AuthRequest authRequest;
     private final TCPConnection tcpConnection;
     private final Time lastPing;
-    private final BlockingQueue<TCPConnection> proxies = new LinkedBlockingQueue<TCPConnection>();
+    private final BlockingQueue<TCPConnection> proxies;
     private final String clientId;
     private final Timer pingChecker;
-    private final String ip;
     private final Random random;
+    private final ControlConnectionRegistry controlConnectionRegistry;
     private final PublicTunnelRegistry publicTunnelRegistry;
-
-    public String getClientId() {
-        return clientId;
-    }
+    private final Logger runtimeLogger;
+    private final Logger accessLogger;
+    private final Config config;
 
     public ControlConnection(
-            TCPConnection tcpConnection,
-            PublicTunnelRegistry publicTunnelRegistry,
-            Random random,
-            AuthRequest authRequest){
-        this.tcpConnection = tcpConnection;
-        this.publicTunnelRegistry = publicTunnelRegistry;
-        this.random = random;
-        this.authRequest = authRequest;
-        this.ip = tcpConnection.getRemoteAddr();
-        this.tcpConnection.setType("control");
+            ControllerHandler controllerHandler
+    ){
 
+        this.clientId = controllerHandler.getClientId();
+        this.tcpConnection = controllerHandler.getTcpConnection();
+        this.controlConnectionRegistry = controllerHandler.getControlConnectionRegistry();
+        this.publicTunnelRegistry = controllerHandler.getPublicTunnelRegistry();
+        this.random = controllerHandler.getRandom();
+        this.runtimeLogger = controllerHandler.getRuntimeLogger();
+        this.accessLogger = controllerHandler.getAccessLogger();
+        this.config = controllerHandler.getConfig();
+
+
+        this.tcpConnection.setType("control");
+        this.proxies = new LinkedBlockingQueue<>();
         this.pingChecker = new Timer();
         this.lastPing = new Time(System.currentTimeMillis());
-
-
-        if (authRequest.isNew()){
-            this.clientId = random.getRandomString(16);
-        }else {
-            this.clientId = authRequest.getClientId();
-        }
-
-        //判断客户端版本与服务器版本是否兼容
-        if (authRequest.getVersion() < 0){
-            System.out.println("Incompatible versions. Server %s, client %s. Download a new version");
-            AuthResponse authResponse = new AuthResponse("Incompatible versions");
-            try {
-                tcpConnection.writeMessage(authResponse);
-            }catch (IOException e){
-                e.printStackTrace();
-                //关闭这个control connection
-            }
-
-        }
-
-
-        AuthResponse authResponse = new AuthResponse(Version.Current, this.clientId);
-        if (!authRequest.isNew()){
-            authResponse.setReconnect(true);
-        }
-
-        try{
-            this.tcpConnection.writeMessage(authResponse);
-        }catch (IOException e){
-            e.printStackTrace();
-        }
 
     }
 
     public TCPConnection getProxy(){
 
         TCPConnection proxyTCPConnection = null;
-        if (proxies.size() == 0){
-            //System.out.printf("[%s][ControlConnection]No proxy in pool, requesting proxy from %s[%s]\n",
-                    //timeStamp(),this.ip, this.clientId);
-            ProxyRequest proxyRequest = new ProxyRequest();
-            try{
-                tcpConnection.writeMessage(proxyRequest);
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-
-        }
 
         try{
+            tcpConnection.writeMessage(new ProxyRequest());
             proxyTCPConnection = proxies.take();
-        }catch (InterruptedException e) {
-            e.printStackTrace();
+        }catch (IOException|InterruptedException e){
+            runtimeLogger.error(e.getMessage(),e);
         }
 
-
-
         if (proxyTCPConnection == null){
-            System.out.printf("[%s][ControlConnection]No proxy connections available\n", timeStamp());
+            runtimeLogger.error("Get null proxy from client");
         }
 
         return proxyTCPConnection;
 
     }
 
-    public void registerProxy(TCPConnection tcpConnection){
+    public void putProxy(TCPConnection tcpConnection){
 
         try{
             proxies.put(tcpConnection);
         }catch (InterruptedException e){
-            e.printStackTrace();
+            runtimeLogger.error(e.getMessage(),e);
         }
-
 
     }
 
-    public String getIp() {
-        return ip;
+    public TCPConnection getTcpConnection() {
+        return tcpConnection;
+    }
+
+    public Time getLastPing() {
+        return lastPing;
+    }
+
+    public Logger getRuntimeLogger() {
+        return runtimeLogger;
+    }
+
+    public Logger getAccessLogger() {
+        return accessLogger;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public String getConnectionId(){
+        return tcpConnection.getConnectionId();
+    }
+
+    public String getRemoteAddress() {
+        return tcpConnection.getRemoteAddress();
     }
 
     public void close(){
+        //   when the run() is blocked in Message message = tcpConnection.readMessage();
+        //this operation will cause exception in run()
         tcpConnection.close();
     }
-
-    public void shutDown(){
-        //用来关闭这个control connection
-    }
-
-
 
     @Override
     public void run() {
 
-
-        this.pingChecker.schedule(new ControlConnectionHeartBeatChecker(tcpConnection, lastPing), 0, 10*1000);
+        pingChecker.schedule(new ControlConnectionHeartBeatChecker(this), 0, 10*1000);
 
         while (true){
 
@@ -153,59 +129,116 @@ public class ControlConnection implements Runnable{
                     case "PublicTunnelRequest":
 
                         PublicTunnelRequest publicTunnelRequest = (PublicTunnelRequest) message;
-                        String url = String.format("tcp://%s:%d", "127.0.0.1", publicTunnelRequest.getRemotePort());
-                        PublicTunnel publicTunnel = publicTunnelRegistry.get(url);
-                        if (publicTunnel != null){
+                        String publicUrl =
+                                String.format("tcp://%s:%d",
+                                        config.getDomain(),
+                                        publicTunnelRequest.getRemotePort()
+                                );
+                        accessLogger.info(publicUrl);
 
-                            PublicTunnelResponse publicTunnelResponse = new PublicTunnelResponse(String.format("tunnel %d is already in use", publicTunnelRequest.getRemotePort()));
+                        PublicTunnel publicTunnel =
+                                new PublicTunnel(publicTunnelRequest,
+                                        publicUrl,
+                                        this,
+                                        random,
+                                        runtimeLogger,
+                                        accessLogger);
+                        String result = null;
+                        result = publicTunnelRegistry.register(clientId, publicTunnel);
+                        if (!"success".equalsIgnoreCase(result)){
+
+                            PublicTunnelResponse publicTunnelResponse =
+                                    new PublicTunnelResponse(result);
+
                             try{
                                 tcpConnection.writeMessage(publicTunnelResponse);
                             }catch (IOException e){
-                                e.printStackTrace();
+                                accessLogger.info(
+                                        String.format("Send PublicTunnelResponse to %s failure",
+                                                tcpConnection.getRemoteAddress()
+                                        )
+                                );
                             }
-                            continue;
+
+                            break;
                         }
 
-                        publicTunnel = new PublicTunnel(publicTunnelRequest, this, random);
-                        publicTunnelRegistry.register(clientId, url, publicTunnel);
+                        result = publicTunnel.bind();
+                        if (!"success".equalsIgnoreCase(result)){
+
+                            PublicTunnelResponse publicTunnelResponse =
+                                    new PublicTunnelResponse(result);
+
+                            try{
+                                tcpConnection.writeMessage(publicTunnelResponse);
+                            }catch (IOException e){
+                                accessLogger.info(
+                                        String.format("Send PublicTunnelResponse to %s failure",
+                                                tcpConnection.getRemoteAddress()
+                                        )
+                                );
+                            }
+
+                            break;
+                        }
 
                         Go(publicTunnel);
+
+                        //  bind public tunnel successfully
                         PublicTunnelResponse publicTunnelResponse =
-                                new PublicTunnelResponse(publicTunnel.getUrl(),
+                                new PublicTunnelResponse(publicUrl,
                                         publicTunnelRequest.getProtocol(),
-                                        publicTunnelRequest.getRequestId(),
                                         publicTunnelRequest.getLocalPort());
+
                         try{
-                            this.tcpConnection.writeMessage(publicTunnelResponse);
+                            tcpConnection.writeMessage(publicTunnelResponse);
                         }catch (IOException e){
-                            e.printStackTrace();
+                            accessLogger.info(
+                                    String.format("Send PublicTunnelResponse to %s failure",
+                                            tcpConnection.getRemoteAddress()
+                                    )
+                            );
                         }
 
                         break;
 
                     case "PingRequest":
 
-                        this.lastPing.setTime(System.currentTimeMillis());
+                        lastPing.setTime(System.currentTimeMillis());
                         PingResponse pingResponse = new PingResponse();
                         try{
                             tcpConnection.writeMessage(pingResponse);
                         }catch (IOException e){
-                            e.printStackTrace();
+                            runtimeLogger.error(e.getMessage(),e);
                         }
                         break;
 
                     default:
 
-                        System.out.printf("[%s][ControlConnection]unknown message\n", timeStamp());
-                        break;
+                        accessLogger.info(
+                                String.format("Unknown message from %s[%s]",
+                                        tcpConnection.getRemoteAddress(),
+                                        tcpConnection.getConnectionId()
+                                )
+                        );
+                       break;
                 }
 
             }catch (IOException e){
-                //e.printStackTrace();
-                System.out.printf("[%s][ControlConnection]control connection to %s[%s] exit\n", timeStamp(), ip,clientId);
-                //需要清理这个control connection对应的public tunnel以及相关的记录
-                this.pingChecker.cancel();
+                //   when close function of tcpConnection is called, program will run to here
+                //it can be closed by the close function or another side of the client
+
+
+                //  clean public tunnels associate with the control connection and delete
+                //the control connection from controlConnectionRegistry
+                pingChecker.cancel();
                 publicTunnelRegistry.delete(clientId);
+                controlConnectionRegistry.delete(clientId);
+                runtimeLogger.info(
+                        String.format("Control connection from %s[%s] exit",
+                                tcpConnection.getRemoteAddress(),
+                                clientId)
+                );
                 return;
             }
 

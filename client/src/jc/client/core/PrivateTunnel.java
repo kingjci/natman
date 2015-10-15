@@ -1,21 +1,16 @@
 package jc.client.core;
 
 /**
- * Created by ½ð³É on 2015/9/23.
+ * Created by ï¿½ï¿½ï¿½ on 2015/9/23.
  */
 public class PrivateTunnel {
 
-    private String publicUrl; //   tcp://jincheng.link:8000, it contains information about public tunnel
     private String protocol;
+    private String publicUrl;
     private String localAddress = "127.0.0.1";
     private int localPort;
 
-    public PrivateTunnel(String publicUrl, int localPort){
-        this.publicUrl = publicUrl;
-        this.localPort = localPort;
-    }
-
-    public PrivateTunnel(String publicUrl, String localAddress, int localPort, String protocol){
+    public PrivateTunnel(String publicUrl,String localAddress, int localPort, String protocol){
         this.publicUrl = publicUrl;
         this.localAddress = localAddress;
         this.localPort = localPort;
@@ -35,7 +30,7 @@ public class PrivateTunnel {
         return localPort;
     }
 
-    public void setLocalPort(int localPort) {
-        this.localPort = localPort;
+    public String getPublicUrl() {
+        return publicUrl;
     }
 }
