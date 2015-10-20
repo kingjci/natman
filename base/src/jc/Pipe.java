@@ -1,6 +1,8 @@
 package jc;
 
 import jc.TCPConnection;
+import org.apache.log4j.Logger;
+import sun.rmi.runtime.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,11 +18,13 @@ public class Pipe implements  Runnable{
         private TCPConnection to;
         private TCPConnection from;
         private CountDownLatch waitGroup;
+        private Logger runtimeLogger;
 
-        public Pipe(TCPConnection to, TCPConnection from, CountDownLatch waitGroup){
+        public Pipe(TCPConnection to, TCPConnection from, CountDownLatch waitGroup, Logger runtimeLogger){
             this.to = to;
             this.from = from;
             this.waitGroup = waitGroup;
+            this.runtimeLogger = runtimeLogger;
         }
 
 
@@ -53,7 +57,7 @@ public class Pipe implements  Runnable{
 
         }catch (IOException e){
             //运行到这里真的发生了异常
-            e.printStackTrace();
+            runtimeLogger.error(e.getMessage(),e);
 
         }finally {
 
@@ -61,7 +65,7 @@ public class Pipe implements  Runnable{
                 from.shutdownInput();
                 to.shutdownOutput();
             }catch (IOException e){
-                e.printStackTrace();
+                runtimeLogger.error(e.getMessage(),e);
             }
 
             waitGroup.countDown();

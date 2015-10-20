@@ -7,19 +7,13 @@ public class Option {
 
     //用来保存服务器中的常量
 
-    private final int controlPort = 12345;
 
     private final float version = 1.0f;
-
     private final float minVersion = 0.0f;
+    private final int maxGetProxyTime = 5;  // 5s
 
     public Option(){
 
-    }
-
-
-    public int getControlPort() {
-        return controlPort;
     }
 
     public float getMinVersion() {
@@ -28,5 +22,9 @@ public class Option {
 
     public float getVersion() {
         return version;
+    }
+
+    public int getMaxGetProxyTime() {
+        return maxGetProxyTime;
     }
 }

@@ -60,7 +60,7 @@ public class Proxy implements Runnable {
         ProxyStart proxyStart = null;
         try{
             proxyStart =(ProxyStart) proxyTCPConnection.readMessage();
-            runtimeLogger.info(
+            runtimeLogger.debug(
                     String.format(
                             "New proxy connection[%s] from %s",
                             proxyTCPConnection.getConnectionId(),
@@ -68,7 +68,6 @@ public class Proxy implements Runnable {
                     )
             );
       }catch (IOException e){
-            proxyTCPConnection.close();
             runtimeLogger.error(
                     String.format(
                             "Proxy connection[%s] is shutdown by server",
@@ -76,6 +75,20 @@ public class Proxy implements Runnable {
                     )
             );
             runtimeLogger.error(e.getMessage(),e);
+
+            try{
+                proxyTCPConnection.close();
+            }catch (IOException ee){
+                runtimeLogger.error(
+                        String.format(
+                                "Fail to close proxy connection[%s] from %s",
+                                proxyTCPConnection.getConnectionId(),
+                                proxyTCPConnection.getRemoteAddress()
+                        )
+                );
+                runtimeLogger.error(ee.getMessage(),e);
+            }
+
             return;
         }
 
@@ -111,7 +124,7 @@ public class Proxy implements Runnable {
             return;
         }
 
-        Join(localTCPConnection, proxyTCPConnection);
+        Join(localTCPConnection, proxyTCPConnection, runtimeLogger, accessLogger);
 
     }
 }

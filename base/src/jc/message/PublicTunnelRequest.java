@@ -11,12 +11,14 @@ public class PublicTunnelRequest implements Message, Serializable {
 
     private String clientId;
     private String protocol;
+    private String subdomain;
     private int remotePort;
     private int localPort;
 
-    public PublicTunnelRequest(String clientId, String protocol, int remotePort, int localPort){
+    public PublicTunnelRequest(String clientId, String protocol, String subdomain,int remotePort, int localPort){
         this.clientId = clientId;
         this.protocol = protocol;
+        this.subdomain = subdomain;
         this.remotePort = remotePort;
         this.localPort = localPort;
     }

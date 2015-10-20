@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.text.SimpleDateFormat;
 import java.util.concurrent.CountDownLatch;
 
 public class Utils {
@@ -19,23 +18,43 @@ public class Utils {
 
     }
 
-    public static void Join(TCPConnection c1, TCPConnection c2){
+    public static void Join(
+            TCPConnection c1,
+            TCPConnection c2,
+            Logger runtimeLogger,
+            Logger accessLogger){
 
         CountDownLatch waitGroup = new CountDownLatch(2);
-        Go(new Pipe(c1, c2, waitGroup));
-        Go(new Pipe(c2, c1, waitGroup));
+        Go(new Pipe(c1, c2, waitGroup, runtimeLogger));
+        Go(new Pipe(c2, c1, waitGroup, runtimeLogger));
 
-        //System.out.printf("[%s][Utils]Join %s with %s\n", timeStamp(),c1.Id(), c2.Id());
+        runtimeLogger.debug(
+                String.format(
+                        "Join %s[%s] with %s[%s]",
+                        c1.getRemoteAddress(),
+                        c1.getConnectionId(),
+                        c2.getRemoteAddress(),
+                        c2.getConnectionId()
+                )
+        );
 
         try{
             waitGroup.await();
             c1.close();
             c2.close();
-        }catch (InterruptedException e){
-            e.printStackTrace();
+        }catch (IOException|InterruptedException e){
+            runtimeLogger.error(e.getMessage(),e);
         }
-        //System.out.printf("[%s][Utils]Separate %s with %s\n", timeStamp(), c1.Id(), c2.Id());
 
+       runtimeLogger.debug(
+                String.format(
+                        "Detach %s[%s] with %s[%s]",
+                        c1.getRemoteAddress(),
+                        c1.getConnectionId(),
+                        c2.getRemoteAddress(),
+                        c2.getConnectionId()
+                )
+        );
     }
 
     public static TCPConnection Dial(
@@ -53,7 +72,7 @@ public class Utils {
             SocketAddress address = new InetSocketAddress(host, port);
             socket.connect(address, 3*1000);
             tcpConnection = new TCPConnection(socket, type, connectionId, runtimeLogger, accessLogger);
-            accessLogger.info(
+            accessLogger.debug(
                     String.format("New %s connection[%s] to: %s",
                             tcpConnection.getType(),
                             tcpConnection.getConnectionId(),
@@ -66,7 +85,7 @@ public class Utils {
                             host,
                             port)
             );
-            runtimeLogger.error(e.getMessage(),e);
+            //runtimeLogger.debug(e.getMessage(),e);
 
         }
         return tcpConnection;

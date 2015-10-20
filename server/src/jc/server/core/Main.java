@@ -24,9 +24,8 @@ public class Main {
     public static ControlConnectionRegistry controlConnectionRegistry = new ControlConnectionRegistry(runtimeLogger,accessLogger);
     public static BlockingQueue<Command> commands = new LinkedBlockingQueue<>();
 
-
     public static Controller controller =
-            new Controller(option.getControlPort(),
+            new Controller(config.getControlPort(),
                     publicTunnelRegistry,
                     controlConnectionRegistry,
                     commands,

@@ -10,6 +10,7 @@ import jc.server.core.PublicTunnel.PublicTunnelRegistry;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
@@ -97,11 +98,14 @@ public class Controller implements Runnable{
             runtimeLogger.info(
                     String.format("NatMan server start on %d", port));
 
-        }catch (IOException e){
-            runtimeLogger.error(e.getMessage(),e);
+        }catch(BindException e) {
+            runtimeLogger.error(String.format("Port %s is already in use", config.getControlPort()));
+            System.exit(-1);
         }
-
-
+        catch (IOException e){
+            runtimeLogger.error(e.getMessage(),e);
+            System.exit(-1);
+        }
 
 
         while (true){
@@ -118,8 +122,8 @@ public class Controller implements Runnable{
                                 accessLogger
                         );
 
-                accessLogger.info(
-                        String.format("New control/proxy connection[%s] from %s",
+                accessLogger.debug(
+                        String.format("New connection[%s] from %s",
                                 tcpConnection.getConnectionId(),
                                 tcpConnection.getRemoteAddress()));
 

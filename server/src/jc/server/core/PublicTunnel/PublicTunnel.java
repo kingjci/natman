@@ -49,36 +49,51 @@ public class PublicTunnel implements Runnable{
 
     }
 
-    public String bind(){
+    public int getPort() {
+        return port;
+    }
 
+    public String bind(int port){
+
+        this.port = port;
 
         switch (protocol){
 
             case "tcp":
 
                 try{
+
                     this.serverSocket = new ServerSocket();
                     this.serverSocket.bind(new InetSocketAddress("0.0.0.0", port));
+                    accessLogger.info(
+                            String.format("Bind public tunnel %s successfully", publicUrl)
+                    );
+
+                    return "success";
                 }catch (BindException e) {
 
+                    try{
+                        this.serverSocket.bind(new InetSocketAddress("0.0.0.0", 0));
+                        this.port = this.serverSocket.getLocalPort();
+                    }catch (IOException ee){
+                        runtimeLogger.error(e.getMessage(), e);
+                    }
+
                     String result =
-                            String.format("Bind public tunnel %s failure, the port is already used by other software", publicUrl);
+                            String.format(
+                                    "Bind public tunnel %s failure:" +
+                                            "the port is already used by other software, choose a random port %d",
+                                    publicUrl,
+                                    serverSocket.getLocalPort()
+                            );
+
                     accessLogger.info(result);
-
-                    return result;
-
+                    return "success";
                 }catch (IOException e){
-
                     String result = String.format("Unknown exception occurs when bind %s", publicUrl);
                     accessLogger.info(result);
                     return result;
                 }
-
-                accessLogger.info(
-                        String.format("Bind public tunnel %s successfully", publicUrl)
-                );
-
-                return "success";
 
             case "http":
 
@@ -89,14 +104,9 @@ public class PublicTunnel implements Runnable{
                 return "success";
 
             default:
+                return null;
 
-                accessLogger.info(String.format("Protocol %s is not supported", publicUrl));
-
-                return "success";
         }
-
-
-
     }
 
     @Override
@@ -120,7 +130,7 @@ public class PublicTunnel implements Runnable{
                                         accessLogger
                                 );
 
-                        accessLogger.info(
+                        accessLogger.debug(
                                 String.format("New public Connection[%s] from %s",
                                         tcpConnection.getConnectionId(),
                                         tcpConnection.getRemoteAddress())

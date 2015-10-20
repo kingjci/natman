@@ -17,12 +17,14 @@ public class PublicTunnelConfiguration {
     }
 
     public String getSubDomain() {
-        return subDomain;
+        return subDomain == null ? "": subDomain;
     }
 
     public void setSubDomain(String subDomain) {
         this.subDomain = subDomain;
     }
+
+
 
     public int getRemotePort() {
         return remotePort;

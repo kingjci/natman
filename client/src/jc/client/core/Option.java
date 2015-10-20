@@ -11,6 +11,7 @@ public class Option {
     private final int heartBeatInterval = 15*1000; // 15s
     private final int heartBeatCheckerInterval = 1*1000; // 1s
     private final int maxLatency = 30*1000; // 30s
+    private final int maxWaitCount = 5;
 
 
     public Option(){
@@ -39,5 +40,9 @@ public class Option {
 
     public int getMaxLatency() {
         return maxLatency;
+    }
+
+    public int getMaxWaitCount() {
+        return maxWaitCount;
     }
 }

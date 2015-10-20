@@ -26,6 +26,12 @@ public class PublicTunnelTCPHandler implements Runnable{
 
         TCPConnection proxyTCPConnection = controlConnection.getProxy();
 
+        if (proxyTCPConnection == null){
+
+            //Can not get proxy from client, abort the public conneciton
+            return;
+        }
+
         ProxyStart proxyStart = new ProxyStart(publicUrl, publicTCPConnection.getRemoteAddress());
         try {
             proxyTCPConnection.writeMessage(proxyStart);
@@ -34,7 +40,12 @@ public class PublicTunnelTCPHandler implements Runnable{
         }
 
         //join proxy tcp connection with public tcp connection
-        Join(proxyTCPConnection, publicTCPConnection);
+        Join(
+                proxyTCPConnection,
+                publicTCPConnection,
+                controlConnection.getRuntimeLogger(),
+                controlConnection.getAccessLogger()
+        );
 
     }
 }

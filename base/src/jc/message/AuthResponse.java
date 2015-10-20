@@ -2,9 +2,6 @@ package jc.message;
 
 import java.io.Serializable;
 
-/**
- * Created by ��� on 2015/9/8.
- */
 public class AuthResponse implements Message, Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -12,7 +9,7 @@ public class AuthResponse implements Message, Serializable {
     private float version;
     private String clientId;
     private String error;
-    private boolean hasError;
+    private boolean auth;
 
 
     public AuthResponse(float version) {
@@ -23,8 +20,8 @@ public class AuthResponse implements Message, Serializable {
         this.clientId = clientId;
     }
 
-    public void setError(String error){
-        this.hasError = true;
+    public void refuse(String error){
+        this.auth = false;
         this.error = new String(error);
     }
 
@@ -40,8 +37,8 @@ public class AuthResponse implements Message, Serializable {
         return error;
     }
 
-    public boolean hasError() {
-        return hasError;
+    public boolean isAuth() {
+        return auth;
     }
 
     @Override

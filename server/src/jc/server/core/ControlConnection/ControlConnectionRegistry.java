@@ -2,6 +2,7 @@ package jc.server.core.ControlConnection;
 
 import org.apache.log4j.Logger;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -30,7 +31,18 @@ public class ControlConnectionRegistry{
         if (oldControlConnection != null){
 
             controlConnections.remove(clientId);
-            oldControlConnection.close();
+
+            try{
+                oldControlConnection.close();
+            }catch (IOException e){
+                accessLogger.info(
+                        String.format("Fail to close old control connection[%s] from %s[%s]",
+                                oldControlConnection.getConnectionId(),
+                                oldControlConnection.getRemoteAddress(),
+                                oldControlConnection.getClientId()
+                        )
+                );
+            }
 
             accessLogger.info(String.format("close old control connection[%s] from %s",
                     oldControlConnection.getConnectionId(),
@@ -38,8 +50,11 @@ public class ControlConnectionRegistry{
         }
 
         controlConnections.put(clientId, controlConnection);
-        accessLogger.info(String.format("Registered control connection %s[%s]", controlConnection.getRemoteAddress(),clientId));
-
+        accessLogger.info(String.format("Register control connection[%s] from %s[%s]",
+                        controlConnection.getConnectionId(),
+                        controlConnection.getRemoteAddress(),
+                        controlConnection.getClientId())
+        );
         readWriteLock.writeLock().unlock();
 
     }

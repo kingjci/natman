@@ -40,10 +40,8 @@ public class TCPConnection {
         inputLock = new ReentrantLock(false);
     }
 
-    public void close(){
+    public void close() throws IOException{
         try {
-            socket.shutdownInput();
-            socket.shutdownOutput();
             socket.close();
         }catch (IOException e){
             runtimeLogger.error(e.getMessage(), e);

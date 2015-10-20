@@ -1,7 +1,6 @@
 package jc.server.core.Controller;
 
 import jc.Random;
-import jc.Version;
 import jc.message.AuthRequest;
 import jc.message.AuthResponse;
 import jc.message.Message;
@@ -15,6 +14,8 @@ import jc.server.core.PublicTunnel.PublicTunnelRegistry;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ControllerHandler implements Runnable {
 
@@ -27,6 +28,7 @@ public class ControllerHandler implements Runnable {
     private final Logger runtimeLogger;
     private final Logger accessLogger;
     private String clientId;
+    private final Set<String> userLoginIn;
 
     public ControllerHandler(
             TCPConnection tcpConnection,
@@ -40,6 +42,7 @@ public class ControllerHandler implements Runnable {
         this.option = controller.getOption();
         this.runtimeLogger = controller.getRuntimeLogger();
         this.accessLogger = controller.getAccessLogger();
+        this.userLoginIn = new HashSet<>();
     }
 
     public TCPConnection getTcpConnection() {
@@ -86,6 +89,20 @@ public class ControllerHandler implements Runnable {
                 message = tcpConnection.readMessage();
             }catch (IOException e){
                 runtimeLogger.error(e.getMessage(), e);
+                try{
+                    tcpConnection.close();
+                }catch (IOException ee){
+                    runtimeLogger.error(
+                            String.format(
+                                    "Fail to close connection[%s] from %s",
+                                    tcpConnection.getConnectionId(),
+                                    tcpConnection.getRemoteAddress()
+                            )
+                    );
+                    runtimeLogger.error(ee.getMessage(), e);
+                }
+
+                return;
             }
 
             ControlConnection controlConnection;
@@ -95,23 +112,21 @@ public class ControllerHandler implements Runnable {
                 case "AuthRequest":
 
                     AuthRequest authRequest = (AuthRequest) message;
-                    AuthResponse authResponse = new AuthResponse(Version.Current);
+                    AuthResponse authResponse = new AuthResponse(option.getVersion());
                     //here is the auth process
 
 
 
 
-
-                    if (authRequest.getVersion() < option.getMinVersion()){
+                    //Username and password is correct, check whether the user has already login in
+                    if (userLoginIn.contains(authRequest.getUsername())){
 
                         String error = String.format(
-                                "Incompatible versions. Server current/min version is %f/%f, client %s. Download a new version",
-                                option.getVersion(),
-                                option.getMinVersion(),
-                                authRequest.getVersion()
+                                "Fail to auth, user %s has already login in",
+                                authRequest.getUsername()
                         );
 
-                        authResponse.setError(error);
+                        authResponse.refuse(error);
                         try{
                             tcpConnection.writeMessage(authResponse);
                         }catch (IOException e){
@@ -128,17 +143,46 @@ public class ControllerHandler implements Runnable {
                         return;
                     }
 
+                    if (authRequest.getVersion() < option.getMinVersion()){
+
+                        String error = String.format(
+                                "Incompatible versions. Server current/min version is %f/%f, client %s. Download a new version",
+                                option.getVersion(),
+                                option.getMinVersion(),
+                                authRequest.getVersion()
+                        );
+
+                        authResponse.refuse(error);
+                        try{
+                            tcpConnection.writeMessage(authResponse);
+                        }catch (IOException e){
+
+                            runtimeLogger.error(
+                                    String.format("Send AuthResponse to %s failure",
+                                            tcpConnection.getRemoteAddress()
+                                    ),e
+                            );
+
+                        }
+
+                        //  auth fails, terminate the auth prematurely
+                        return;
+                    }
 
                     if (authRequest.isNew()){
-                        clientId = random.getRandomString(16);
-
+                        if (authRequest.getUsername() == null | "".equalsIgnoreCase(authRequest.getUsername())){
+                            clientId = random.getRandomString(16);
+                        }else {
+                            clientId = authRequest.getUsername();
+                            userLoginIn.add(authRequest.getUsername());
+                        }
                     }else {
                         clientId = authRequest.getClientId();
                     }
                     authResponse.setClientId(clientId);
 
                     accessLogger.info(
-                            String.format("auth client %s[%s] successfully",
+                            String.format("Auth client %s[%s] successfully",
                                     tcpConnection.getRemoteAddress(),
                                     authResponse.getClientId()
                             )
@@ -154,16 +198,8 @@ public class ControllerHandler implements Runnable {
                         );
                     }
 
-
                     controlConnection = new ControlConnection(this);
-
                     controlConnectionRegistry.register(controlConnection);
-                    accessLogger.info(String.format("register control connection[%s] from %s[%s]",
-                                    controlConnection.getConnectionId(),
-                                    controlConnection.getRemoteAddress(),
-                                    controlConnection.getClientId())
-                    );
-
                     controlConnection.start();
 
                     break;
@@ -176,7 +212,7 @@ public class ControllerHandler implements Runnable {
 
                     clientId = proxyResponse.getClientId();
 
-                    accessLogger.info(
+                    accessLogger.debug(
                             String.format("Registering new proxy connection[%s] for %s[%s]",
                                     tcpConnection.getConnectionId(),
                                     tcpConnection.getRemoteAddress(),
@@ -190,12 +226,23 @@ public class ControllerHandler implements Runnable {
 
                         //  can not find the client id, the control connection
                         //has been closed or it is a illegal
-                        tcpConnection.close();
+
                         accessLogger.error(
                                 String.format("No client found for identifier:%s",
                                         proxyResponse.getClientId()
                                 )
                         );
+
+                        try {
+                            tcpConnection.close();
+                        }catch (IOException e){
+                            runtimeLogger.error(
+                                    String.format(
+                                            "Fail to close control connection[%s]",
+                                            tcpConnection.getConnectionId()
+                                    )
+                            );
+                        }
 
                         break;
                     }

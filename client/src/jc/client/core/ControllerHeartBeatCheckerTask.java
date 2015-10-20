@@ -2,9 +2,12 @@ package jc.client.core;
 
 import jc.TCPConnection;
 import jc.Time;
+import jc.command.Command;
+import jc.command.QuitCommand;
 import org.apache.log4j.Logger;
 
 import java.util.TimerTask;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -13,22 +16,23 @@ import java.util.concurrent.CountDownLatch;
 
 public class ControllerHeartBeatCheckerTask extends TimerTask {
 
-    private final Time lastPingResponse;
-    private final Option option;
-    private final CountDownLatch latch;
-    private final Logger runtimeLogger;
-    private final Logger accessLogger;
-    private final TCPConnection tcpConnection;
+    private Time lastPingResponse;
+    private Option option;
+    private Logger runtimeLogger;
+    private Logger accessLogger;
+    private TCPConnection tcpConnection;
+    private BlockingQueue<Command> commands;
 
 
-    public ControllerHeartBeatCheckerTask(ControllerHeartBeat controllerHeartBeat){
+    public ControllerHeartBeatCheckerTask(Controller controller){
 
-        tcpConnection = controllerHeartBeat.getTcpConnection();
-        lastPingResponse = controllerHeartBeat.getLastPingResponse();
-        option = controllerHeartBeat.getOption();
-        latch = controllerHeartBeat.getLatch();
-        runtimeLogger = controllerHeartBeat.getRuntimeLogger();
-        accessLogger = controllerHeartBeat.getAccessLogger();
+        tcpConnection = controller.getTcpConnection();
+        lastPingResponse = controller.getLastPingResponse();
+        option = controller.getOption();
+        commands = controller.getCommands();
+        runtimeLogger = controller.getRuntimeLogger();
+        accessLogger = controller.getAccessLogger();
+
     }
 
 
@@ -40,13 +44,17 @@ public class ControllerHeartBeatCheckerTask extends TimerTask {
 
         if (needPingResponse){
 
-            latch.countDown();
+            try{
+                commands.put(new QuitCommand("ControllerHeartBeatCheckerTask","Lost heartbeat",-5));
+            }catch (InterruptedException e){
+                runtimeLogger.error(e.getMessage(),e);
+            }
 
             runtimeLogger.error(
                     String.format(
                             "Lost heartbeat from %s, control restart in %d seconds",
                             tcpConnection.getRemoteAddress(),
-                            option.getWaitTime()
+                            option.getWaitTime()/1000
                     )
             );
 

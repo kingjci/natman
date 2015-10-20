@@ -20,12 +20,12 @@ public class ControllerHeartBeatTask extends TimerTask {
     private final Logger accessLogger;
 
 
-    public ControllerHeartBeatTask(ControllerHeartBeat controllerHeartBeat){
-        clientId = controllerHeartBeat.getClientId();
-        tcpConnection = controllerHeartBeat.getTcpConnection();
-        lastPing = controllerHeartBeat.getLastPing();
-        runtimeLogger = controllerHeartBeat.getRuntimeLogger();
-        accessLogger = controllerHeartBeat.getAccessLogger();
+    public ControllerHeartBeatTask(Controller controller){
+        clientId = controller.getClientId();
+        tcpConnection = controller.getTcpConnection();
+        lastPing = controller.getLastPing();
+        runtimeLogger = controller.getRuntimeLogger();
+        accessLogger = controller.getAccessLogger();
     }
 
 
@@ -38,18 +38,24 @@ public class ControllerHeartBeatTask extends TimerTask {
             tcpConnection.writeMessage(pingRequest);
             lastPing.setTime(System.currentTimeMillis());
             runtimeLogger.debug(
-                    String.format("Ping %s successfully", tcpConnection.getRemoteAddress())
+                    String.format(
+                            "Ping %s[%s] successfully",
+                            tcpConnection.getRemoteAddress(),
+                            tcpConnection.getConnectionId()
+                    )
             );
 
         }catch (IOException e){
 
-            runtimeLogger.error(String.format("Ping %s failure", tcpConnection.getRemoteAddress()));
-            runtimeLogger.error(e.getMessage(), e);
+            runtimeLogger.error(
+                    String.format(
+                            "Ping %s[%s] failure",
+                            tcpConnection.getRemoteAddress(),
+                            tcpConnection.getConnectionId()
+                    )
+            );
+            //runtimeLogger.error(e.getMessage(), e);
         }
-
-
-
-
     }
 }
 

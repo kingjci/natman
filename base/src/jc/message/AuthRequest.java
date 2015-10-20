@@ -3,19 +3,21 @@ package jc.message;
 import java.io.Serializable;
 
 /**
- * Created by ½ð³É on 2015/9/8.
+ * Created by ï¿½ï¿½ï¿½ on 2015/9/8.
  */
 public class AuthRequest implements Message, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private float version; //µ±Ç°°æ±¾
-    private String clientId; //µ±¿Í»§¶Ë¿ªÊ¼Ò»¸öÐÂµÄsessionµÄÊ±ºòÎª¿Õ
+    private final float version;
+    private final String clientId;
+    private String username;
+    private String password;
+
 
     public AuthRequest(String clientId, float version){
         this.clientId = clientId;
         this.version = version;
-
     }
 
 
@@ -31,6 +33,22 @@ public class AuthRequest implements Message, Serializable {
 
     public String getClientId() {
         return clientId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
