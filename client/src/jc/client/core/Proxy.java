@@ -15,7 +15,7 @@ import static jc.Utils.Join;
 public class Proxy implements Runnable {
 
     private final String clientId;
-    private final String serverAddress;
+    private final Config config;
     private final Random random;
     private final Option option;
     private final Logger runtimeLogger;
@@ -25,7 +25,7 @@ public class Proxy implements Runnable {
 
     public Proxy(Controller controller){
         clientId = controller.getClientId();
-        serverAddress = controller.getServerAddress();
+        config = controller.getConfig();
         random = controller.getRandom();
         option = controller.getOption();
         runtimeLogger = controller.getRuntimeLogger();
@@ -39,7 +39,7 @@ public class Proxy implements Runnable {
 
         TCPConnection proxyTCPConnection =
                 Dial(
-                        serverAddress,
+                        config.getServerAddress(),
                         option.getControlPort(),
                         "proxy",
                         random.getRandomString(8),
@@ -57,7 +57,7 @@ public class Proxy implements Runnable {
             return;
         }
 
-        ProxyStart proxyStart = null;
+        ProxyStart proxyStart;
         try{
             proxyStart =(ProxyStart) proxyTCPConnection.readMessage();
             runtimeLogger.debug(

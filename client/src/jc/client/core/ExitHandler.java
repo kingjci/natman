@@ -1,4 +1,4 @@
-package jc.server.core;
+package jc.client.core;
 
 import org.apache.log4j.Logger;
 

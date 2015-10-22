@@ -1,0 +1,8 @@
+[15-10-15 21:15:33:399][Main.java:202][ERROR]..\client.cfg (系统找不到指定的文件。)
+java.io.FileNotFoundException: ..\client.cfg (系统找不到指定的文件。)
+	at java.io.FileInputStream.open(Native Method)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at java.io.FileInputStream.<init>(FileInputStream.java:97)
+	at java.io.FileReader.<init>(FileReader.java:58)
+	at jc.client.core.Main.LoadConfiguration(Main.java:81)
+	at jc.client.core.Main.main(Main.java:30)

@@ -14,8 +14,6 @@ import jc.server.core.PublicTunnel.PublicTunnelRegistry;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 public class ControllerHandler implements Runnable {
 
@@ -27,8 +25,6 @@ public class ControllerHandler implements Runnable {
     private final Option option;
     private final Logger runtimeLogger;
     private final Logger accessLogger;
-    private String clientId;
-    private final Set<String> userLoginIn;
 
     public ControllerHandler(
             TCPConnection tcpConnection,
@@ -42,7 +38,6 @@ public class ControllerHandler implements Runnable {
         this.option = controller.getOption();
         this.runtimeLogger = controller.getRuntimeLogger();
         this.accessLogger = controller.getAccessLogger();
-        this.userLoginIn = new HashSet<>();
     }
 
     public TCPConnection getTcpConnection() {
@@ -77,14 +72,10 @@ public class ControllerHandler implements Runnable {
         return accessLogger;
     }
 
-    public String getClientId() {
-        return clientId;
-    }
-
     @Override
     public void run() {
 
-            Message message = null;
+            Message message;
             try {
                 message = tcpConnection.readMessage();
             }catch (IOException e){
@@ -118,31 +109,6 @@ public class ControllerHandler implements Runnable {
 
 
 
-                    //Username and password is correct, check whether the user has already login in
-                    if (userLoginIn.contains(authRequest.getUsername())){
-
-                        String error = String.format(
-                                "Fail to auth, user %s has already login in",
-                                authRequest.getUsername()
-                        );
-
-                        authResponse.refuse(error);
-                        try{
-                            tcpConnection.writeMessage(authResponse);
-                        }catch (IOException e){
-
-                            runtimeLogger.error(
-                                    String.format("Send AuthResponse to %s failure",
-                                            tcpConnection.getRemoteAddress()
-                                    ),e
-                            );
-
-                        }
-
-                        //  auth fails, terminate the auth prematurely
-                        return;
-                    }
-
                     if (authRequest.getVersion() < option.getMinVersion()){
 
                         String error = String.format(
@@ -169,16 +135,8 @@ public class ControllerHandler implements Runnable {
                         return;
                     }
 
-                    if (authRequest.isNew()){
-                        if (authRequest.getUsername() == null | "".equalsIgnoreCase(authRequest.getUsername())){
-                            clientId = random.getRandomString(16);
-                        }else {
-                            clientId = authRequest.getUsername();
-                            userLoginIn.add(authRequest.getUsername());
-                        }
-                    }else {
-                        clientId = authRequest.getClientId();
-                    }
+                    String clientId = authRequest.isNew()? random.getRandomClientId():authRequest.getClientId();
+
                     authResponse.setClientId(clientId);
 
                     accessLogger.info(
@@ -198,7 +156,8 @@ public class ControllerHandler implements Runnable {
                         );
                     }
 
-                    controlConnection = new ControlConnection(this);
+                    controlConnection = new ControlConnection(this, clientId);
+                    //If the client already has a control connection, old one will be closed
                     controlConnectionRegistry.register(controlConnection);
                     controlConnection.start();
 
@@ -207,20 +166,16 @@ public class ControllerHandler implements Runnable {
                 case "ProxyResponse":{
 
                     ProxyResponse proxyResponse = (ProxyResponse) message;
-
                     tcpConnection.setType("proxy");
-
-                    clientId = proxyResponse.getClientId();
-
                     accessLogger.debug(
                             String.format("Registering new proxy connection[%s] for %s[%s]",
                                     tcpConnection.getConnectionId(),
                                     tcpConnection.getRemoteAddress(),
-                                    clientId
+                                    proxyResponse.getClientId()
                             )
                     );
 
-                    controlConnection = controlConnectionRegistry.get(clientId);
+                    controlConnection = controlConnectionRegistry.get(proxyResponse.getClientId());
 
                     if (controlConnection == null){
 

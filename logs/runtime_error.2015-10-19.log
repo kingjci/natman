@@ -1,0 +1,278 @@
+[15-10-19 17:56:15:973][Config.java:523][ERROR]HTTP hello:subdomain:8080:80 format is wrong at 20
+[15-10-19 17:56:48:258][Config.java:523][ERROR]HTTP hello:subdomain:8080:80 format is wrong at 20
+[15-10-19 20:03:14:049][Config.java:256][ERROR]Unknown command
+[15-10-19 20:03:23:086][Config.java:256][ERROR]Unknown command
+[15-10-19 20:04:00:254][Config.java:256][ERROR]Unknown command
+[15-10-19 20:04:19:487][Config.java:256][ERROR]Unknown command
+[15-10-19 20:04:40:650][Config.java:256][ERROR]Unknown command
+[15-10-19 20:06:15:148][Config.java:256][ERROR]Unknown command
+[15-10-19 20:23:22:013][Utils.java:83][ERROR]Can not connect to 127.0.0.1:12345, perhaps this port is not open
+[15-10-19 20:23:22:015][Utils.java:88][ERROR]Connection refused: connect
+java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.waitForConnect(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:75)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:339)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:200)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:182)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:157)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:391)
+	at java.net.Socket.connect(Socket.java:579)
+	at jc.Utils.Dial(Utils.java:73)
+	at jc.client.core.Controller.control(Controller.java:121)
+	at jc.client.core.Controller.run(Controller.java:108)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 21:14:56:881][ControllerHandler.java:87][ERROR]Connection reset
+java.net.SocketException: Connection reset
+	at java.net.SocketInputStream.read(SocketInputStream.java:189)
+	at java.net.SocketInputStream.read(SocketInputStream.java:121)
+	at java.io.ObjectInputStream$PeekInputStream.read(ObjectInputStream.java:2283)
+	at java.io.ObjectInputStream$PeekInputStream.readFully(ObjectInputStream.java:2296)
+	at java.io.ObjectInputStream$BlockDataInputStream.readShort(ObjectInputStream.java:2767)
+	at java.io.ObjectInputStream.readStreamHeader(ObjectInputStream.java:798)
+	at java.io.ObjectInputStream.<init>(ObjectInputStream.java:298)
+	at jc.TCPConnection.readMessage(TCPConnection.java:105)
+	at jc.server.core.Controller.ControllerHandler.run(ControllerHandler.java:85)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 21:16:54:127][Controller.java:243][ERROR]Control connection is closed: can not read from /127.0.0.1:12345
+[15-10-19 21:21:04:820][Controller.java:243][ERROR]Control connection is closed: can not read from /127.0.0.1:12345
+[15-10-19 21:22:56:088][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:50727[RBiTPyMz]
+[15-10-19 21:23:06:089][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:50727[RBiTPyMz]
+[15-10-19 21:23:16:089][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:50727[RBiTPyMz]
+[15-10-19 21:23:26:090][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:50727[RBiTPyMz]
+[15-10-19 21:23:36:091][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:50727[RBiTPyMz]
+[15-10-19 21:23:46:091][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:50727[RBiTPyMz]
+[15-10-19 21:23:52:067][Controller.java:217][ERROR]Control connection is closed: can not write to /127.0.0.1:12345
+[15-10-19 21:26:44:728][Controller.java:217][ERROR]Control connection is closed: can not write to /127.0.0.1:12345
+[15-10-19 21:26:50:730][Utils.java:83][ERROR]Can not connect to 127.0.0.1:12345, perhaps this port is not open
+[15-10-19 21:26:50:732][Utils.java:88][ERROR]Connection refused: connect
+java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.waitForConnect(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:75)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:339)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:200)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:182)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:157)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:391)
+	at java.net.Socket.connect(Socket.java:579)
+	at jc.Utils.Dial(Utils.java:73)
+	at jc.client.core.Controller.control(Controller.java:149)
+	at jc.client.core.Controller.run(Controller.java:109)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 21:28:09:167][Controller.java:217][ERROR]Control connection is closed: can not write to /127.0.0.1:12345
+[15-10-19 21:28:15:169][Utils.java:83][ERROR]Can not connect to 127.0.0.1:12345, perhaps this port is not open
+[15-10-19 21:28:15:171][Utils.java:88][ERROR]Connection refused: connect
+java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.waitForConnect(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:75)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:339)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:200)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:182)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:157)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:391)
+	at java.net.Socket.connect(Socket.java:579)
+	at jc.Utils.Dial(Utils.java:73)
+	at jc.client.core.Controller.control(Controller.java:149)
+	at jc.client.core.Controller.run(Controller.java:109)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 21:28:52:757][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:50999[LD61w54V]
+[15-10-19 21:29:02:757][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:50999[LD61w54V]
+[15-10-19 21:29:12:758][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:50999[LD61w54V]
+[15-10-19 21:29:17:665][Controller.java:217][ERROR]Control connection is closed: can not write to /127.0.0.1:12345
+[15-10-19 21:30:01:411][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:51017[u2a5ouaJ]
+[15-10-19 21:30:11:411][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:51017[u2a5ouaJ]
+[15-10-19 21:30:21:412][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:51017[u2a5ouaJ]
+[15-10-19 21:30:23:233][Controller.java:217][ERROR]Control connection is closed: can not write to /127.0.0.1:12345
+[15-10-19 21:40:34:943][Controller.java:243][ERROR]Control connection is closed: can not read from /127.0.0.1:12345
+[15-10-19 21:45:22:757][Controller.java:243][ERROR]Control connection is closed: can not read from /127.0.0.1:12345
+[15-10-19 21:46:27:906][Controller.java:243][ERROR]Control connection is closed: can not read from /127.0.0.1:12345
+[15-10-19 21:47:25:179][Controller.java:243][ERROR]Control connection is closed: can not read from /127.0.0.1:12345
+[15-10-19 21:48:30:532][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:51445[1KTzaIhP]
+[15-10-19 21:48:40:533][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:51445[1KTzaIhP]
+[15-10-19 21:50:37:649][Controller.java:243][ERROR]Control connection is closed: can not read from /127.0.0.1:12345
+[15-10-19 21:51:16:461][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:51579[spvYCyv5]
+[15-10-19 21:51:26:462][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:51579[spvYCyv5]
+[15-10-19 21:51:36:463][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:51579[spvYCyv5]
+[15-10-19 21:51:46:463][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:51579[spvYCyv5]
+[15-10-19 21:51:56:464][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:51579[spvYCyv5]
+[15-10-19 21:52:06:464][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:51579[spvYCyv5]
+[15-10-19 21:52:16:465][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:51579[spvYCyv5]
+[15-10-19 21:53:52:978][Controller.java:243][ERROR]Control connection is closed: can not read from /127.0.0.1:12345
+[15-10-19 21:53:54:172][ControllerHeartBeatTask.java:46][ERROR]Ping /127.0.0.1:12345 failure
+[15-10-19 21:53:54:173][ControllerHeartBeatTask.java:47][ERROR]Connection reset by peer: socket write error
+java.net.SocketException: Connection reset by peer: socket write error
+	at java.net.SocketOutputStream.socketWrite0(Native Method)
+	at java.net.SocketOutputStream.socketWrite(SocketOutputStream.java:109)
+	at java.net.SocketOutputStream.write(SocketOutputStream.java:153)
+	at java.io.ObjectOutputStream$BlockDataOutputStream.drain(ObjectOutputStream.java:1857)
+	at java.io.ObjectOutputStream$BlockDataOutputStream.setBlockDataMode(ObjectOutputStream.java:1766)
+	at java.io.ObjectOutputStream.<init>(ObjectOutputStream.java:246)
+	at jc.TCPConnection.writeMessage(TCPConnection.java:87)
+	at jc.client.core.ControllerHeartBeatTask.run(ControllerHeartBeatTask.java:38)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+[15-10-19 21:54:32:602][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:51626[mwLim6ky]
+[15-10-19 21:54:42:602][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:51626[mwLim6ky]
+[15-10-19 21:54:52:603][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:51626[mwLim6ky]
+[15-10-19 21:55:02:603][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:51626[mwLim6ky]
+[15-10-19 21:55:12:604][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:51626[mwLim6ky]
+[15-10-19 21:55:22:605][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:51626[mwLim6ky]
+[15-10-19 21:55:32:605][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:51626[mwLim6ky]
+[15-10-19 21:55:42:606][ControlConnectionHeartBeatChecker.java:30][ERROR]Lost heartbeat from /127.0.0.1:51626[mwLim6ky]
+[15-10-19 21:55:45:176][Controller.java:217][ERROR]Control connection is closed: can not write to /127.0.0.1:12345
+[15-10-19 22:06:09:391][Proxy.java:85][ERROR]Couldn't find tunnel for proxy: tcp://127.0.0.1:8000
+[15-10-19 22:06:11:400][ControlConnection.java:71][ERROR]Get null proxy from client
+[15-10-19 22:08:23:979][TCPConnection.java:49][ERROR]Socket input is already shutdown
+java.net.SocketException: Socket input is already shutdown
+	at java.net.Socket.shutdownInput(Socket.java:1458)
+	at jc.TCPConnection.close(TCPConnection.java:45)
+	at jc.Utils.Join(Utils.java:43)
+	at jc.server.core.PublicTunnel.PublicTunnelTCPHandler.run(PublicTunnelTCPHandler.java:37)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 22:08:23:982][TCPConnection.java:49][ERROR]Socket input is already shutdown
+java.net.SocketException: Socket input is already shutdown
+	at java.net.Socket.shutdownInput(Socket.java:1458)
+	at jc.TCPConnection.close(TCPConnection.java:45)
+	at jc.Utils.Join(Utils.java:44)
+	at jc.server.core.PublicTunnel.PublicTunnelTCPHandler.run(PublicTunnelTCPHandler.java:37)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 22:12:42:025][Proxy.java:72][ERROR]Proxy connection[XPEXXimB] is shutdown by server
+[15-10-19 22:12:42:070][Proxy.java:72][ERROR]Proxy connection[yKv1IJpj] is shutdown by server
+[15-10-19 22:12:42:070][Controller.java:257][ERROR]Control connection is closed: can not read from /127.0.0.1:12345
+[15-10-19 22:12:42:981][Proxy.java:78][ERROR]Connection reset
+java.net.SocketException: Connection reset
+	at java.net.SocketInputStream.read(SocketInputStream.java:189)
+	at java.net.SocketInputStream.read(SocketInputStream.java:121)
+	at java.io.ObjectInputStream$PeekInputStream.read(ObjectInputStream.java:2283)
+	at java.io.ObjectInputStream$PeekInputStream.readFully(ObjectInputStream.java:2296)
+	at java.io.ObjectInputStream$BlockDataInputStream.readShort(ObjectInputStream.java:2767)
+	at java.io.ObjectInputStream.readStreamHeader(ObjectInputStream.java:798)
+	at java.io.ObjectInputStream.<init>(ObjectInputStream.java:298)
+	at jc.TCPConnection.readMessage(TCPConnection.java:105)
+	at jc.client.core.Proxy.run(Proxy.java:62)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 22:12:43:989][TCPConnection.java:49][ERROR]Socket input is already shutdown
+java.net.SocketException: Socket input is already shutdown
+	at java.net.Socket.shutdownInput(Socket.java:1458)
+	at jc.TCPConnection.close(TCPConnection.java:45)
+	at jc.Utils.Join(Utils.java:43)
+	at jc.client.core.Proxy.run(Proxy.java:114)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 22:12:43:993][TCPConnection.java:49][ERROR]Socket input is already shutdown
+java.net.SocketException: Socket input is already shutdown
+	at java.net.Socket.shutdownInput(Socket.java:1458)
+	at jc.TCPConnection.close(TCPConnection.java:45)
+	at jc.Utils.Join(Utils.java:44)
+	at jc.client.core.Proxy.run(Proxy.java:114)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 22:12:43:989][TCPConnection.java:49][ERROR]Socket input is already shutdown
+java.net.SocketException: Socket input is already shutdown
+	at java.net.Socket.shutdownInput(Socket.java:1458)
+	at jc.TCPConnection.close(TCPConnection.java:45)
+	at jc.Utils.Join(Utils.java:43)
+	at jc.client.core.Proxy.run(Proxy.java:114)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 22:12:43:996][TCPConnection.java:49][ERROR]Socket input is already shutdown
+java.net.SocketException: Socket input is already shutdown
+	at java.net.Socket.shutdownInput(Socket.java:1458)
+	at jc.TCPConnection.close(TCPConnection.java:45)
+	at jc.Utils.Join(Utils.java:44)
+	at jc.client.core.Proxy.run(Proxy.java:114)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 22:12:43:988][TCPConnection.java:49][ERROR]Socket input is already shutdown
+java.net.SocketException: Socket input is already shutdown
+	at java.net.Socket.shutdownInput(Socket.java:1458)
+	at jc.TCPConnection.close(TCPConnection.java:45)
+	at jc.Utils.Join(Utils.java:43)
+	at jc.client.core.Proxy.run(Proxy.java:114)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 22:12:43:997][TCPConnection.java:49][ERROR]Socket input is already shutdown
+java.net.SocketException: Socket input is already shutdown
+	at java.net.Socket.shutdownInput(Socket.java:1458)
+	at jc.TCPConnection.close(TCPConnection.java:45)
+	at jc.Utils.Join(Utils.java:44)
+	at jc.client.core.Proxy.run(Proxy.java:114)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 22:12:43:987][TCPConnection.java:49][ERROR]Socket input is already shutdown
+java.net.SocketException: Socket input is already shutdown
+	at java.net.Socket.shutdownInput(Socket.java:1458)
+	at jc.TCPConnection.close(TCPConnection.java:45)
+	at jc.Utils.Join(Utils.java:43)
+	at jc.client.core.Proxy.run(Proxy.java:114)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 22:12:43:998][TCPConnection.java:49][ERROR]Socket input is already shutdown
+java.net.SocketException: Socket input is already shutdown
+	at java.net.Socket.shutdownInput(Socket.java:1458)
+	at jc.TCPConnection.close(TCPConnection.java:45)
+	at jc.Utils.Join(Utils.java:44)
+	at jc.client.core.Proxy.run(Proxy.java:114)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 22:12:43:987][TCPConnection.java:49][ERROR]Socket input is already shutdown
+java.net.SocketException: Socket input is already shutdown
+	at java.net.Socket.shutdownInput(Socket.java:1458)
+	at jc.TCPConnection.close(TCPConnection.java:45)
+	at jc.Utils.Join(Utils.java:43)
+	at jc.client.core.Proxy.run(Proxy.java:114)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 22:12:44:002][TCPConnection.java:49][ERROR]Socket input is already shutdown
+java.net.SocketException: Socket input is already shutdown
+	at java.net.Socket.shutdownInput(Socket.java:1458)
+	at jc.TCPConnection.close(TCPConnection.java:45)
+	at jc.Utils.Join(Utils.java:44)
+	at jc.client.core.Proxy.run(Proxy.java:114)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 22:12:43:985][TCPConnection.java:49][ERROR]Socket input is already shutdown
+java.net.SocketException: Socket input is already shutdown
+	at java.net.Socket.shutdownInput(Socket.java:1458)
+	at jc.TCPConnection.close(TCPConnection.java:45)
+	at jc.Utils.Join(Utils.java:43)
+	at jc.client.core.Proxy.run(Proxy.java:114)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 22:12:44:003][TCPConnection.java:49][ERROR]Socket input is already shutdown
+java.net.SocketException: Socket input is already shutdown
+	at java.net.Socket.shutdownInput(Socket.java:1458)
+	at jc.TCPConnection.close(TCPConnection.java:45)
+	at jc.Utils.Join(Utils.java:44)
+	at jc.client.core.Proxy.run(Proxy.java:114)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 22:12:43:985][TCPConnection.java:49][ERROR]Socket input is already shutdown
+java.net.SocketException: Socket input is already shutdown
+	at java.net.Socket.shutdownInput(Socket.java:1458)
+	at jc.TCPConnection.close(TCPConnection.java:45)
+	at jc.Utils.Join(Utils.java:43)
+	at jc.client.core.Proxy.run(Proxy.java:114)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 22:12:44:004][TCPConnection.java:49][ERROR]Socket input is already shutdown
+java.net.SocketException: Socket input is already shutdown
+	at java.net.Socket.shutdownInput(Socket.java:1458)
+	at jc.TCPConnection.close(TCPConnection.java:45)
+	at jc.Utils.Join(Utils.java:44)
+	at jc.client.core.Proxy.run(Proxy.java:114)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 22:12:43:985][TCPConnection.java:49][ERROR]Socket input is already shutdown
+java.net.SocketException: Socket input is already shutdown
+	at java.net.Socket.shutdownInput(Socket.java:1458)
+	at jc.TCPConnection.close(TCPConnection.java:45)
+	at jc.Utils.Join(Utils.java:43)
+	at jc.client.core.Proxy.run(Proxy.java:114)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 22:12:44:007][TCPConnection.java:49][ERROR]Socket input is already shutdown
+java.net.SocketException: Socket input is already shutdown
+	at java.net.Socket.shutdownInput(Socket.java:1458)
+	at jc.TCPConnection.close(TCPConnection.java:45)
+	at jc.Utils.Join(Utils.java:44)
+	at jc.client.core.Proxy.run(Proxy.java:114)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 22:12:43:985][TCPConnection.java:49][ERROR]Socket input is already shutdown
+java.net.SocketException: Socket input is already shutdown
+	at java.net.Socket.shutdownInput(Socket.java:1458)
+	at jc.TCPConnection.close(TCPConnection.java:45)
+	at jc.Utils.Join(Utils.java:43)
+	at jc.client.core.Proxy.run(Proxy.java:114)
+	at java.lang.Thread.run(Thread.java:722)
+[15-10-19 22:12:44:008][TCPConnection.java:49][ERROR]Socket input is already shutdown
+java.net.SocketException: Socket input is already shutdown
+	at java.net.Socket.shutdownInput(Socket.java:1458)
+	at jc.TCPConnection.close(TCPConnection.java:45)
+	at jc.Utils.Join(Utils.java:44)
+	at jc.client.core.Proxy.run(Proxy.java:114)
+	at java.lang.Thread.run(Thread.java:722)

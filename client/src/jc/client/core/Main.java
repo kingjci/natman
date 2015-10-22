@@ -3,11 +3,8 @@ package jc.client.core;
 import jc.Random;
 import jc.command.Command;
 import jc.command.QuitCommand;
-import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
 
-import java.io.*;
-import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -27,7 +24,9 @@ public class Main {
 
 
     public static void main(String[] args) {
-        
+
+        Runtime.getRuntime().addShutdownHook(new ExitHandler());
+
         LoadConfiguration(args, CONFIG ,OPTION,RUNTIMELOGGER);
 
         Go(CONTROLLER);

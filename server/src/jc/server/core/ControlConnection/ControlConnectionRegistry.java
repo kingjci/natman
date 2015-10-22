@@ -34,6 +34,14 @@ public class ControlConnectionRegistry{
 
             try{
                 oldControlConnection.close();
+                accessLogger.info(
+                        String.format(
+                                "Close old control connection[%s] rom %s[%s]",
+                                oldControlConnection.getClientId(),
+                                oldControlConnection.getRemoteAddress(),
+                                oldControlConnection.getClientId()
+                        )
+                );
             }catch (IOException e){
                 accessLogger.info(
                         String.format("Fail to close old control connection[%s] from %s[%s]",

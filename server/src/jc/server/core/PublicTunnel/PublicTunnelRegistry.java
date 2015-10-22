@@ -1,16 +1,12 @@
 package jc.server.core.PublicTunnel;
 
 import jc.server.core.Config;
-import jc.server.core.PublicTunnel.PublicTunnel;
 import org.apache.log4j.Logger;
 
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-/**
- * Created by ��� on 2015/9/8.
- */
 public class PublicTunnelRegistry {
 
     private Map<String, PublicTunnel> tunnels;
@@ -87,6 +83,13 @@ public class PublicTunnelRegistry {
             }
 
         }
+
+        runtimeLogger.info(
+                String.format(
+                        "Public tunnels of %s closed",
+                        clientId
+                )
+        );
 
         readWriteLock.writeLock().unlock();
 

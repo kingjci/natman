@@ -11,6 +11,7 @@ public class PublicTunnelResponse implements Message, Serializable {
 
     private String publicUrl; // tcp://jincheng.link:8000
     private String protocol;
+    private int remotePort;
     private int localPort;
     private String error;
 
@@ -19,10 +20,11 @@ public class PublicTunnelResponse implements Message, Serializable {
     }
 
 
-    public PublicTunnelResponse(String publicUrl, String protocol,int localPort){
+    public PublicTunnelResponse(String publicUrl, String protocol,int localPort,int remotePort){
         this.publicUrl = publicUrl;
         this.protocol = protocol;
         this.localPort = localPort;
+        this.remotePort = remotePort;
     }
 
     public int getLocalPort() {
@@ -44,6 +46,14 @@ public class PublicTunnelResponse implements Message, Serializable {
     public boolean hasError(){
 
         return (error != null) && (!"".equalsIgnoreCase(error));
+    }
+
+    public int getRemotePort() {
+        return remotePort;
+    }
+
+    public void setRemotePort(int remotePort) {
+        this.remotePort = remotePort;
     }
 
     @Override

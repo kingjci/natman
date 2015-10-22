@@ -19,7 +19,6 @@ import static jc.Utils.*;
 public class Controller implements Runnable {
 
     private String clientId;
-    private String serverAddress;
     private Map<String, PrivateTunnel> privateTunnels;
     private Map<String, PublicTunnelConfiguration> publicTunnelConfiguration;
     private Time lastPing;
@@ -32,8 +31,8 @@ public class Controller implements Runnable {
     private Logger runtimeLogger;
     private Logger accessLogger;
 
-    private Timer heartBeatTimer;
-    private Timer heartBeatResponseCheckTimer;
+    private Timer heartBeat;
+    private Timer heartBeatResponseCheck;
 
     public Controller(
             Config config,
@@ -45,7 +44,6 @@ public class Controller implements Runnable {
     ){
 
         this.config = config;
-        this.serverAddress = config.getServerAddress();
         this.option = option;
         this.privateTunnels = new HashMap<>();
         this.publicTunnelConfiguration = config.getPublicTunnelConfigurations();
@@ -60,55 +58,36 @@ public class Controller implements Runnable {
     public String getClientId() {
         return clientId;
     }
-
-    public String getServerAddress() {
-        return serverAddress;
-    }
-
-    public Logger getAccessLogger() {
-        return accessLogger;
-    }
-
     public Logger getRuntimeLogger() {
         return runtimeLogger;
     }
-
     public TCPConnection getTcpConnection() {
         return tcpConnection;
     }
-
     public Config getConfig() {
         return config;
     }
-
     public Option getOption() {
         return option;
     }
-
     public Random getRandom() {
         return random;
     }
-
     public Time getLastPingResponse() {
         return lastPingResponse;
     }
-
     public Time getLastPing() {
         return lastPing;
     }
-
     public BlockingQueue<Command> getCommands() {
         return commands;
     }
-
-    public Map<String, PublicTunnelConfiguration> getPublicTunnelConfiguration() {
-        return publicTunnelConfiguration;
-    }
-
     public Map<String, PrivateTunnel> getPrivateTunnels() {
         return privateTunnels;
     }
-
+    public Logger getAccessLogger() {
+        return accessLogger;
+    }
 
 
     @Override
@@ -148,20 +127,17 @@ public class Controller implements Runnable {
         }
 
         QuitCommand quitCommand = new QuitCommand("controller", "Disconnect from the server",-10);
-
         try{
             commands.put(quitCommand);
         }catch (InterruptedException e){
             runtimeLogger.error(e.getMessage(),e);
         }
-
-
     }
 
     public void control(){
 
         tcpConnection = Dial(
-                        serverAddress,
+                        config.getServerAddress(),
                         option.getControlPort(),
                         "control",
                         random.getRandomString(8),
@@ -172,6 +148,7 @@ public class Controller implements Runnable {
         if (tcpConnection == null){
             return;
         }
+
         AuthRequest authRequest = new AuthRequest(clientId, 1.0f);
 
         if (config.getUsername() != null && !"".equals(config.getUsername())){
@@ -194,7 +171,7 @@ public class Controller implements Runnable {
                             tcpConnection.getRemoteAddress()
                     )
             );
-           // runtimeLogger.error(e.getMessage(), e);
+           System.exit(-1);
         }
 
         if (authResponse == null){
@@ -202,7 +179,7 @@ public class Controller implements Runnable {
             System.exit(-1);
         }
 
-        if (authResponse.isAuth()){
+        if (authResponse.hasError()){
             accessLogger.error(
                     String.format(
                             "Refused by server[%s] with username[%s] password[%s]",
@@ -251,6 +228,17 @@ public class Controller implements Runnable {
                     System.exit(-1);
                 }
 
+                if (publicTunnelResponse.getRemotePort() != publicTunnelRequest.getRemotePort()){
+                    runtimeLogger.warn(
+                            String.format(
+                                    "%d port on server[%s] is occupied. get random port %d",
+                                    publicTunnelRequest.getRemotePort(),
+                                    config.getServerAddress(),
+                                    publicTunnelResponse.getRemotePort()
+                            )
+                    );
+                }
+
                 PrivateTunnel privateTunnel =
                         new PrivateTunnel(
                                 publicTunnelResponse.getPublicUrl(),
@@ -281,22 +269,21 @@ public class Controller implements Runnable {
 
         lastPingResponse.setTime(System.currentTimeMillis());
 
-        if (heartBeatTimer != null){
-            heartBeatTimer.cancel();
+        if (heartBeat != null){
+            heartBeat.cancel();
         }
-        heartBeatTimer = new Timer();
-        heartBeatTimer.schedule(new ControllerHeartBeatTask(this), 0, option.getHeartBeatInterval());
+        heartBeat = new Timer();
+        heartBeat.schedule(new ControllerHeartBeatTask(this), 0, option.getHeartBeatInterval());
 
-        if ((heartBeatResponseCheckTimer != null)){
-            heartBeatResponseCheckTimer.cancel();
+        if ((heartBeatResponseCheck != null)){
+            heartBeatResponseCheck.cancel();
         }
-        heartBeatResponseCheckTimer = new Timer();
-        heartBeatResponseCheckTimer.schedule(new ControllerHeartBeatCheckerTask(this), 0, option.getHeartBeatCheckerInterval());
+        heartBeatResponseCheck = new Timer();
+        heartBeatResponseCheck.schedule(new ControllerHeartBeatCheckerTask(this), 0, option.getHeartBeatCheckerInterval());
 
         while (true){
 
-            Message message = null;
-
+            Message message;
             try{
                 message = tcpConnection.readMessage();
             }catch (IOException e){

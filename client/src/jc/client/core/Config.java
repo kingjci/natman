@@ -4,7 +4,6 @@ import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,13 +14,13 @@ import java.util.regex.Pattern;
 
 public class Config {
 
-    private String serverAddress = "127.0.0.1";
+    private String serverAddress;
     private String clientAddress = "127.0.0.1";
-    private String command;
     private String username;
     private String password;
+    private Map<String, PublicTunnelConfiguration> publicTunnelConfigurations;
 
-    private static String propt =
+    private static String prompt =
             "Examples:\n" +
             "-localport 8080 -remoteport 8000 -server 127.0.0.1 -protocol tcp\n" +
             "-localport 8080 -remoteport 8000 -server 127.0.0.1 -subdomain aaa -protocol http\n" +
@@ -40,47 +39,25 @@ public class Config {
             "\n" +
             "`";
 
-    private Map<String, PublicTunnelConfiguration> publicTunnelConfigurations = new HashMap<String, PublicTunnelConfiguration>();
 
-    public String getCommand() {
-        return command;
-    }
-
-    public void setCommand(String command) {
-        this.command = command;
+    public Config(){
+        publicTunnelConfigurations = new HashMap<>();
     }
 
     public String getServerAddress() {
         return serverAddress;
     }
-
     public void setServerAddress(String serverAddress) {
         this.serverAddress = serverAddress;
-    }
-
-    public Map<String, PublicTunnelConfiguration> getPublicTunnelConfigurations() {
-        return publicTunnelConfigurations;
-    }
-
-    public void putPublicTunnelConfiguration( PublicTunnelConfiguration publicTunnelConfiguration){
-        publicTunnelConfigurations.put(
-                publicTunnelConfiguration.getName(),
-                publicTunnelConfiguration
-        );
     }
 
     public String getClientAddress() {
         return clientAddress;
     }
 
-    public void setClientAddress(String clientAddress) {
-        this.clientAddress = clientAddress;
-    }
-
     public String getUsername() {
         return username;
     }
-
     public void setUsername(String username) {
         this.username = username;
     }
@@ -88,11 +65,19 @@ public class Config {
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
 
+    public Map<String, PublicTunnelConfiguration> getPublicTunnelConfigurations() {
+        return publicTunnelConfigurations;
+    }
+    public void putPublicTunnelConfiguration( PublicTunnelConfiguration publicTunnelConfiguration){
+        publicTunnelConfigurations.put(
+                publicTunnelConfiguration.getName(),
+                publicTunnelConfiguration
+        );
+    }
 
 
     public static void LoadConfiguration(
@@ -197,6 +182,14 @@ public class Config {
                             System.exit(-1);
                     }
                 }
+                if (!items.empty()){
+                    runtimeLogger.error(
+                            String.format(
+                                    "Mismatch bracket %s",
+                                    items.pop()
+                            )
+                    );
+                }
 
                 runtimeLogger.info(String.format("Read %d config lines", count));
 
@@ -294,11 +287,11 @@ public class Config {
                 System.exit(0);
 
             case "help":
-                System.out.println(propt);
+                System.out.println(prompt);
                 System.exit(0);
 
             case "":
-                System.out.println(propt);
+                System.out.println(prompt);
                 System.exit(0);
 
             default:
@@ -382,18 +375,21 @@ public class Config {
                     continue;
                 }
 
-                String regexDomain = "(?:(?:\\d{1,3}){1,3}\\d{1,3})|(?:(?:[\\w-]){2,})";
+                String regexDomain = "(?:(?:\\d{1,3}){1,3}\\d{1,3})|(?:(?:[\\w|-]+){2,})";
                 Pattern pattern = Pattern.compile(regexDomain);
                 Matcher matcher = pattern.matcher(line);
 
-                if (matcher.find()){
-                    config.setServerAddress(line);
-                }else {
-                    runtimeLogger.error(String.format("Server address %s format is wrong",line));
+                if (!matcher.find()){
+                    runtimeLogger.error(
+                            String.format(
+                                    "Server address %s format is wrong",
+                                    line
+                            )
+                    );
                     System.exit(-1);
                 }
 
-
+                config.setServerAddress(line);
             }
             return count;
 
@@ -405,7 +401,6 @@ public class Config {
     }
 
     public static int ParseTcp(BufferedReader bufferedReader, Config config,int count, Logger runtimeLogger){
-
 
         try{
 

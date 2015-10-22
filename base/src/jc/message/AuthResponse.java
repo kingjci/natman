@@ -9,7 +9,7 @@ public class AuthResponse implements Message, Serializable {
     private float version;
     private String clientId;
     private String error;
-    private boolean auth;
+    private boolean hasError = false;
 
 
     public AuthResponse(float version) {
@@ -21,7 +21,7 @@ public class AuthResponse implements Message, Serializable {
     }
 
     public void refuse(String error){
-        this.auth = false;
+        this.hasError = true;
         this.error = new String(error);
     }
 
@@ -37,8 +37,8 @@ public class AuthResponse implements Message, Serializable {
         return error;
     }
 
-    public boolean isAuth() {
-        return auth;
+    public boolean hasError() {
+        return hasError;
     }
 
     @Override

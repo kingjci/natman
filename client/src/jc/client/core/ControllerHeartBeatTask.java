@@ -8,24 +8,18 @@ import org.apache.log4j.Logger;
 import java.io.IOException;
 import java.util.TimerTask;
 
-/**
- * Created by 金成 on 2015/10/15.
- */
 public class ControllerHeartBeatTask extends TimerTask {
 
     private final String clientId;
     private final TCPConnection tcpConnection;
     private final Time lastPing;
     private final Logger runtimeLogger;
-    private final Logger accessLogger;
-
 
     public ControllerHeartBeatTask(Controller controller){
         clientId = controller.getClientId();
         tcpConnection = controller.getTcpConnection();
         lastPing = controller.getLastPing();
         runtimeLogger = controller.getRuntimeLogger();
-        accessLogger = controller.getAccessLogger();
     }
 
 

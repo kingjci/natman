@@ -28,7 +28,7 @@ public class PublicTunnelTCPHandler implements Runnable{
 
         if (proxyTCPConnection == null){
 
-            //Can not get proxy from client, abort the public conneciton
+            //Can not get proxy from client, abort the public connection
             return;
         }
 

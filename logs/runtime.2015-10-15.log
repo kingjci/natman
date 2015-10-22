@@ -1,0 +1,10 @@
+[15-10-15 15:08:16:178][Controller.java:97][INFO]NatMan server start on 12345
+[15-10-15 21:15:33:399][Main.java:202][ERROR]..\client.cfg (系统找不到指定的文件。)
+java.io.FileNotFoundException: ..\client.cfg (系统找不到指定的文件。)
+	at java.io.FileInputStream.open(Native Method)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at java.io.FileInputStream.<init>(FileInputStream.java:97)
+	at java.io.FileReader.<init>(FileReader.java:58)
+	at jc.client.core.Main.LoadConfiguration(Main.java:81)
+	at jc.client.core.Main.main(Main.java:30)
+[15-10-15 22:09:57:984][Main.java:207][INFO]Read 25 config lines

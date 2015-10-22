@@ -18,7 +18,6 @@ import java.net.Socket;
 public class PublicTunnel implements Runnable{
 
     protected PublicTunnelRequest publicTunnelRequest;
-    protected long start;
     protected int port;
     protected String publicUrl;
     protected String protocol;

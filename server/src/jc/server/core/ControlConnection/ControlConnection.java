@@ -35,10 +35,11 @@ public class ControlConnection extends Thread{
     private final Option option;
 
     public ControlConnection(
-            ControllerHandler controllerHandler
+            ControllerHandler controllerHandler,
+            String clientId
     ){
 
-        this.clientId = controllerHandler.getClientId();
+        this.clientId = clientId;
         this.tcpConnection = controllerHandler.getTcpConnection();
         this.controlConnectionRegistry = controllerHandler.getControlConnectionRegistry();
         this.publicTunnelRegistry = controllerHandler.getPublicTunnelRegistry();
@@ -68,7 +69,13 @@ public class ControlConnection extends Thread{
         }
 
         if (proxyTCPConnection == null){
-            runtimeLogger.error("Get null proxy from client");
+            runtimeLogger.error(
+                    String.format(
+                            "Fail to get proxy from %s[%s]",
+                            tcpConnection.getRemoteAddress(),
+                            clientId
+                    )
+            );
         }
 
         return proxyTCPConnection;
@@ -116,6 +123,7 @@ public class ControlConnection extends Thread{
     public void close() throws IOException{
         //   when the run() is blocked in Message message = tcpConnection.readMessage();
         //this operation will cause exception in run()
+        tcpConnection.close();
         accessLogger.info(
                 String.format(
                         "Control connection from %s[%s] is closed",
@@ -123,7 +131,14 @@ public class ControlConnection extends Thread{
                         clientId
                 )
         );
-        tcpConnection.close();
+        pingChecker.cancel();
+        runtimeLogger.debug(
+                String.format(
+                        "Heartbeat of %s[%s] is closed",
+                        tcpConnection.getRemoteAddress(),
+                        clientId
+                )
+        );
     }
 
     @Override
@@ -162,8 +177,8 @@ public class ControlConnection extends Thread{
                                         random,
                                         runtimeLogger,
                                         accessLogger);
-                        String result = null;
-                        result = publicTunnelRegistry.register(clientId, publicTunnel);
+
+                        String result = publicTunnelRegistry.register(clientId, publicTunnel);
 
                         if (!"success".equalsIgnoreCase(result)){
 
@@ -191,10 +206,6 @@ public class ControlConnection extends Thread{
                                         )
                                 );
                             }
-
-
-
-
                         }
 
                         result = publicTunnel.bind(publicTunnelRequest.getRemotePort());
@@ -230,8 +241,10 @@ public class ControlConnection extends Thread{
                             PublicTunnelResponse publicTunnelResponse =
                                     new PublicTunnelResponse(publicUrl,
                                             publicTunnelRequest.getProtocol(),
-                                            publicTunnelRequest.getLocalPort()
+                                            publicTunnelRequest.getLocalPort(),
+                                            publicTunnel.getPort()
                                     );
+
                             try{
                                 tcpConnection.writeMessage(publicTunnelResponse);
                             }catch (IOException e){
