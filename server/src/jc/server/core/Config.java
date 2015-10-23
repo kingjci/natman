@@ -1,113 +1,68 @@
 package jc.server.core;
 
+import jc.server.core.Users.FileUsers;
+import jc.server.core.Users.MysqlUsers;
+import jc.server.core.Users.Users;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Config {
 
-    //用来保存，从服务器配置文件中读取的配置
-
+    //store config read from the config file
     private Set<String> bannedPort; // tcp://jincheng.link:8000这个形式
-    private String domain = "jincheng.link";
-    private int controlPort = 12345;
-    private boolean auth = false;
-    private String userSource;
+    private Map<Integer, Integer> httpRedirect;
+    private String domain;
+    private int controlPort;
+    private boolean auth;
+    private String usersSource;
     private String usersFile;
     private String mysqlUrl;
     private String mysqlUsername;
     private String mysqlPassword;
+    private Users users;
 
+    public Config(String[] args, Logger runtimeLogger){
 
-    public Config(){
         bannedPort = new HashSet<>();
+        httpRedirect = new HashMap<>();
+        domain = "jincheng.link"; // Default value
+        controlPort = 12345;
+        auth = false;
+
+        LoadConfiguration(args, runtimeLogger);
+        LoadUsers(runtimeLogger);
 
     }
 
     public String getDomain() {
         return domain;
     }
-
-    public void setDomain(String domain) {
-        this.domain = domain;
-    }
-
     public int getControlPort() {
         return controlPort;
     }
-
-    public void setControlPort(int controlPort) {
-        this.controlPort = controlPort;
-    }
-
     public Set<String> getBannedPort() {
         return bannedPort;
     }
-
     public boolean isAuth() {
         return auth;
     }
-
-    public void setAuth(boolean auth) {
-        this.auth = auth;
+    public Map<Integer,Integer> getHttpRedirect(){
+        return  httpRedirect;
     }
 
-    public String getUserSource() {
-        return userSource;
+    public Users getUsers() {
+        return users;
     }
 
-    public void setUserSource(String userSource) {
-        this.userSource = userSource;
-    }
-
-    public String getUsersFile() {
-        return usersFile;
-    }
-
-    public void setUsersFile(String usersFile) {
-        this.usersFile = usersFile;
-    }
-
-    public String getMysqlUrl() {
-        return mysqlUrl;
-    }
-
-    public void setMysqlUrl(String mysqlUrl) {
-        this.mysqlUrl = mysqlUrl;
-    }
-
-    public String getMysqlUsername() {
-        return mysqlUsername;
-    }
-
-    public void setMysqlUsername(String mysqlUsername) {
-        this.mysqlUsername = mysqlUsername;
-    }
-
-    public String getMysqlPassword() {
-        return mysqlPassword;
-    }
-
-    public void setMysqlPassword(String mysqlPassword) {
-        this.mysqlPassword = mysqlPassword;
-    }
-
-    public void setBannedPort(Set<String> bannedPort) {
-        this.bannedPort = bannedPort;
-    }
-
-    public static void LoadConfiguration(
+    private void LoadConfiguration(
             String[] args,
-            Config config,
-            Option option,
             Logger runtimeLogger){
 
         Options options = new Options();
@@ -152,7 +107,7 @@ public class Config {
 
                         case "[domain]":
                             items.push("[domain]");
-                            count = ParseDomain(bufferedReader, config, count, runtimeLogger);
+                            count = ParseDomain(bufferedReader,count, runtimeLogger);
                             if (count == 0){
                                 runtimeLogger.error("Error occurs when parsing [domain]");
                                 System.exit(-1);
@@ -162,7 +117,7 @@ public class Config {
 
                         case "[port]":
                             items.push("[port]");
-                            count = ParsePort(bufferedReader, config, count, runtimeLogger);
+                            count = ParsePort(bufferedReader, count, runtimeLogger);
                             if (count == 0){
                                 runtimeLogger.error("Error occurs when parsing [port]");
                                 System.exit(-1);
@@ -172,7 +127,7 @@ public class Config {
 
                         case "[auth]":
                             items.push("[auth]");
-                            count = ParseAuth(bufferedReader, config, count, runtimeLogger);
+                            count = ParseAuth(bufferedReader,count, runtimeLogger);
                             if (count == 0){
                                 runtimeLogger.error("Error occurs when parsing [Auth]");
                                 System.exit(-1);
@@ -182,7 +137,7 @@ public class Config {
 
                         case "[users-file]":
                             items.push("[users-file]");
-                            count = ParseUsersFile(bufferedReader, config, count, runtimeLogger);
+                            count = ParseUsersFile(bufferedReader, count, runtimeLogger);
                             if (count == 0){
                                 runtimeLogger.error("Error occurs when parsing [users-file]");
                                 System.exit(-1);
@@ -192,7 +147,7 @@ public class Config {
 
                         case "[users-mysql]":
                             items.push("[users-mysql]");
-                            count = ParseUsersMysql(bufferedReader, config, count, runtimeLogger);
+                            count = ParseUsersMysql(bufferedReader,count, runtimeLogger);
                             if (count == 0){
                                 runtimeLogger.error("Error occurs when parsing [users-mysql]");
                                 System.exit(-1);
@@ -202,9 +157,19 @@ public class Config {
 
                         case "[banned-port]":
                             items.push("[banned-port]");
-                            count = ParseBannedPort(bufferedReader, config, count, runtimeLogger);
+                            count = ParseBannedPort(bufferedReader,count, runtimeLogger);
                             if (count == 0){
                                 runtimeLogger.error("Error occurs when parsing [banned-port]");
+                                System.exit(-1);
+                            }
+                            items.pop();
+                            break;
+
+                        case "[http-redirect]":
+                            items.push("[http-redirect]");
+                            count = ParseHTTPRedirect(bufferedReader,count, runtimeLogger);
+                            if (count == 0){
+                                runtimeLogger.error("Error occurs when parsing [http-redirect]");
                                 System.exit(-1);
                             }
                             items.pop();
@@ -213,6 +178,17 @@ public class Config {
                         default:
                             runtimeLogger.error(String.format("Unknown syntax at %s[%d]",line,count));
                             System.exit(-1);
+                    }
+                }
+
+                if (!items.empty()){
+                    if (!items.empty()){
+                        runtimeLogger.error(
+                                String.format(
+                                        "Mismatch bracket %s",
+                                        items.pop()
+                                )
+                        );
                     }
                 }
 
@@ -241,14 +217,12 @@ public class Config {
             }
 
         }else {
-
-
+            runtimeLogger.error("Please give config file, example: -config server.cfg");
         }
 
     }
 
-
-    public static int ParseDomain(BufferedReader bufferedReader, Config config,int count, Logger runtimeLogger){
+    private int ParseDomain(BufferedReader bufferedReader, int count, Logger runtimeLogger){
 
         try{
 
@@ -270,13 +244,11 @@ public class Config {
                 Matcher matcher = pattern.matcher(line);
 
                 if (matcher.find()){
-                    config.setDomain(line);
+                    domain = line;
                 }else {
                     runtimeLogger.error(String.format("Domain %s format is wrong",line));
                     System.exit(-1);
                 }
-
-
             }
             return count;
 
@@ -286,11 +258,12 @@ public class Config {
         }
     }
 
-    public static int ParsePort(BufferedReader bufferedReader, Config config,int count, Logger runtimeLogger){
+    private int ParsePort(BufferedReader bufferedReader,int count, Logger runtimeLogger){
 
         try{
 
             while (true) {
+
                 String line = bufferedReader.readLine();
                 count++;
 
@@ -318,8 +291,7 @@ public class Config {
                     runtimeLogger.error(String.format("Port config error occurs at line %d: port should between 1 - 65536", count));
                     System.exit(-1);
                 }
-
-                config.setControlPort(port);
+                controlPort = port;
             }
 
             return count;
@@ -330,11 +302,12 @@ public class Config {
         }
     }
 
-    public static int ParseAuth(BufferedReader bufferedReader, Config config,int count, Logger runtimeLogger){
+    private int ParseAuth(BufferedReader bufferedReader, int count, Logger runtimeLogger){
 
         try{
 
             while (true){
+
                 String line = bufferedReader.readLine();
                 count++;
 
@@ -347,7 +320,7 @@ public class Config {
                 }
 
                 String[] words = line.split(":");
-                if (words.length == 2){
+                if (words.length == 2 | words.length == 1){
 
                     Pattern pattern;
                     Matcher matcher;
@@ -361,7 +334,7 @@ public class Config {
                         System.exit(-1);
                     }
 
-                    config.setAuth(Boolean.valueOf(words[0]));
+                    auth = Boolean.valueOf(words[0]);
 
                     String regexSource = "\\S+";
                     pattern = Pattern.compile(regexSource);
@@ -372,7 +345,9 @@ public class Config {
                         System.exit(-1);
                     }
 
-                    config.setUserSource(words[1]);
+                    if (words.length == 2){
+                        usersSource = words[1];
+                    }
 
                 }else {
                     runtimeLogger.error(String.format("Auth %s format is wrong at %d",line,count));
@@ -388,11 +363,12 @@ public class Config {
         }
     }
 
-    public static int ParseUsersFile(BufferedReader bufferedReader, Config config,int count, Logger runtimeLogger) {
+    private int ParseUsersFile(BufferedReader bufferedReader,int count, Logger runtimeLogger) {
 
         try {
 
             while (true) {
+
                 String line = bufferedReader.readLine();
                 count++;
 
@@ -404,7 +380,7 @@ public class Config {
                     continue;
                 }
 
-                config.setUsersFile(line);
+                usersFile = line;
             }
 
             return count;
@@ -415,11 +391,12 @@ public class Config {
         }
     }
 
-    public static int ParseUsersMysql(BufferedReader bufferedReader, Config config,int count, Logger runtimeLogger){
+    private int ParseUsersMysql(BufferedReader bufferedReader,int count, Logger runtimeLogger){
 
         try{
 
             while (true) {
+
                 String line = bufferedReader.readLine();
                 count++;
 
@@ -431,7 +408,7 @@ public class Config {
                     continue;
                 }
 
-                String[] words = line.split(":");
+                String[] words = line.split(",");
                 if (words.length == 3) {
 
                     Pattern pattern;
@@ -446,7 +423,7 @@ public class Config {
                         System.exit(-1);
                     }
 
-                    config.setMysqlUrl(words[0]);
+                   mysqlUrl = words[0];
 
                     String regexUsername = "\\S+";
                     pattern = Pattern.compile(regexUsername);
@@ -457,7 +434,7 @@ public class Config {
                         System.exit(-1);
                     }
 
-                    config.setMysqlUsername(words[1]);
+                    mysqlUsername = words[1];
 
                     String regexPassword = "\\S+";
                     pattern = Pattern.compile(regexPassword);
@@ -467,7 +444,7 @@ public class Config {
                         System.exit(-1);
                     }
 
-                    config.setMysqlUrl(words[2]);
+                    mysqlPassword = words[2];
                 } else {
                     runtimeLogger.error(String.format("users-mysql %s format is wrong at %d", line, count));
                     System.exit(-1);
@@ -483,11 +460,9 @@ public class Config {
 
     }
 
-    public static int ParseBannedPort(BufferedReader bufferedReader, Config config,int count, Logger runtimeLogger){
+    private int ParseBannedPort(BufferedReader bufferedReader,int count, Logger runtimeLogger){
 
         try{
-
-            Set<String> bannedPort = config.getBannedPort();
 
             while (true){
 
@@ -502,35 +477,136 @@ public class Config {
                     continue;
                 }
 
-                String regexPort = "\\d{1,5}";
-                Pattern pattern = Pattern.compile(regexPort);
-                Matcher matcher = pattern.matcher(line);
+                String[] words = line.split(":");
 
-                if (!matcher.find()){
-                    runtimeLogger.error(String.format("banned-port config error occurs at line %d: invalid mysql password", count));
+                if (words.length == 2){
+
+
+                    String regexProtocol = "\\w{1,5}";
+                    Pattern pattern = Pattern.compile(regexProtocol);
+                    Matcher matcher = pattern.matcher(words[0]);
+
+                    if (!matcher.find()){
+                        runtimeLogger.error(String.format("Banned-port config error occurs at line %d: invalid mysql password", count));
+                        System.exit(-1);
+                    }
+
+                    int port = Integer.valueOf(words[1]);
+
+                    if (port <= 0 | port > 65535) {
+                        runtimeLogger.error(String.format("Banned port config error occurs at line %d: port should between 1 - 65536", count));
+                        System.exit(-1);
+                    }
+                    bannedPort.add(
+                            String.format(
+                                    "%s://%s:%d",
+                                    "tcp",
+                                    domain,
+                                    port
+                            )
+                    );
+
+                }else {
+                    runtimeLogger.error(String.format("Banned port %s format is wrong at %d", line, count));
                     System.exit(-1);
                 }
-
-                int port = Integer.valueOf(line);
-
-                if (port <= 0 | port > 65535) {
-                    runtimeLogger.error(String.format("Banned port config error occurs at line %d: port should between 1 - 65536", count));
-                    System.exit(-1);
-                }
-                bannedPort.add(
-                        String.format(
-                                "%s://%s:%d",
-                                "tcp",
-                                config.getDomain(),
-                                port
-                        )
-                );
             }
             return count;
 
         }catch (IOException e){
             runtimeLogger.error(e.getMessage(), e);
             return 0;
+        }
+    }
+
+    private int ParseHTTPRedirect(BufferedReader bufferedReader, int count, Logger runtimeLogger){
+
+        try{
+
+            while (true) {
+
+                String line = bufferedReader.readLine();
+                count++;
+
+                if ("[/http-redirect]".equalsIgnoreCase(line)) {
+                    break;
+                }
+
+                if (line.startsWith("#") | "".equals(line)) {
+                    continue;
+                }
+
+                String[] words = line.split(":");
+                if (words.length == 2) {
+
+                    Pattern pattern;
+                    Matcher matcher;
+
+                    String regexVirtualPort = "\\d{1,5}";
+                    pattern = Pattern.compile(regexVirtualPort);
+                    matcher = pattern.matcher(words[0]);
+
+                    if (!matcher.find()) {
+                        runtimeLogger.error(String.format("http-redirect config error occurs at line %d: invalid mysql url", count));
+                        System.exit(-1);
+                    }
+
+                    int virtualPort = Integer.valueOf(words[0]);
+                    if (virtualPort <=0 | virtualPort >=65536){
+                        runtimeLogger.error(
+                                "Http redirect virtual port should between 1 and 65536"
+                                );
+                        System.exit(-1);
+                    }
+
+                    String regexRealPort = "\\d{1,5}";
+                    pattern = Pattern.compile(regexRealPort);
+                    matcher = pattern.matcher(words[1]);
+
+                    if (!matcher.find()) {
+                        runtimeLogger.error(String.format("http-redirect config error occurs at line %d: invalid mysql url", count));
+                        System.exit(-1);
+                    }
+
+                    int realPort = Integer.valueOf(words[1]);
+                    if (realPort <=0 | realPort >=65536){
+                        runtimeLogger.error(
+                                "Http redirect realPort port should between 1 and 65536"
+                        );
+                        System.exit(-1);
+                    }
+
+                    httpRedirect.put(virtualPort, realPort);
+
+                } else {
+                    runtimeLogger.error(String.format("http-redirect %s format is wrong at %d", line, count));
+                    System.exit(-1);
+                }
+            }
+
+            return count;
+
+        }catch (IOException e){
+            runtimeLogger.error(e.getMessage(), e);
+            return 0;
+        }
+    }
+
+    private void LoadUsers(Logger runtimeLogger){
+
+        if (auth) {
+
+            switch (usersSource) {
+                case "file":
+                    users = new FileUsers(usersFile, runtimeLogger);
+                    break;
+                case "mysql":
+                    users = new MysqlUsers(mysqlUrl, mysqlUsername, mysqlPassword, runtimeLogger);
+                    break;
+                default:
+                    runtimeLogger.error(String.format("Unknown users sources %s", usersFile));
+            }
+
         }
     }
 }

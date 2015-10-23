@@ -138,7 +138,7 @@ public class Controller implements Runnable {
 
         tcpConnection = Dial(
                         config.getServerAddress(),
-                        option.getControlPort(),
+                        config.getControlPort(),
                         "control",
                         random.getRandomString(8),
                         runtimeLogger,

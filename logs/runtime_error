@@ -1,2 +1,20 @@
-[15-10-22 01:33:59:330][Controller.java:295][ERROR]Control connection is closed: can not read from /127.0.0.1:12345
-[15-10-22 09:49:45:230][Utils.java:83][ERROR]Can not connect to 127.0.0.1:12345, perhaps this port is not open
+[15-10-23 13:45:39:306][Config.java:175][ERROR]Unknown syntax at [http-redirect][29]
+[15-10-23 14:04:30:303][Config.java:179][ERROR]Unknown syntax at [http-redirect][32]
+[15-10-23 14:04:42:828][Config.java:179][ERROR]Unknown syntax at [http-redirect][32]
+[15-10-23 14:09:14:421][Config.java:184][ERROR]Unknown syntax at [http-redirect][32]
+[15-10-23 16:47:24:925][MysqlUsers.java:42][ERROR]Before start of result set
+java.sql.SQLException: Before start of result set
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:1078)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:989)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:975)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:920)
+	at com.mysql.jdbc.ResultSetImpl.checkRowPos(ResultSetImpl.java:851)
+	at com.mysql.jdbc.ResultSetImpl.getInt(ResultSetImpl.java:2706)
+	at jc.server.core.Users.MysqlUsers.auth(MysqlUsers.java:40)
+	at jc.server.core.Config.<init>(Config.java:43)
+	at jc.server.core.Main.main(Main.java:34)
+[15-10-23 16:49:07:269][FileUsers.java:36][ERROR]Users error at 1
+[15-10-23 19:09:29:231][Utils.java:83][ERROR]Can not connect to 127.0.0.1:8080, perhaps this port is not open
+[15-10-23 19:09:29:231][Utils.java:83][ERROR]Can not connect to 127.0.0.1:8080, perhaps this port is not open
+[15-10-23 19:09:29:232][Proxy.java:117][ERROR]Fail to open private connection 127.0.0.1: 8080
+[15-10-23 19:09:29:232][Proxy.java:117][ERROR]Fail to open private connection 127.0.0.1: 8080

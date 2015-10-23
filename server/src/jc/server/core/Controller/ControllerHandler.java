@@ -11,6 +11,7 @@ import jc.server.core.ControlConnection.ControlConnection;
 import jc.server.core.ControlConnection.ControlConnectionRegistry;
 import jc.server.core.Option;
 import jc.server.core.PublicTunnel.PublicTunnelRegistry;
+import jc.server.core.Users.Users;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -43,31 +44,24 @@ public class ControllerHandler implements Runnable {
     public TCPConnection getTcpConnection() {
         return tcpConnection;
     }
-
     public ControlConnectionRegistry getControlConnectionRegistry() {
         return controlConnectionRegistry;
     }
-
     public PublicTunnelRegistry getPublicTunnelRegistry() {
         return publicTunnelRegistry;
     }
-
     public Random getRandom() {
         return random;
     }
-
     public Config getConfig() {
         return config;
     }
-
     public Option getOption() {
         return option;
     }
-
     public Logger getRuntimeLogger() {
         return runtimeLogger;
     }
-
     public Logger getAccessLogger() {
         return accessLogger;
     }
@@ -106,8 +100,72 @@ public class ControllerHandler implements Runnable {
                     AuthResponse authResponse = new AuthResponse(option.getVersion());
                     //here is the auth process
 
+                    if (config.isAuth()){
 
+                        String username = authRequest.getUsername();
+                        String password = authRequest.getPassword();
 
+                        if (username == null | "".equals(username) | password == null | "".equals(password)){
+                            String error = "Absent of username or password";
+
+                            authResponse.refuse(error);
+                            try{
+                                tcpConnection.writeMessage(authResponse);
+                            }catch (IOException e){
+
+                                runtimeLogger.error(
+                                        String.format("Send AuthResponse to %s failure",
+                                                tcpConnection.getRemoteAddress()
+                                        ),e
+                                );
+
+                            }
+
+                            //  auth fails, terminate the auth prematurely
+                            accessLogger.info(
+                                    String.format(
+                                            "Fail to auth: Absent of username or password from %s[%s]",
+                                            tcpConnection.getRemoteAddress(),
+                                            tcpConnection.getConnectionId()
+                                    )
+                            );
+                            return;
+                        }
+
+                        Users users = config.getUsers();
+                        boolean authResult = users.auth(username, password);
+
+                        if (!authResult){
+
+                            String error = "Incorrect username or password";
+
+                            authResponse.refuse(error);
+                            try{
+                                tcpConnection.writeMessage(authResponse);
+                            }catch (IOException e){
+
+                                runtimeLogger.error(
+                                        String.format("Send AuthResponse to %s failure",
+                                                tcpConnection.getRemoteAddress()
+                                        ),e
+                                );
+
+                            }
+
+                            //  auth fails, terminate the auth prematurely
+                            accessLogger.info(
+                                    String.format(
+                                            "Fail to auth: Incorrect username/password %s/%s from %s[%s]",
+                                            username,
+                                            password,
+                                            tcpConnection.getRemoteAddress(),
+                                            tcpConnection.getConnectionId()
+                                    )
+                            );
+                            return;
+                        }
+
+                    }
 
                     if (authRequest.getVersion() < option.getMinVersion()){
 
@@ -132,6 +190,14 @@ public class ControllerHandler implements Runnable {
                         }
 
                         //  auth fails, terminate the auth prematurely
+                        accessLogger.info(
+                                String.format(
+                                        "Fail to auth: Incorrect Incompatible versions %f from %s[%s]",
+                                        authRequest.getVersion(),
+                                        tcpConnection.getRemoteAddress(),
+                                        tcpConnection.getConnectionId()
+                                )
+                        );
                         return;
                     }
 
@@ -140,7 +206,8 @@ public class ControllerHandler implements Runnable {
                     authResponse.setClientId(clientId);
 
                     accessLogger.info(
-                            String.format("Auth client %s[%s] successfully",
+                            String.format("Success to auth %s[%s][%s]",
+                                    authRequest.getUsername(),
                                     tcpConnection.getRemoteAddress(),
                                     authResponse.getClientId()
                             )

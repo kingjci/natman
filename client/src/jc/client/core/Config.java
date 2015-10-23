@@ -16,6 +16,7 @@ public class Config {
 
     private String serverAddress;
     private String clientAddress = "127.0.0.1";
+    private int controlPort = 12345;
     private String username;
     private String password;
     private Map<String, PublicTunnelConfiguration> publicTunnelConfigurations;
@@ -53,6 +54,10 @@ public class Config {
 
     public String getClientAddress() {
         return clientAddress;
+    }
+
+    public int getControlPort() {
+        return controlPort;
     }
 
     public String getUsername() {

@@ -1,252 +1,57 @@
-[15-10-22 01:18:46:005][Controller.java:98][INFO]NatMan server start on 12345
-[15-10-22 01:18:50:835][Config.java:201][INFO]Read 16 config lines
-[15-10-22 01:18:50:986][Controller.java:256][INFO]PrivateTunnel established at tcp://127.0.0.1:8000 successfully
-[15-10-22 01:18:50:993][Controller.java:256][INFO]PrivateTunnel established at tcp://127.0.0.1:8001 successfully
-[15-10-22 01:18:51:025][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1319[hello][ANfyBGom] successfully
-[15-10-22 01:18:51:028][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[Xvm1PdTc] successfully
-[15-10-22 01:19:05:997][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[Xvm1PdTc] successfully
-[15-10-22 01:19:05:998][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1319[hello][ANfyBGom] successfully
-[15-10-22 01:19:12:433][Proxy.java:63][DEBUG]New proxy connection[bdUY5Zw5] from /127.0.0.1:12345
-[15-10-22 01:19:12:446][Utils.java:31][DEBUG]Join /127.0.0.1:8080[FWusqLX6] with /127.0.0.1:12345[bdUY5Zw5]
-[15-10-22 01:19:12:480][Proxy.java:63][DEBUG]New proxy connection[YtPc9ocg] from /127.0.0.1:12345
-[15-10-22 01:19:12:504][Utils.java:31][DEBUG]Join /127.0.0.1:8080[iE6cJ9mO] with /127.0.0.1:12345[YtPc9ocg]
-[15-10-22 01:19:12:512][Utils.java:31][DEBUG]Join /127.0.0.1:1419[JKm1Ddq9] with /127.0.0.1:1415[GhaWNC0K]
-[15-10-22 01:19:12:513][Utils.java:31][DEBUG]Join /127.0.0.1:1417[5yrtBSkF] with /127.0.0.1:1412[z6O3jkcC]
-[15-10-22 01:19:12:853][Proxy.java:63][DEBUG]New proxy connection[Fk03xF07] from /127.0.0.1:12345
-[15-10-22 01:19:12:853][Utils.java:31][DEBUG]Join /127.0.0.1:1420[WlTcIXNV] with /127.0.0.1:1416[RiF4Blhn]
-[15-10-22 01:19:12:855][Utils.java:31][DEBUG]Join /127.0.0.1:8080[vwGEEnVE] with /127.0.0.1:12345[Fk03xF07]
-[15-10-22 01:19:12:889][Proxy.java:63][DEBUG]New proxy connection[ce4xupsa] from /127.0.0.1:12345
-[15-10-22 01:19:12:889][Utils.java:31][DEBUG]Join /127.0.0.1:1418[kNtsxebH] with /127.0.0.1:1414[kLdnHMqi]
-[15-10-22 01:19:12:891][Utils.java:31][DEBUG]Join /127.0.0.1:8080[W5woJ2MR] with /127.0.0.1:12345[ce4xupsa]
-[15-10-22 01:19:12:902][Proxy.java:63][DEBUG]New proxy connection[LWpMlbFm] from /127.0.0.1:12345
-[15-10-22 01:19:12:910][Utils.java:31][DEBUG]Join /127.0.0.1:1421[nWCANvwq] with /127.0.0.1:1413[27UzX7HN]
-[15-10-22 01:19:12:911][Utils.java:31][DEBUG]Join /127.0.0.1:8080[V6x8aBhN] with /127.0.0.1:12345[LWpMlbFm]
-[15-10-22 01:19:20:235][ControlConnection.java:288][INFO]Control connection[hello] to /127.0.0.1:1319 is closed
-[15-10-22 01:19:20:642][Utils.java:49][DEBUG]Detach /127.0.0.1:1417[5yrtBSkF] with /127.0.0.1:1412[z6O3jkcC]
-[15-10-22 01:19:20:644][Utils.java:49][DEBUG]Detach /127.0.0.1:1421[nWCANvwq] with /127.0.0.1:1413[27UzX7HN]
-[15-10-22 01:19:20:679][Utils.java:49][DEBUG]Detach /127.0.0.1:1420[WlTcIXNV] with /127.0.0.1:1416[RiF4Blhn]
-[15-10-22 01:19:20:697][Utils.java:49][DEBUG]Detach /127.0.0.1:1418[kNtsxebH] with /127.0.0.1:1414[kLdnHMqi]
-[15-10-22 01:19:20:697][Utils.java:49][DEBUG]Detach /127.0.0.1:1419[JKm1Ddq9] with /127.0.0.1:1415[GhaWNC0K]
-[15-10-22 01:21:48:069][Controller.java:98][INFO]NatMan server start on 12345
-[15-10-22 01:21:51:510][Config.java:201][INFO]Read 16 config lines
-[15-10-22 01:21:51:622][Controller.java:256][INFO]PrivateTunnel established at tcp://127.0.0.1:8000 successfully
-[15-10-22 01:21:51:626][Controller.java:256][INFO]PrivateTunnel established at tcp://127.0.0.1:8001 successfully
-[15-10-22 01:21:51:636][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:21:51:640][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:22:06:633][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:22:06:633][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:22:21:634][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:22:21:634][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:22:36:634][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:22:36:634][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:22:51:636][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:22:51:636][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:23:06:637][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:23:06:637][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:23:21:636][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:23:21:636][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:23:36:638][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:23:36:640][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:23:51:638][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:23:51:639][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:24:06:640][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:24:06:641][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:24:21:640][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:24:21:640][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:24:36:642][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:24:36:642][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:24:51:644][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:24:51:645][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:25:06:643][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:25:06:643][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:25:21:643][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:25:21:643][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:25:36:644][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:25:36:644][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:25:51:645][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:25:51:645][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:26:06:646][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:26:06:646][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:26:21:647][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:26:21:648][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:26:36:648][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:26:36:648][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:26:51:648][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:26:51:648][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:27:06:649][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:27:06:650][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:27:21:650][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:27:21:650][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:27:36:651][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:27:36:652][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:27:51:652][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:27:51:652][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:28:06:653][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:28:06:653][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:28:21:654][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:28:21:654][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:28:36:654][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:28:36:654][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:28:51:655][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:28:51:655][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:29:06:656][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:29:06:656][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:29:21:657][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:29:21:658][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:29:36:658][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:29:36:659][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:29:51:659][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:29:51:660][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:30:06:661][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:30:06:662][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:30:21:660][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:30:21:660][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:30:36:661][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:30:36:661][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:30:51:662][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:30:51:662][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:31:06:663][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:31:06:663][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:31:21:670][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:31:21:670][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:31:36:670][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:31:36:670][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:31:51:671][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:31:51:671][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:32:06:672][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:32:06:672][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:32:21:672][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:32:21:672][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:32:36:673][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:32:36:673][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:32:51:674][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:32:51:675][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:33:06:676][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:33:06:676][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:33:21:676][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:33:21:676][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:33:36:677][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:33:36:677][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:33:51:677][ControllerHeartBeatTask.java:40][DEBUG]Ping /127.0.0.1:12345[f2FcVJrZ] successfully
-[15-10-22 01:33:51:677][ControlConnection.java:252][DEBUG]Ping from /127.0.0.1:1580[hello][Vbz7w4sh] successfully
-[15-10-22 01:33:59:330][Controller.java:295][ERROR]Control connection is closed: can not read from /127.0.0.1:12345
-[15-10-22 09:42:34:466][Config.java:201][INFO]Read 16 config lines
-[15-10-22 09:48:49:932][Config.java:201][INFO]Read 16 config lines
-[15-10-22 09:49:06:114][Config.java:201][INFO]Read 16 config lines
-[15-10-22 09:49:43:292][Config.java:201][INFO]Read 16 config lines
-[15-10-22 09:49:45:230][Utils.java:83][ERROR]Can not connect to 127.0.0.1:12345, perhaps this port is not open
-[15-10-22 09:50:08:953][Config.java:201][INFO]Read 16 config lines
-[15-10-22 10:42:15:239][Controller.java:98][INFO]NatMan server start on 12345
-[15-10-22 10:42:27:045][Config.java:194][INFO]Read 16 config lines
-[15-10-22 10:42:30:636][Controller.java:251][INFO]PrivateTunnel established at tcp://jincheng.link:8000 successfully
-[15-10-22 10:42:30:639][Controller.java:251][INFO]PrivateTunnel established at tcp://jincheng.link:8001 successfully
-[15-10-22 10:42:30:644][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:42:30:647][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:42:44:198][Proxy.java:63][DEBUG]New proxy connection[beCVYZxY] from /127.0.0.1:12345
-[15-10-22 10:42:44:205][Proxy.java:63][DEBUG]New proxy connection[SP7wBmiF] from /127.0.0.1:12345
-[15-10-22 10:42:44:222][Proxy.java:63][DEBUG]New proxy connection[Ur5o9dRG] from /127.0.0.1:12345
-[15-10-22 10:42:44:223][Proxy.java:63][DEBUG]New proxy connection[MTd6283o] from /127.0.0.1:12345
-[15-10-22 10:42:44:250][Proxy.java:63][DEBUG]New proxy connection[8081M5JM] from /127.0.0.1:12345
-[15-10-22 10:42:44:257][Proxy.java:63][DEBUG]New proxy connection[s62povrW] from /127.0.0.1:12345
-[15-10-22 10:42:44:273][Utils.java:31][DEBUG]Join /127.0.0.1:5292[AjlqusUz] with /127.0.0.1:5287[MIOXlU7K]
-[15-10-22 10:42:44:273][Utils.java:31][DEBUG]Join /127.0.0.1:8080[B9EYVxax] with /127.0.0.1:12345[s62povrW]
-[15-10-22 10:42:44:274][Utils.java:31][DEBUG]Join /127.0.0.1:8080[SNsL8irJ] with /127.0.0.1:12345[MTd6283o]
-[15-10-22 10:42:44:274][Utils.java:31][DEBUG]Join /127.0.0.1:8080[pB0c4gyr] with /127.0.0.1:12345[8081M5JM]
-[15-10-22 10:42:44:276][Utils.java:31][DEBUG]Join /127.0.0.1:5294[jJgjAwLi] with /127.0.0.1:5286[UJdz1gSy]
-[15-10-22 10:42:44:276][Utils.java:31][DEBUG]Join /127.0.0.1:8080[U256H5c4] with /127.0.0.1:12345[SP7wBmiF]
-[15-10-22 10:42:44:277][Utils.java:31][DEBUG]Join /127.0.0.1:8080[1lzqTFHP] with /127.0.0.1:12345[beCVYZxY]
-[15-10-22 10:42:44:277][Utils.java:31][DEBUG]Join /127.0.0.1:5293[bRaibqdL] with /127.0.0.1:5285[oA1UKLfD]
-[15-10-22 10:42:44:279][Utils.java:31][DEBUG]Join /127.0.0.1:5295[28rpH8Ew] with /127.0.0.1:5289[akwunOH9]
-[15-10-22 10:42:44:284][Utils.java:31][DEBUG]Join /127.0.0.1:8080[pPDZrVO6] with /127.0.0.1:12345[Ur5o9dRG]
-[15-10-22 10:42:44:284][Utils.java:31][DEBUG]Join /127.0.0.1:5291[hmfjRzYY] with /127.0.0.1:5288[w9GfR0uV]
-[15-10-22 10:42:44:285][Utils.java:31][DEBUG]Join /127.0.0.1:5296[Wp0mx6jk] with /127.0.0.1:5290[HTZjxZbg]
-[15-10-22 10:42:45:642][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:42:45:642][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:43:00:643][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:43:00:644][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:43:04:159][Utils.java:49][DEBUG]Detach /127.0.0.1:5294[jJgjAwLi] with /127.0.0.1:5286[UJdz1gSy]
-[15-10-22 10:43:04:159][Utils.java:49][DEBUG]Detach /127.0.0.1:8080[1lzqTFHP] with /127.0.0.1:12345[beCVYZxY]
-[15-10-22 10:43:04:160][Utils.java:49][DEBUG]Detach /127.0.0.1:5292[AjlqusUz] with /127.0.0.1:5287[MIOXlU7K]
-[15-10-22 10:43:04:160][Utils.java:49][DEBUG]Detach /127.0.0.1:8080[pPDZrVO6] with /127.0.0.1:12345[Ur5o9dRG]
-[15-10-22 10:43:04:161][Utils.java:49][DEBUG]Detach /127.0.0.1:8080[SNsL8irJ] with /127.0.0.1:12345[MTd6283o]
-[15-10-22 10:43:04:162][Utils.java:49][DEBUG]Detach /127.0.0.1:5291[hmfjRzYY] with /127.0.0.1:5288[w9GfR0uV]
-[15-10-22 10:43:04:165][Utils.java:49][DEBUG]Detach /127.0.0.1:5295[28rpH8Ew] with /127.0.0.1:5289[akwunOH9]
-[15-10-22 10:43:04:165][Utils.java:49][DEBUG]Detach /127.0.0.1:8080[B9EYVxax] with /127.0.0.1:12345[s62povrW]
-[15-10-22 10:43:04:165][Utils.java:49][DEBUG]Detach /127.0.0.1:5296[Wp0mx6jk] with /127.0.0.1:5290[HTZjxZbg]
-[15-10-22 10:43:04:165][Utils.java:49][DEBUG]Detach /127.0.0.1:8080[pB0c4gyr] with /127.0.0.1:12345[8081M5JM]
-[15-10-22 10:43:14:149][Utils.java:49][DEBUG]Detach /127.0.0.1:5293[bRaibqdL] with /127.0.0.1:5285[oA1UKLfD]
-[15-10-22 10:43:14:149][Utils.java:49][DEBUG]Detach /127.0.0.1:8080[U256H5c4] with /127.0.0.1:12345[SP7wBmiF]
-[15-10-22 10:43:15:644][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:43:15:645][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:43:30:644][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:43:30:644][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:43:45:645][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:43:45:645][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:44:00:647][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:44:00:648][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:44:15:647][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:44:15:647][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:44:30:648][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:44:30:648][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:44:45:649][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:44:45:650][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:45:00:650][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:45:00:650][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:45:15:650][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:45:15:650][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:45:30:651][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:45:30:651][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:45:45:652][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:45:45:652][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:46:00:653][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:46:00:654][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:46:15:655][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:46:15:656][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:46:30:655][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:46:30:656][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:46:45:657][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:46:45:657][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:47:00:656][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:47:00:656][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:47:15:658][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:47:15:658][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:47:30:658][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:47:30:659][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:47:45:660][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:47:45:660][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:48:00:660][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:48:00:661][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:48:15:661][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:48:15:662][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:48:30:663][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:48:30:664][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:48:45:662][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:48:45:663][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:49:00:663][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:49:00:664][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:49:15:664][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:49:15:664][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:49:30:665][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:49:30:666][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:49:45:666][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:49:45:666][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:50:00:667][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:50:00:668][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:50:15:668][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:50:15:668][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:50:30:668][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:50:30:668][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:50:45:669][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:50:45:670][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:51:00:670][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:51:00:671][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:51:15:671][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:51:15:672][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:51:30:672][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:51:30:672][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:51:45:673][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:51:45:673][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:52:00:675][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:5281[d2nrDiKvYHscVH3N][JECymoEt] successfully
-[15-10-22 10:52:00:674][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[9gHLuysB] successfully
-[15-10-22 10:52:04:265][PublicTunnelRegistry.java:87][INFO]Public tunnels of d2nrDiKvYHscVH3N closed
-[15-10-22 10:52:04:266][ControlConnection.java:303][INFO]Control connection[d2nrDiKvYHscVH3N] to /127.0.0.1:5281 is closed
+[15-10-23 13:45:39:306][Config.java:175][ERROR]Unknown syntax at [http-redirect][29]
+[15-10-23 13:45:39:322][ExitHandler.java:10][DEBUG]Goodbye!
+[15-10-23 14:03:12:389][ExitHandler.java:10][DEBUG]Goodbye!
+[15-10-23 14:03:18:391][ExitHandler.java:10][DEBUG]Goodbye!
+[15-10-23 14:04:30:303][Config.java:179][ERROR]Unknown syntax at [http-redirect][32]
+[15-10-23 14:04:30:308][ExitHandler.java:10][DEBUG]Goodbye!
+[15-10-23 14:04:42:828][Config.java:179][ERROR]Unknown syntax at [http-redirect][32]
+[15-10-23 14:04:42:837][ExitHandler.java:10][DEBUG]Goodbye!
+[15-10-23 14:09:14:421][Config.java:184][ERROR]Unknown syntax at [http-redirect][32]
+[15-10-23 14:09:14:427][ExitHandler.java:10][DEBUG]Goodbye!
+[15-10-23 14:09:58:319][Config.java:201][INFO]Read 33 config lines
+[15-10-23 16:46:49:843][Config.java:198][INFO]Read 32 config lines
+[15-10-23 16:47:24:925][MysqlUsers.java:42][ERROR]Before start of result set
+java.sql.SQLException: Before start of result set
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:1078)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:989)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:975)
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:920)
+	at com.mysql.jdbc.ResultSetImpl.checkRowPos(ResultSetImpl.java:851)
+	at com.mysql.jdbc.ResultSetImpl.getInt(ResultSetImpl.java:2706)
+	at jc.server.core.Users.MysqlUsers.auth(MysqlUsers.java:40)
+	at jc.server.core.Config.<init>(Config.java:43)
+	at jc.server.core.Main.main(Main.java:34)
+[15-10-23 16:47:59:949][Config.java:198][INFO]Read 32 config lines
+[15-10-23 16:48:57:385][Config.java:198][INFO]Read 32 config lines
+[15-10-23 16:49:07:269][FileUsers.java:36][ERROR]Users error at 1
+[15-10-23 16:49:46:620][Config.java:198][INFO]Read 32 config lines
+[15-10-23 16:50:06:939][Config.java:198][INFO]Read 32 config lines
+[15-10-23 16:50:08:811][ExitHandler.java:10][DEBUG]Goodbye!
+[15-10-23 16:50:17:233][Config.java:198][INFO]Read 32 config lines
+[15-10-23 16:50:45:303][ExitHandler.java:10][DEBUG]Goodbye!
+[15-10-23 16:51:26:650][Config.java:198][INFO]Read 32 config lines
+[15-10-23 16:51:37:246][Config.java:198][INFO]Read 32 config lines
+[15-10-23 16:52:15:940][Config.java:198][INFO]Read 32 config lines
+[15-10-23 16:53:17:736][Config.java:198][INFO]Read 32 config lines
+[15-10-23 16:58:29:520][Config.java:195][INFO]Read 35 config lines
+[15-10-23 19:08:35:296][Config.java:195][INFO]Read 36 config lines
+[15-10-23 19:08:35:311][Controller.java:98][INFO]NatMan server start on 12345
+[15-10-23 19:09:03:041][Config.java:199][INFO]Read 16 config lines
+[15-10-23 19:09:03:120][Controller.java:251][INFO]PrivateTunnel established at tcp://jincheng.link:8000 successfully
+[15-10-23 19:09:03:125][Controller.java:251][INFO]PrivateTunnel established at tcp://jincheng.link:8001 successfully
+[15-10-23 19:09:03:132][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[KoBzKdWz] successfully
+[15-10-23 19:09:03:136][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:16838[OxsqFMhghskkpi4w][kWIAcmej] successfully
+[15-10-23 19:09:18:129][ControllerHeartBeatTask.java:34][DEBUG]Ping /127.0.0.1:12345[KoBzKdWz] successfully
+[15-10-23 19:09:18:130][ControlConnection.java:267][DEBUG]Ping from /127.0.0.1:16838[OxsqFMhghskkpi4w][kWIAcmej] successfully
+[15-10-23 19:09:28:221][Proxy.java:63][DEBUG]New proxy connection[rkXOApEW] from /127.0.0.1:12345
+[15-10-23 19:09:28:223][Proxy.java:63][DEBUG]New proxy connection[4U3XIw3C] from /127.0.0.1:12345
+[15-10-23 19:09:28:231][Utils.java:31][DEBUG]Join /127.0.0.1:16848[uiIbRhLs] with /127.0.0.1:16846[OrSLua13]
+[15-10-23 19:09:28:231][Utils.java:31][DEBUG]Join /127.0.0.1:16847[1Ygsfkuj] with /127.0.0.1:16845[tfCuKkUs]
+[15-10-23 19:09:29:231][Utils.java:83][ERROR]Can not connect to 127.0.0.1:8080, perhaps this port is not open
+[15-10-23 19:09:29:231][Utils.java:83][ERROR]Can not connect to 127.0.0.1:8080, perhaps this port is not open
+[15-10-23 19:09:29:232][Proxy.java:117][ERROR]Fail to open private connection 127.0.0.1: 8080
+[15-10-23 19:09:29:232][Proxy.java:117][ERROR]Fail to open private connection 127.0.0.1: 8080
+[15-10-23 19:09:32:954][PublicTunnelRegistry.java:87][INFO]Public tunnels of OxsqFMhghskkpi4w closed
+[15-10-23 19:09:32:955][ControlConnection.java:303][INFO]Control connection[OxsqFMhghskkpi4w] to /127.0.0.1:16838 is closed
+[15-10-23 19:09:33:042][Utils.java:49][DEBUG]Detach /127.0.0.1:16847[1Ygsfkuj] with /127.0.0.1:16845[tfCuKkUs]
+[15-10-23 19:09:33:042][Utils.java:49][DEBUG]Detach /127.0.0.1:16848[uiIbRhLs] with /127.0.0.1:16846[OrSLua13]

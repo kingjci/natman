@@ -11,53 +11,61 @@ import org.apache.log4j.Logger;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import static jc.Utils.Go;
-
 public class Main {
 
-    public static Config config = new Config(); //config loaded from cofig file
-    public static Option option = new Option(); //store constant things
-    public static Logger runtimeLogger = Logger.getLogger("Runtime");
-    public static Logger accessLogger = Logger.getLogger("Access");
-    public static Random random = new Random();
-    public static PublicTunnelRegistry publicTunnelRegistry = new PublicTunnelRegistry(runtimeLogger,accessLogger,config);
-    public static ControlConnectionRegistry controlConnectionRegistry = new ControlConnectionRegistry(runtimeLogger,accessLogger);
-    public static BlockingQueue<Command> commands = new LinkedBlockingQueue<>();
-
-    public static Controller controller =
-            new Controller(config.getControlPort(),
-                    publicTunnelRegistry,
-                    controlConnectionRegistry,
-                    commands,
-                    random,
-                    config,
-                    option,
-                    runtimeLogger,
-                    accessLogger);
+    public static Config CONFIG; //config loaded from cofig file
+    public static Option OPTION; //store constant things
+    public static Random RANDOM;
+    public static Logger RUNTIMELOGGER;
+    public static Logger ACCESSLOGGER;
+    public static PublicTunnelRegistry PUBLICTUNNELREGISTRY;
+    public static ControlConnectionRegistry CONTROLCONNECTIONREGISTRY;
+    public static BlockingQueue<Command> COMMANDS;
+    public static Thread CONTROLLER;
 
     public static void main(String[] args) {
 
         Runtime.getRuntime().addShutdownHook(new ExitHandler());
 
-        Go(controller);
+        OPTION = new Option();
+        RANDOM = new Random();
+        RUNTIMELOGGER = Logger.getLogger("Runtime");
+        ACCESSLOGGER = Logger.getLogger("Access");
+        CONFIG = new Config(args,RUNTIMELOGGER);
+        COMMANDS = new LinkedBlockingQueue<>();
+        CONTROLCONNECTIONREGISTRY = new ControlConnectionRegistry(RUNTIMELOGGER, ACCESSLOGGER);
+        PUBLICTUNNELREGISTRY = new PublicTunnelRegistry(RUNTIMELOGGER,ACCESSLOGGER,CONFIG);
+
+        CONTROLLER =  new Controller(
+                CONFIG.getControlPort(),
+                PUBLICTUNNELREGISTRY,
+                CONTROLCONNECTIONREGISTRY,
+                COMMANDS,
+                RANDOM,
+                CONFIG,
+                OPTION,
+                RUNTIMELOGGER,
+                ACCESSLOGGER
+        );
+
+        CONTROLLER.start();
 
         //main thread receive commands from other threads to handle
         while (true){
             try{
-                Command command = commands.take();
+                Command command = COMMANDS.take();
                 switch (command.getCommandType()){
 
                     case "QuitCommand":
 
                         QuitCommand quitCommand = (QuitCommand) command;
-
                         System.exit(quitCommand.getExitCode());
 
                     default:
-                        runtimeLogger.error("Unknown command");
+                        RUNTIMELOGGER.error("Unknown command");
                 }
             }catch (InterruptedException e){
-                runtimeLogger.error(e.getMessage(), e);
+                RUNTIMELOGGER.error(e.getMessage(), e);
             }
 
         }

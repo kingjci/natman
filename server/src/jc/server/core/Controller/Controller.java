@@ -17,7 +17,7 @@ import java.util.concurrent.BlockingQueue;
 
 import static jc.Utils.Go;
 
-public class Controller implements Runnable{
+public class Controller extends Thread{
 
     private int port;
     private PublicTunnelRegistry publicTunnelRegistry;

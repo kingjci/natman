@@ -41,8 +41,6 @@ public class ControlConnectionHeartBeatChecker extends TimerTask {
             }catch (IOException e){
                 runtimeLogger.error(e.getMessage(),e);
             }
-
-
         }
     }
 }

@@ -40,7 +40,7 @@ public class Proxy implements Runnable {
         TCPConnection proxyTCPConnection =
                 Dial(
                         config.getServerAddress(),
-                        option.getControlPort(),
+                        config.getControlPort(),
                         "proxy",
                         random.getRandomString(8),
                         runtimeLogger,
