@@ -19,11 +19,12 @@ public class FileUsers implements Users{
 
         this.filePath = filePath;
         usernameAndPassword = new HashMap<>();
-        Reader reader;
+        Reader reader = null;
+        BufferedReader bufferedReader = null;
         try{
 
             reader = new FileReader(filePath);
-            BufferedReader bufferedReader = new BufferedReader(reader);
+            bufferedReader = new BufferedReader(reader);
             int count = 0;
             while (true){
                 String line = bufferedReader.readLine();
@@ -48,6 +49,23 @@ public class FileUsers implements Users{
             runtimeLogger.error(e.getMessage(),e);
         }catch (IOException e){
             runtimeLogger.error(e.getMessage(), e);
+        }finally {
+
+            if (reader != null){
+                try{
+                    reader.close();
+                }catch (IOException e){
+                    runtimeLogger.error("Error occurs when closing the config file");
+                }
+            }
+
+            if (bufferedReader != null){
+                try{
+                    bufferedReader.close();
+                }catch (IOException e){
+                    runtimeLogger.error("Error occurs when closing the config file");
+                }
+            }
         }
     }
 

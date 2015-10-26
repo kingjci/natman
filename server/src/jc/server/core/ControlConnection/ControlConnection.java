@@ -5,10 +5,10 @@ import jc.message.*;
 import jc.server.core.Config;
 import jc.server.core.Controller.ControllerHandler;
 import jc.server.core.Option;
-import jc.server.core.PublicTunnel.PublicTunnel;
 import jc.TCPConnection;
 import jc.Time;
-import jc.server.core.PublicTunnel.PublicTunnelRegistry;
+import jc.server.core.PublicTunnel.TCP.PublicTCPTunnelRegistry;
+import jc.server.core.PublicTunnel.Result.PublicTunnelRegisterResult;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -16,8 +16,6 @@ import java.util.Timer;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
-
-import static jc.Utils.Go;
 
 public class ControlConnection extends Thread{
 
@@ -28,7 +26,7 @@ public class ControlConnection extends Thread{
     private final Timer pingChecker;
     private final Random random;
     private final ControlConnectionRegistry controlConnectionRegistry;
-    private final PublicTunnelRegistry publicTunnelRegistry;
+    private final PublicTCPTunnelRegistry publicTCPTunnelRegistry;
     private final Logger runtimeLogger;
     private final Logger accessLogger;
     private final Config config;
@@ -42,7 +40,7 @@ public class ControlConnection extends Thread{
         this.clientId = clientId;
         this.tcpConnection = controllerHandler.getTcpConnection();
         this.controlConnectionRegistry = controllerHandler.getControlConnectionRegistry();
-        this.publicTunnelRegistry = controllerHandler.getPublicTunnelRegistry();
+        this.publicTCPTunnelRegistry = controllerHandler.getPublicTCPTunnelRegistry();
         this.random = controllerHandler.getRandom();
         this.runtimeLogger = controllerHandler.getRuntimeLogger();
         this.accessLogger = controllerHandler.getAccessLogger();
@@ -95,31 +93,24 @@ public class ControlConnection extends Thread{
     public TCPConnection getTcpConnection() {
         return tcpConnection;
     }
-
     public Time getLastPing() {
         return lastPing;
     }
-
     public Logger getRuntimeLogger() {
         return runtimeLogger;
     }
-
     public Logger getAccessLogger() {
         return accessLogger;
     }
-
     public String getClientId() {
         return clientId;
     }
-
     public String getConnectionId(){
         return tcpConnection.getConnectionId();
     }
-
     public String getRemoteAddress() {
         return tcpConnection.getRemoteAddress();
     }
-
     public void close() throws IOException{
         //   when the run() is blocked in Message message = tcpConnection.readMessage();
         //this operation will cause exception in run()
@@ -155,108 +146,87 @@ public class ControlConnection extends Thread{
                     case "PublicTunnelRequest":
 
                         PublicTunnelRequest publicTunnelRequest = (PublicTunnelRequest) message;
-                        String publicUrl =
-                                String.format("%s://%s:%d",
-                                        publicTunnelRequest.getProtocol(),
-                                        config.getDomain(),
-                                        publicTunnelRequest.getRemotePort()
-                                );
+
                         accessLogger.info(
                             String.format(
-                                "Client %s[%s] is requesting %s",
+                                "Client %s[%s] is requesting %s on port %d",
                                     tcpConnection.getRemoteAddress(),
                                     clientId,
-                                    publicUrl
+                                    publicTunnelRequest.getProtocol(),
+                                    publicTunnelRequest.getRemotePort()
                             )
                         );
 
-                        PublicTunnel publicTunnel =
-                                new PublicTunnel(publicTunnelRequest,
-                                        publicUrl,
-                                        this,
-                                        random,
-                                        runtimeLogger,
-                                        accessLogger);
 
-                        String result = publicTunnelRegistry.register(clientId, publicTunnel);
+                        PublicTunnelRegisterResult result = null;
+                        switch (publicTunnelRequest.getProtocol()){
 
-                        if (!"success".equalsIgnoreCase(result)){
 
-                            PublicTunnelResponse publicTunnelResponse =
-                                    new PublicTunnelResponse(result);
+                            case "tcp":
 
-                            try{
-                                tcpConnection.writeMessage(publicTunnelResponse);
-                            }catch (IOException e){
-                                accessLogger.info(
-                                        String.format("Send PublicTunnelResponse to %s failure",
-                                                tcpConnection.getRemoteAddress()
-                                        )
-                                );
-                            }
+                                result =
+                                        publicTCPTunnelRegistry.register(
+                                                publicTunnelRequest.getRemotePort(),
+                                                this
+                                        );
 
-                            try{
-                                close();
-                            }catch (IOException e){
-                                accessLogger.info(
-                                        String.format("Fail to close control connection[%s] from %s[%s]",
-                                                tcpConnection.getConnectionId(),
-                                                tcpConnection.getRemoteAddress(),
-                                                clientId
-                                        )
-                                );
-                            }
+                                break;
+
+
+                            case "http":
+
+
+
+                                break;
+
+
+                            default:
+
                         }
 
-                        result = publicTunnel.bind(publicTunnelRequest.getRemotePort());
-                        if (!"success".equalsIgnoreCase(result)){
-
-                            PublicTunnelResponse publicTunnelResponse =
-                                    new PublicTunnelResponse(result);
-
-                            try{
-                                tcpConnection.writeMessage(publicTunnelResponse);
-                            }catch (IOException e){
-                                accessLogger.info(
-                                        String.format("Send PublicTunnelResponse to %s failure",
-                                                tcpConnection.getRemoteAddress()
-                                        )
-                                );
-                            }
-
-                            try{
-                                close();
-                            }catch (IOException e){
-                                accessLogger.info(
-                                        String.format("Fail to close control connection[%s] from %s[%s]",
-                                                tcpConnection.getConnectionId(),
-                                                tcpConnection.getRemoteAddress(),
-                                                clientId
-                                        )
-                                );
-                            }
-
-                        }else {
+                        PublicTunnelResponse publicTunnelResponse;
+                        if ("success".equalsIgnoreCase(result.getState())){
                             //  bind public tunnel successfully
-                            PublicTunnelResponse publicTunnelResponse =
-                                    new PublicTunnelResponse(publicUrl,
+
+                            publicTunnelResponse =
+                                    new PublicTunnelResponse(
+                                            result.getPublicUrl(),
                                             publicTunnelRequest.getProtocol(),
                                             publicTunnelRequest.getLocalPort(),
-                                            publicTunnel.getPort()
+                                            result.getRemotePort()
                                     );
 
+                        }else {
+
+                            publicTunnelResponse = new PublicTunnelResponse(result.getError());
+
                             try{
-                                tcpConnection.writeMessage(publicTunnelResponse);
+                                close();
                             }catch (IOException e){
                                 accessLogger.info(
-                                        String.format("Send PublicTunnelResponse to %s failure",
-                                                tcpConnection.getRemoteAddress()
+                                        String.format("Fail to close control connection[%s] from %s[%s]",
+                                                tcpConnection.getConnectionId(),
+                                                tcpConnection.getRemoteAddress(),
+                                                clientId
                                         )
                                 );
                             }
                         }
 
-                        Go(publicTunnel);
+
+
+                        try{
+                            tcpConnection.writeMessage(publicTunnelResponse);
+                        }catch (IOException e){
+                            accessLogger.info(
+                                    String.format("Send PublicTunnelResponse to %s failure",
+                                            tcpConnection.getRemoteAddress()
+                                    )
+                            );
+                        }
+
+
+
 
                         break;
 
@@ -298,7 +268,7 @@ public class ControlConnection extends Thread{
                 //  clean public tunnels associate with the control connection and delete
                 //the control connection from controlConnectionRegistry
                 pingChecker.cancel();
-                publicTunnelRegistry.delete(clientId);
+                publicTCPTunnelRegistry.delete(clientId);
                 controlConnectionRegistry.delete(clientId);
                 runtimeLogger.info(
                         String.format("Control connection[%s] to %s is closed",

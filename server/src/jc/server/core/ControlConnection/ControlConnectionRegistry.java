@@ -76,17 +76,6 @@ public class ControlConnectionRegistry{
         return controlConnection;
     }
 
-    public boolean has(String clientId){
-
-        readWriteLock.readLock().lock();;
-        ControlConnection controlConnection = controlConnections.get(clientId);
-        readWriteLock.readLock().unlock();
-
-        return !(controlConnection==null);
-
-    }
-
-
     public void delete(String clientId){
 
         readWriteLock.writeLock().lock();

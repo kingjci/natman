@@ -12,7 +12,7 @@ import java.util.Map;
 import static jc.Utils.Dial;
 import static jc.Utils.Join;
 
-public class Proxy implements Runnable {
+public class Proxy extends Thread {
 
     private final String clientId;
     private final Config config;
@@ -124,7 +124,7 @@ public class Proxy implements Runnable {
             return;
         }
 
-        Join(localTCPConnection, proxyTCPConnection, runtimeLogger, accessLogger);
+        Join(localTCPConnection, proxyTCPConnection, runtimeLogger);
 
     }
 }

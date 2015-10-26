@@ -6,7 +6,7 @@ import jc.command.Command;
 import jc.server.core.Config;
 import jc.server.core.ControlConnection.ControlConnectionRegistry;
 import jc.server.core.Option;
-import jc.server.core.PublicTunnel.PublicTunnelRegistry;
+import jc.server.core.PublicTunnel.TCP.PublicTCPTunnelRegistry;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -15,12 +15,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 
-import static jc.Utils.Go;
-
 public class Controller extends Thread{
 
     private int port;
-    private PublicTunnelRegistry publicTunnelRegistry;
+    private PublicTCPTunnelRegistry publicTCPTunnelRegistry;
     private ControlConnectionRegistry controlConnectionRegistry;
     private BlockingQueue<Command> commands;
     private Random random;
@@ -34,7 +32,7 @@ public class Controller extends Thread{
 
     public Controller(
             int port,
-            PublicTunnelRegistry publicTunnelRegistry,
+            PublicTCPTunnelRegistry publicTCPTunnelRegistry,
             ControlConnectionRegistry controlConnectionRegistry,
             BlockingQueue<Command> commands,
             Random random,
@@ -46,7 +44,7 @@ public class Controller extends Thread{
 
         this.port = port;
         // pass ControlTunnelHandler to register control connection
-        this.publicTunnelRegistry = publicTunnelRegistry;
+        this.publicTCPTunnelRegistry = publicTCPTunnelRegistry;
         this.controlConnectionRegistry = controlConnectionRegistry;
         this.commands = commands;
         this.random = random;
@@ -57,8 +55,8 @@ public class Controller extends Thread{
 
     }
 
-    public PublicTunnelRegistry getPublicTunnelRegistry() {
-        return publicTunnelRegistry;
+    public PublicTCPTunnelRegistry getPublicTCPTunnelRegistry() {
+        return publicTCPTunnelRegistry;
     }
 
     public ControlConnectionRegistry getControlConnectionRegistry() {
@@ -127,7 +125,7 @@ public class Controller extends Thread{
                                 tcpConnection.getConnectionId(),
                                 tcpConnection.getRemoteAddress()));
 
-                Go(new ControllerHandler(tcpConnection, this));
+                (new ControllerHandler(tcpConnection, this)).start();
 
             }catch (IOException e){
                 runtimeLogger.error(e.getMessage(),e);

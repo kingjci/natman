@@ -15,81 +15,65 @@ import java.util.regex.Pattern;
 public class Config {
 
     private String serverAddress;
-    private String clientAddress = "127.0.0.1";
-    private int controlPort = 12345;
+    private String clientAddress;
+    private int controlPort;
     private String username;
     private String password;
     private Map<String, PublicTunnelConfiguration> publicTunnelConfigurations;
 
-    private static String prompt =
-            "Examples:\n" +
-            "-localport 8080 -remoteport 8000 -server 127.0.0.1 -protocol tcp\n" +
-            "-localport 8080 -remoteport 8000 -server 127.0.0.1 -subdomain aaa -protocol http\n" +
-            "\n" +
-            "\n" +
-            "Advanced usage: natman [OPTIONS] <command> [command args] [...]\n" +
-            "Commands:\n" +
-            "\tnatman start [tunnel] [...]    Start tunnels by name from config file\n" +
-            "\tnatman list  -config client.cfg List tunnel names from config file\n" +
-            "\tnatman help                    Print help\n" +
-            "\tnatman version                 Print natman version\n" +
-            "\n" +
-            "Examples:\n" +
-            "\tnatman start www api blog pubsub\n" +
-            "\tnatman version\n" +
-            "\n" +
-            "`";
+    private String prompt;
 
 
-    public Config(){
+    public Config(String[] args, Option option,Logger runtimeLogger){
+
+        clientAddress = "127.0.0.1";
+        controlPort = 12345;
+        prompt =
+        "Examples:\n" +
+                "-localport 8080 -remoteport 8000 -server 127.0.0.1 -protocol tcp\n" +
+                "-localport 8080 -remoteport 8000 -server 127.0.0.1 -subdomain aaa -protocol http\n" +
+                "\n" +
+                "\n" +
+                "Advanced usage: natman [OPTIONS] <command> [command args] [...]\n" +
+                "Commands:\n" +
+                "\tnatman start [tunnel] [...]    Start tunnels by name from config file\n" +
+                "\tnatman list  -config client.cfg List tunnel names from config file\n" +
+                "\tnatman help                    Print help\n" +
+                "\tnatman version                 Print natman version\n" +
+                "\n" +
+                "Examples:\n" +
+                "\tnatman start www api blog pubsub\n" +
+                "\tnatman version\n" +
+                "\n" +
+                "`";
+
+
         publicTunnelConfigurations = new HashMap<>();
+
+        LoadConfiguration(args, option, runtimeLogger);
+
     }
 
     public String getServerAddress() {
         return serverAddress;
     }
-    public void setServerAddress(String serverAddress) {
-        this.serverAddress = serverAddress;
-    }
-
     public String getClientAddress() {
         return clientAddress;
     }
-
     public int getControlPort() {
         return controlPort;
     }
-
     public String getUsername() {
         return username;
     }
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getPassword() {
         return password;
     }
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Map<String, PublicTunnelConfiguration> getPublicTunnelConfigurations() {
         return publicTunnelConfigurations;
     }
-    public void putPublicTunnelConfiguration( PublicTunnelConfiguration publicTunnelConfiguration){
-        publicTunnelConfigurations.put(
-                publicTunnelConfiguration.getName(),
-                publicTunnelConfiguration
-        );
-    }
 
-
-    public static void LoadConfiguration(
-            String[] args,
-            Config config,
-            Option option,
-            Logger runtimeLogger
+    public void LoadConfiguration(String[] args, Option option, Logger runtimeLogger
     ){
 
         Options options = new Options();
@@ -134,7 +118,7 @@ public class Config {
 
                         case "[auth]":
                             items.push("[auth]");
-                            count = ParseAuth(bufferedReader, config, count,runtimeLogger);
+                            count = ParseAuth(bufferedReader,count,runtimeLogger);
                             if (count == 0){
                                 runtimeLogger.error("Error occurs when parsing [auth]");
                                 System.exit(-1);
@@ -144,7 +128,7 @@ public class Config {
 
                         case "[server]":
                             items.push("[server]");
-                            count = ParseServer(bufferedReader, config, count,runtimeLogger);
+                            count = ParseServer(bufferedReader,count,runtimeLogger);
                             if (count == 0){
                                 runtimeLogger.error("Error occurs when parsing [server]");
                                 System.exit(-1);
@@ -154,7 +138,7 @@ public class Config {
 
                         case "[tcp]":
                             items.push("[tcp]");
-                            count = ParseTcp(bufferedReader, config, count, runtimeLogger);
+                            count = ParseTcp(bufferedReader,count, runtimeLogger);
                             if (count == 0){
                                 runtimeLogger.error("Error occurs when parsing [tcp]");
                                 System.exit(-1);
@@ -164,7 +148,7 @@ public class Config {
 
                         case "[http]":
                             items.push("[http]");
-                            count = ParseHttp(bufferedReader, config, count, runtimeLogger);
+                            count = ParseHttp(bufferedReader,count, runtimeLogger);
                             if (count == 0){
                                 runtimeLogger.error("Error occurs when parsing [http]");
                                 System.exit(-1);
@@ -174,7 +158,7 @@ public class Config {
 
                         case "[udp]":
                             items.push("[udp]");
-                            count = ParseUDP(bufferedReader, config, count, runtimeLogger);
+                            count = ParseUDP(bufferedReader,count, runtimeLogger);
                             if (count == 0){
                                 runtimeLogger.error("Error occurs when parsing [udp]");
                                 System.exit(-1);
@@ -223,14 +207,17 @@ public class Config {
         }else {
             PublicTunnelConfiguration publicTunnelConfiguration = new PublicTunnelConfiguration();
             publicTunnelConfiguration.setName("default");
-            config.putPublicTunnelConfiguration(publicTunnelConfiguration);
+
+            publicTunnelConfigurations.put(
+                    publicTunnelConfiguration.getName(),
+                    publicTunnelConfiguration
+            );
         }
 
         switch (args[0]){
 
             case "list":
 
-                Map<String, PublicTunnelConfiguration> publicTunnelConfigurations = config.getPublicTunnelConfigurations();
                 for (Map.Entry<String, PublicTunnelConfiguration> entry:
                         publicTunnelConfigurations.entrySet()){
                     String publicTunnelName = entry.getKey();
@@ -306,8 +293,7 @@ public class Config {
 
     }
 
-    public static int ParseAuth(BufferedReader bufferedReader, Config config,int count, Logger runtimeLogger) {
-
+    public int ParseAuth(BufferedReader bufferedReader,int count, Logger runtimeLogger) {
 
         try {
 
@@ -346,8 +332,8 @@ public class Config {
                         System.exit(-1);
                     }
 
-                    config.setUsername(words[0]);
-                    config.setPassword(words[1]);
+                    username = words[0];
+                    password = words[1];
 
                 }else {
                     runtimeLogger.error(String.format("Auth error occurs at line %d", count));
@@ -360,10 +346,9 @@ public class Config {
             runtimeLogger.error(e.getMessage(), e);
             return 0;
         }
-
     }
 
-    public static int ParseServer(BufferedReader bufferedReader, Config config,int count, Logger runtimeLogger){
+    public int ParseServer(BufferedReader bufferedReader,int count, Logger runtimeLogger){
 
         try{
 
@@ -394,7 +379,7 @@ public class Config {
                     System.exit(-1);
                 }
 
-                config.setServerAddress(line);
+                serverAddress = line;
             }
             return count;
 
@@ -405,7 +390,7 @@ public class Config {
 
     }
 
-    public static int ParseTcp(BufferedReader bufferedReader, Config config,int count, Logger runtimeLogger){
+    public int ParseTcp(BufferedReader bufferedReader,int count, Logger runtimeLogger){
 
         try{
 
@@ -472,7 +457,10 @@ public class Config {
                     publicTunnelConfiguration.setName(words[0]);
                     publicTunnelConfiguration.setLocalPort(Integer.valueOf(words[1]));
                     publicTunnelConfiguration.setRemotePort(Integer.valueOf(words[2]));
-                    config.putPublicTunnelConfiguration(publicTunnelConfiguration);
+                    publicTunnelConfigurations.put(
+                            publicTunnelConfiguration.getName(),
+                            publicTunnelConfiguration
+                    );
 
                 }else {
                     runtimeLogger.error(String.format("TCP %s format is wrong at %d",line,count));
@@ -488,7 +476,7 @@ public class Config {
         }
     }
 
-    public static int ParseHttp(BufferedReader bufferedReader, Config config,int count, Logger runtimeLogger){
+    public int ParseHttp(BufferedReader bufferedReader,int count, Logger runtimeLogger){
 
         try{
 
@@ -566,7 +554,10 @@ public class Config {
                     publicTunnelConfiguration.setSubDomain(words[1]);
                     publicTunnelConfiguration.setLocalPort(Integer.valueOf(words[2]));
                     publicTunnelConfiguration.setRemotePort(Integer.valueOf(words[3]));
-                    config.putPublicTunnelConfiguration(publicTunnelConfiguration);
+                    publicTunnelConfigurations.put(
+                            publicTunnelConfiguration.getName(),
+                            publicTunnelConfiguration
+                    );
 
                 }else {
                     runtimeLogger.error(String.format("HTTP %s format is wrong at %d",line, count));
@@ -581,7 +572,7 @@ public class Config {
         }
     }
 
-    public static int ParseUDP(BufferedReader bufferedReader, Config config, int count, Logger runtimeLogger) {
+    public int ParseUDP(BufferedReader bufferedReader, int count, Logger runtimeLogger) {
 
         try {
             while (true) {
@@ -647,7 +638,10 @@ public class Config {
                     publicTunnelConfiguration.setName(words[0]);
                     publicTunnelConfiguration.setLocalPort(Integer.valueOf(words[1]));
                     publicTunnelConfiguration.setRemotePort(Integer.valueOf(words[2]));
-                    config.putPublicTunnelConfiguration(publicTunnelConfiguration);
+                    publicTunnelConfigurations.put(
+                            publicTunnelConfiguration.getName(),
+                            publicTunnelConfiguration
+                    );
 
                 } else {
                     runtimeLogger.error(String.format("UDP %s format is wrong at %d", line, count));

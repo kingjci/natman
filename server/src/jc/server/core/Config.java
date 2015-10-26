@@ -37,8 +37,6 @@ public class Config {
         auth = false;
 
         LoadConfiguration(args, runtimeLogger);
-        LoadUsers(runtimeLogger);
-
     }
 
     public String getDomain() {
@@ -189,6 +187,20 @@ public class Config {
                                         items.pop()
                                 )
                         );
+                    }
+                }
+
+                if (auth) {
+
+                    switch (usersSource) {
+                        case "file":
+                            users = new FileUsers(usersFile, runtimeLogger);
+                            break;
+                        case "mysql":
+                            users = new MysqlUsers(mysqlUrl, mysqlUsername, mysqlPassword, runtimeLogger);
+                            break;
+                        default:
+                            runtimeLogger.error(String.format("Unknown users sources %s", usersFile));
                     }
                 }
 
@@ -589,24 +601,6 @@ public class Config {
         }catch (IOException e){
             runtimeLogger.error(e.getMessage(), e);
             return 0;
-        }
-    }
-
-    private void LoadUsers(Logger runtimeLogger){
-
-        if (auth) {
-
-            switch (usersSource) {
-                case "file":
-                    users = new FileUsers(usersFile, runtimeLogger);
-                    break;
-                case "mysql":
-                    users = new MysqlUsers(mysqlUrl, mysqlUsername, mysqlPassword, runtimeLogger);
-                    break;
-                default:
-                    runtimeLogger.error(String.format("Unknown users sources %s", usersFile));
-            }
-
         }
     }
 }

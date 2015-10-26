@@ -1,8 +1,6 @@
 package jc;
 
-import jc.TCPConnection;
 import org.apache.log4j.Logger;
-import sun.rmi.runtime.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,10 +8,8 @@ import java.io.OutputStream;
 import java.net.SocketException;
 import java.util.concurrent.CountDownLatch;
 
-/**
- * Created by ��� on 2015/9/23.
- */
-public class Pipe implements  Runnable{
+
+public class Pipe extends Thread{
 
         private TCPConnection to;
         private TCPConnection from;

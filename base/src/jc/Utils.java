@@ -11,22 +11,15 @@ import java.util.concurrent.CountDownLatch;
 
 public class Utils {
 
-    public static void Go(Runnable runnable){
-
-        Thread thread = new Thread(runnable);
-        thread.start();
-
-    }
-
     public static void Join(
             TCPConnection c1,
             TCPConnection c2,
-            Logger runtimeLogger,
-            Logger accessLogger){
+            Logger runtimeLogger
+    ){
 
         CountDownLatch waitGroup = new CountDownLatch(2);
-        Go(new Pipe(c1, c2, waitGroup, runtimeLogger));
-        Go(new Pipe(c2, c1, waitGroup, runtimeLogger));
+        (new Pipe(c1, c2, waitGroup, runtimeLogger)).start();
+        (new Pipe(c2, c1, waitGroup, runtimeLogger)).start();
 
         runtimeLogger.debug(
                 String.format(
@@ -89,8 +82,6 @@ public class Utils {
 
         }
         return tcpConnection;
-
     }
-
 
 }

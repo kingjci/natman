@@ -1,4 +1,4 @@
-package jc.server.core.PublicTunnel;
+package jc.server.core.PublicTunnel.TCP;
 
 import jc.TCPConnection;
 import jc.message.ProxyStart;
@@ -8,13 +8,13 @@ import java.io.IOException;
 
 import static jc.Utils.Join;
 
-public class PublicTunnelTCPHandler implements Runnable{
+public class PublicTCPTunnelHandler extends Thread{
 
     private ControlConnection controlConnection;
     private TCPConnection publicTCPConnection;
     private String publicUrl;
 
-    public PublicTunnelTCPHandler(ControlConnection controlConnection, TCPConnection publicTCPConnection, String publicUrl){
+    public PublicTCPTunnelHandler(ControlConnection controlConnection, TCPConnection publicTCPConnection, String publicUrl){
         this.controlConnection = controlConnection;
         this.publicTCPConnection = publicTCPConnection;
         this.publicUrl = publicUrl;
@@ -43,8 +43,7 @@ public class PublicTunnelTCPHandler implements Runnable{
         Join(
                 proxyTCPConnection,
                 publicTCPConnection,
-                controlConnection.getRuntimeLogger(),
-                controlConnection.getAccessLogger()
+                controlConnection.getRuntimeLogger()
         );
 
     }

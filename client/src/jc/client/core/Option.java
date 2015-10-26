@@ -8,7 +8,7 @@ public class Option {
     private int heartBeatInterval = 15*1000; // 15s
     private int heartBeatCheckerInterval = 1*1000; // 1s
     private int maxLatency = 30*1000; // 30s
-    private int maxWaitCount = 5;
+    private int maxWaitCount = -1;
 
     public Option(){
 

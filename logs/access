@@ -1,19 +1,185 @@
-[15-10-23 19:09:03:058][Controller.java:125][DEBUG]New connection[kWIAcmej] from /127.0.0.1:16838
-[15-10-23 19:09:03:057][Utils.java:75][DEBUG]New control connection[KoBzKdWz] to: /127.0.0.1:12345
-[15-10-23 19:09:03:098][ControllerHandler.java:208][INFO]Success to auth hello[/127.0.0.1:16838][OxsqFMhghskkpi4w]
-[15-10-23 19:09:03:104][Controller.java:195][INFO]Authenticated with server[127.0.0.1], client id: OxsqFMhghskkpi4w
-[15-10-23 19:09:03:107][ControlConnectionRegistry.java:61][INFO]Register control connection[kWIAcmej] from /127.0.0.1:16838[OxsqFMhghskkpi4w]
-[15-10-23 19:09:03:111][ControlConnection.java:164][INFO]Client /127.0.0.1:16838[OxsqFMhghskkpi4w] is requesting tcp://jincheng.link:8000
-[15-10-23 19:09:03:113][PublicTunnelRegistry.java:67][INFO]Register public tunnel tcp://jincheng.link:8000 successfully
-[15-10-23 19:09:03:113][PublicTunnel.java:67][INFO]Bind public tunnel tcp://jincheng.link:8000 successfully
-[15-10-23 19:09:03:122][ControlConnection.java:164][INFO]Client /127.0.0.1:16838[OxsqFMhghskkpi4w] is requesting tcp://jincheng.link:8001
-[15-10-23 19:09:03:122][PublicTunnelRegistry.java:67][INFO]Register public tunnel tcp://jincheng.link:8001 successfully
-[15-10-23 19:09:03:123][PublicTunnel.java:67][INFO]Bind public tunnel tcp://jincheng.link:8001 successfully
-[15-10-23 19:09:28:186][PublicTunnel.java:132][DEBUG]New public Connection[tfCuKkUs] from /127.0.0.1:16845
-[15-10-23 19:09:28:193][PublicTunnel.java:132][DEBUG]New public Connection[OrSLua13] from /127.0.0.1:16846
-[15-10-23 19:09:28:200][Utils.java:75][DEBUG]New proxy connection[rkXOApEW] to: /127.0.0.1:12345
-[15-10-23 19:09:28:200][Utils.java:75][DEBUG]New proxy connection[4U3XIw3C] to: /127.0.0.1:12345
-[15-10-23 19:09:28:201][Controller.java:125][DEBUG]New connection[1Ygsfkuj] from /127.0.0.1:16847
-[15-10-23 19:09:28:208][Controller.java:125][DEBUG]New connection[uiIbRhLs] from /127.0.0.1:16848
-[15-10-23 19:09:28:212][ControllerHandler.java:237][DEBUG]Registering new proxy connection[uiIbRhLs] for /127.0.0.1:16848[OxsqFMhghskkpi4w]
-[15-10-23 19:09:28:212][ControllerHandler.java:237][DEBUG]Registering new proxy connection[1Ygsfkuj] for /127.0.0.1:16847[OxsqFMhghskkpi4w]
+[15-10-25 00:21:15:686][Utils.java:68][DEBUG]New control connection[Pxn4j4eI] to: /127.0.0.1:12345
+[15-10-25 00:21:15:686][Controller.java:123][DEBUG]New connection[qFbRBgg9] from /127.0.0.1:26539
+[15-10-25 00:21:15:738][ControllerHandler.java:208][INFO]Success to auth hello[/127.0.0.1:26539][kQk6BzsDrJV0UdWm]
+[15-10-25 00:21:15:744][Controller.java:195][INFO]Authenticated with server[127.0.0.1], client id: kQk6BzsDrJV0UdWm
+[15-10-25 00:21:15:747][ControlConnectionRegistry.java:61][INFO]Register control connection[qFbRBgg9] from /127.0.0.1:26539[kQk6BzsDrJV0UdWm]
+[15-10-25 00:21:15:752][ControlConnection.java:155][INFO]Client /127.0.0.1:26539[kQk6BzsDrJV0UdWm] is requesting tcp://jincheng.link:8000
+[15-10-25 00:21:15:753][PublicTunnelRegistry.java:67][INFO]Register public tunnel tcp://jincheng.link:8000 successfully
+[15-10-25 00:21:15:755][PublicTunnel.java:67][INFO]Bind public tunnel tcp://jincheng.link:8000 successfully
+[15-10-25 00:21:15:761][ControlConnection.java:155][INFO]Client /127.0.0.1:26539[kQk6BzsDrJV0UdWm] is requesting tcp://jincheng.link:8001
+[15-10-25 00:21:15:762][PublicTunnelRegistry.java:67][INFO]Register public tunnel tcp://jincheng.link:8001 successfully
+[15-10-25 00:21:15:762][PublicTunnel.java:67][INFO]Bind public tunnel tcp://jincheng.link:8001 successfully
+[15-10-25 00:21:45:213][PublicTunnel.java:132][DEBUG]New public Connection[sRXllCAX] from /127.0.0.1:26557
+[15-10-25 00:21:45:230][PublicTunnel.java:132][DEBUG]New public Connection[78uMTWF2] from /127.0.0.1:26558
+[15-10-25 00:21:45:231][PublicTunnel.java:132][DEBUG]New public Connection[yTk01PkW] from /127.0.0.1:26559
+[15-10-25 00:21:45:233][PublicTunnel.java:132][DEBUG]New public Connection[M3Xy8xSk] from /127.0.0.1:26560
+[15-10-25 00:21:45:233][PublicTunnel.java:132][DEBUG]New public Connection[KXjZOhOS] from /127.0.0.1:26561
+[15-10-25 00:21:45:234][PublicTunnel.java:132][DEBUG]New public Connection[TE8NF2XV] from /127.0.0.1:26562
+[15-10-25 00:21:45:243][Controller.java:123][DEBUG]New connection[zFn01f6L] from /127.0.0.1:26563
+[15-10-25 00:21:45:244][Utils.java:68][DEBUG]New proxy connection[t9ObVEMB] to: /127.0.0.1:12345
+[15-10-25 00:21:45:246][Controller.java:123][DEBUG]New connection[co5yjfCl] from /127.0.0.1:26564
+[15-10-25 00:21:45:246][Utils.java:68][DEBUG]New proxy connection[38mXhnVA] to: /127.0.0.1:12345
+[15-10-25 00:21:45:254][Controller.java:123][DEBUG]New connection[6UhHgdwp] from /127.0.0.1:26565
+[15-10-25 00:21:45:255][Utils.java:68][DEBUG]New proxy connection[XQu1NArO] to: /127.0.0.1:12345
+[15-10-25 00:21:45:255][ControllerHandler.java:237][DEBUG]Registering new proxy connection[co5yjfCl] for /127.0.0.1:26564[kQk6BzsDrJV0UdWm]
+[15-10-25 00:21:45:257][Utils.java:68][DEBUG]New proxy connection[slvBBaX1] to: /127.0.0.1:12345
+[15-10-25 00:21:45:262][Utils.java:68][DEBUG]New proxy connection[jCUlrfjE] to: /127.0.0.1:12345
+[15-10-25 00:21:45:265][Utils.java:68][DEBUG]New proxy connection[5G4NzVAK] to: /127.0.0.1:12345
+[15-10-25 00:21:45:273][ControllerHandler.java:237][DEBUG]Registering new proxy connection[6UhHgdwp] for /127.0.0.1:26565[kQk6BzsDrJV0UdWm]
+[15-10-25 00:21:45:275][Controller.java:123][DEBUG]New connection[acd6xHMn] from /127.0.0.1:26566
+[15-10-25 00:21:45:276][Controller.java:123][DEBUG]New connection[QVWDI1Bc] from /127.0.0.1:26567
+[15-10-25 00:21:45:278][Controller.java:123][DEBUG]New connection[hL3jkh7U] from /127.0.0.1:26568
+[15-10-25 00:21:45:280][ControllerHandler.java:237][DEBUG]Registering new proxy connection[zFn01f6L] for /127.0.0.1:26563[kQk6BzsDrJV0UdWm]
+[15-10-25 00:21:45:309][ControllerHandler.java:237][DEBUG]Registering new proxy connection[acd6xHMn] for /127.0.0.1:26566[kQk6BzsDrJV0UdWm]
+[15-10-25 00:21:45:315][ControllerHandler.java:237][DEBUG]Registering new proxy connection[QVWDI1Bc] for /127.0.0.1:26567[kQk6BzsDrJV0UdWm]
+[15-10-25 00:21:45:318][ControllerHandler.java:237][DEBUG]Registering new proxy connection[hL3jkh7U] for /127.0.0.1:26568[kQk6BzsDrJV0UdWm]
+[15-10-25 00:21:45:326][Utils.java:68][DEBUG]New private connection[dXTO2Q3z] to: /127.0.0.1:8080
+[15-10-25 00:21:45:331][Utils.java:68][DEBUG]New private connection[Tuvn9PX3] to: /127.0.0.1:8080
+[15-10-25 00:21:45:351][Utils.java:68][DEBUG]New private connection[6DGzl6FD] to: /127.0.0.1:8080
+[15-10-25 00:21:45:353][Utils.java:68][DEBUG]New private connection[dtock31a] to: /127.0.0.1:8080
+[15-10-25 00:21:45:374][Utils.java:68][DEBUG]New private connection[ykxnwKwI] to: /127.0.0.1:8080
+[15-10-25 00:21:45:375][Utils.java:68][DEBUG]New private connection[GQQWk45n] to: /127.0.0.1:8080
+[15-10-25 00:25:23:833][Utils.java:68][DEBUG]New control connection[uBD8u2LY] to: /127.0.0.1:12345
+[15-10-25 00:25:23:835][Controller.java:123][DEBUG]New connection[FB4n4wPW] from /127.0.0.1:26776
+[15-10-25 00:25:23:850][ControllerHandler.java:208][INFO]Success to auth hello[/127.0.0.1:26776][kQk6BzsDrJV0UdWm]
+[15-10-25 00:25:23:854][Controller.java:195][INFO]Authenticated with server[127.0.0.1], client id: kQk6BzsDrJV0UdWm
+[15-10-25 00:25:23:859][ControlConnectionRegistry.java:61][INFO]Register control connection[FB4n4wPW] from /127.0.0.1:26776[kQk6BzsDrJV0UdWm]
+[15-10-25 00:25:23:864][ControlConnection.java:155][INFO]Client /127.0.0.1:26776[kQk6BzsDrJV0UdWm] is requesting tcp://jincheng.link:8000
+[15-10-25 00:25:23:866][PublicTunnelRegistry.java:67][INFO]Register public tunnel tcp://jincheng.link:8000 successfully
+[15-10-25 00:25:23:868][PublicTunnel.java:67][INFO]Bind public tunnel tcp://jincheng.link:8000 successfully
+[15-10-25 00:25:23:874][ControlConnection.java:155][INFO]Client /127.0.0.1:26776[kQk6BzsDrJV0UdWm] is requesting tcp://jincheng.link:8001
+[15-10-25 00:25:23:874][PublicTunnelRegistry.java:67][INFO]Register public tunnel tcp://jincheng.link:8001 successfully
+[15-10-25 00:25:23:875][PublicTunnel.java:67][INFO]Bind public tunnel tcp://jincheng.link:8001 successfully
+[15-10-25 00:25:32:351][PublicTunnel.java:132][DEBUG]New public Connection[NRigg4Lx] from /127.0.0.1:26777
+[15-10-25 00:25:32:354][PublicTunnel.java:132][DEBUG]New public Connection[1kq5HQ0B] from /127.0.0.1:26778
+[15-10-25 00:25:32:355][PublicTunnel.java:132][DEBUG]New public Connection[Sij9KeK6] from /127.0.0.1:26779
+[15-10-25 00:25:32:356][PublicTunnel.java:132][DEBUG]New public Connection[Yi28GoRe] from /127.0.0.1:26780
+[15-10-25 00:25:32:358][PublicTunnel.java:132][DEBUG]New public Connection[scSELP4l] from /127.0.0.1:26781
+[15-10-25 00:25:32:360][PublicTunnel.java:132][DEBUG]New public Connection[pZMNbibL] from /127.0.0.1:26782
+[15-10-25 00:25:32:368][Controller.java:123][DEBUG]New connection[fbLQtek2] from /127.0.0.1:26783
+[15-10-25 00:25:32:370][Utils.java:68][DEBUG]New proxy connection[QgSzQWei] to: /127.0.0.1:12345
+[15-10-25 00:25:32:375][Utils.java:68][DEBUG]New proxy connection[V1c0XURI] to: /127.0.0.1:12345
+[15-10-25 00:25:32:375][Controller.java:123][DEBUG]New connection[YpD33GkT] from /127.0.0.1:26784
+[15-10-25 00:25:32:378][ControllerHandler.java:237][DEBUG]Registering new proxy connection[fbLQtek2] for /127.0.0.1:26783[kQk6BzsDrJV0UdWm]
+[15-10-25 00:25:32:381][Utils.java:68][DEBUG]New proxy connection[tuQNc4Qt] to: /127.0.0.1:12345
+[15-10-25 00:25:32:381][Utils.java:68][DEBUG]New proxy connection[GF5MlLe5] to: /127.0.0.1:12345
+[15-10-25 00:25:32:382][Controller.java:123][DEBUG]New connection[ntOrD8Pa] from /127.0.0.1:26785
+[15-10-25 00:25:32:382][ControllerHandler.java:237][DEBUG]Registering new proxy connection[YpD33GkT] for /127.0.0.1:26784[kQk6BzsDrJV0UdWm]
+[15-10-25 00:25:32:381][Utils.java:68][DEBUG]New proxy connection[ybdEm6LT] to: /127.0.0.1:12345
+[15-10-25 00:25:32:384][Controller.java:123][DEBUG]New connection[TrWNHXXv] from /127.0.0.1:26786
+[15-10-25 00:25:32:386][ControllerHandler.java:237][DEBUG]Registering new proxy connection[TrWNHXXv] for /127.0.0.1:26786[kQk6BzsDrJV0UdWm]
+[15-10-25 00:25:32:386][ControllerHandler.java:237][DEBUG]Registering new proxy connection[ntOrD8Pa] for /127.0.0.1:26785[kQk6BzsDrJV0UdWm]
+[15-10-25 00:25:32:389][Utils.java:68][DEBUG]New proxy connection[C15Rh8AQ] to: /127.0.0.1:12345
+[15-10-25 00:25:32:394][Utils.java:68][DEBUG]New private connection[PgzK2VbF] to: /127.0.0.1:8080
+[15-10-25 00:25:32:388][Controller.java:123][DEBUG]New connection[0ai3gFaM] from /127.0.0.1:26787
+[15-10-25 00:25:32:399][Controller.java:123][DEBUG]New connection[xbZ9js0o] from /127.0.0.1:26788
+[15-10-25 00:25:32:400][ControllerHandler.java:237][DEBUG]Registering new proxy connection[0ai3gFaM] for /127.0.0.1:26787[kQk6BzsDrJV0UdWm]
+[15-10-25 00:25:32:408][Utils.java:68][DEBUG]New private connection[u8THvqG9] to: /127.0.0.1:8080
+[15-10-25 00:25:32:413][ControllerHandler.java:237][DEBUG]Registering new proxy connection[xbZ9js0o] for /127.0.0.1:26788[kQk6BzsDrJV0UdWm]
+[15-10-25 00:25:32:416][Utils.java:68][DEBUG]New private connection[EbD0DpOB] to: /127.0.0.1:8080
+[15-10-25 00:25:32:425][Utils.java:68][DEBUG]New private connection[A81tyzft] to: /127.0.0.1:8080
+[15-10-25 00:25:32:425][Utils.java:68][DEBUG]New private connection[E7Dg08AO] to: /127.0.0.1:8080
+[15-10-25 00:25:32:429][Utils.java:68][DEBUG]New private connection[BL70pQME] to: /127.0.0.1:8080
+[15-10-25 00:27:59:404][PublicTunnel.java:132][DEBUG]New public Connection[K6T8k5Og] from /127.0.0.1:26858
+[15-10-25 00:27:59:405][PublicTunnel.java:132][DEBUG]New public Connection[GYV8Dity] from /127.0.0.1:26859
+[15-10-25 00:27:59:406][PublicTunnel.java:132][DEBUG]New public Connection[7i3jXhSa] from /127.0.0.1:26860
+[15-10-25 00:27:59:407][PublicTunnel.java:132][DEBUG]New public Connection[qBaOJn5V] from /127.0.0.1:26861
+[15-10-25 00:27:59:407][PublicTunnel.java:132][DEBUG]New public Connection[Nd29iths] from /127.0.0.1:26862
+[15-10-25 00:27:59:408][PublicTunnel.java:132][DEBUG]New public Connection[A0nGnOfz] from /127.0.0.1:26863
+[15-10-25 00:27:59:421][Utils.java:68][DEBUG]New proxy connection[YGdKxXYZ] to: /127.0.0.1:12345
+[15-10-25 00:27:59:421][Controller.java:123][DEBUG]New connection[cvHY8RiG] from /127.0.0.1:26864
+[15-10-25 00:27:59:421][Utils.java:68][DEBUG]New proxy connection[UM42PiCa] to: /127.0.0.1:12345
+[15-10-25 00:27:59:421][Utils.java:68][DEBUG]New proxy connection[J4t5Jg2Q] to: /127.0.0.1:12345
+[15-10-25 00:27:59:422][Controller.java:123][DEBUG]New connection[m99OiuvX] from /127.0.0.1:26865
+[15-10-25 00:27:59:422][Utils.java:68][DEBUG]New proxy connection[xseNePxf] to: /127.0.0.1:12345
+[15-10-25 00:27:59:422][Utils.java:68][DEBUG]New proxy connection[iXLgHJ7L] to: /127.0.0.1:12345
+[15-10-25 00:27:59:423][Controller.java:123][DEBUG]New connection[Bl6euHGs] from /127.0.0.1:26866
+[15-10-25 00:27:59:424][Controller.java:123][DEBUG]New connection[KqTPQuJp] from /127.0.0.1:26867
+[15-10-25 00:27:59:424][ControllerHandler.java:237][DEBUG]Registering new proxy connection[cvHY8RiG] for /127.0.0.1:26864[kQk6BzsDrJV0UdWm]
+[15-10-25 00:27:59:426][Utils.java:68][DEBUG]New proxy connection[QL9W1itB] to: /127.0.0.1:12345
+[15-10-25 00:27:59:424][Controller.java:123][DEBUG]New connection[ZN6eg35H] from /127.0.0.1:26868
+[15-10-25 00:27:59:427][ControllerHandler.java:237][DEBUG]Registering new proxy connection[m99OiuvX] for /127.0.0.1:26865[kQk6BzsDrJV0UdWm]
+[15-10-25 00:27:59:428][Controller.java:123][DEBUG]New connection[bn9dCfM8] from /127.0.0.1:26869
+[15-10-25 00:27:59:428][ControllerHandler.java:237][DEBUG]Registering new proxy connection[KqTPQuJp] for /127.0.0.1:26867[kQk6BzsDrJV0UdWm]
+[15-10-25 00:27:59:428][ControllerHandler.java:237][DEBUG]Registering new proxy connection[Bl6euHGs] for /127.0.0.1:26866[kQk6BzsDrJV0UdWm]
+[15-10-25 00:27:59:436][Utils.java:68][DEBUG]New private connection[BzUj0GUh] to: /127.0.0.1:8080
+[15-10-25 00:27:59:438][Utils.java:68][DEBUG]New private connection[8iq8mn41] to: /127.0.0.1:8080
+[15-10-25 00:27:59:436][ControllerHandler.java:237][DEBUG]Registering new proxy connection[ZN6eg35H] for /127.0.0.1:26868[kQk6BzsDrJV0UdWm]
+[15-10-25 00:27:59:435][ControllerHandler.java:237][DEBUG]Registering new proxy connection[bn9dCfM8] for /127.0.0.1:26869[kQk6BzsDrJV0UdWm]
+[15-10-25 00:27:59:443][Utils.java:68][DEBUG]New private connection[dFA9G0hO] to: /127.0.0.1:8080
+[15-10-25 00:27:59:446][Utils.java:68][DEBUG]New private connection[otMBm8CC] to: /127.0.0.1:8080
+[15-10-25 00:27:59:447][Utils.java:68][DEBUG]New private connection[SQ33YxA6] to: /127.0.0.1:8080
+[15-10-25 00:27:59:454][Utils.java:68][DEBUG]New private connection[TTZPn1No] to: /127.0.0.1:8080
+[15-10-25 00:29:06:688][PublicTunnel.java:132][DEBUG]New public Connection[1AMPqOr1] from /127.0.0.1:26903
+[15-10-25 00:29:06:689][PublicTunnel.java:132][DEBUG]New public Connection[AoJXE5Vk] from /127.0.0.1:26904
+[15-10-25 00:29:06:689][PublicTunnel.java:132][DEBUG]New public Connection[a2tGmgQ1] from /127.0.0.1:26905
+[15-10-25 00:29:06:690][PublicTunnel.java:132][DEBUG]New public Connection[8nEbHuIh] from /127.0.0.1:26906
+[15-10-25 00:29:06:690][PublicTunnel.java:132][DEBUG]New public Connection[7cfzYOhy] from /127.0.0.1:26907
+[15-10-25 00:29:06:691][PublicTunnel.java:132][DEBUG]New public Connection[ZOaiVyZh] from /127.0.0.1:26908
+[15-10-25 00:29:06:695][Utils.java:68][DEBUG]New proxy connection[TzWxWmbP] to: /127.0.0.1:12345
+[15-10-25 00:29:06:696][Controller.java:123][DEBUG]New connection[PMB0O85B] from /127.0.0.1:26909
+[15-10-25 00:29:06:700][ControllerHandler.java:237][DEBUG]Registering new proxy connection[PMB0O85B] for /127.0.0.1:26909[kQk6BzsDrJV0UdWm]
+[15-10-25 00:29:06:701][Controller.java:123][DEBUG]New connection[H4aobLZr] from /127.0.0.1:26910
+[15-10-25 00:29:06:700][Utils.java:68][DEBUG]New proxy connection[49osjNRA] to: /127.0.0.1:12345
+[15-10-25 00:29:06:701][Controller.java:123][DEBUG]New connection[dDEKZgT9] from /127.0.0.1:26911
+[15-10-25 00:29:06:701][Utils.java:68][DEBUG]New proxy connection[zb8TEUmu] to: /127.0.0.1:12345
+[15-10-25 00:29:06:703][Utils.java:68][DEBUG]New proxy connection[n3n858cN] to: /127.0.0.1:12345
+[15-10-25 00:29:06:703][Utils.java:68][DEBUG]New proxy connection[HWGnp9FA] to: /127.0.0.1:12345
+[15-10-25 00:29:06:705][Utils.java:68][DEBUG]New proxy connection[EpeNvSHQ] to: /127.0.0.1:12345
+[15-10-25 00:29:06:708][Controller.java:123][DEBUG]New connection[S66KtQ3H] from /127.0.0.1:26912
+[15-10-25 00:29:06:708][ControllerHandler.java:237][DEBUG]Registering new proxy connection[dDEKZgT9] for /127.0.0.1:26911[kQk6BzsDrJV0UdWm]
+[15-10-25 00:29:06:709][ControllerHandler.java:237][DEBUG]Registering new proxy connection[S66KtQ3H] for /127.0.0.1:26912[kQk6BzsDrJV0UdWm]
+[15-10-25 00:29:06:709][Controller.java:123][DEBUG]New connection[9DT5YLrZ] from /127.0.0.1:26913
+[15-10-25 00:29:06:709][ControllerHandler.java:237][DEBUG]Registering new proxy connection[H4aobLZr] for /127.0.0.1:26910[kQk6BzsDrJV0UdWm]
+[15-10-25 00:29:06:712][Controller.java:123][DEBUG]New connection[leUO7Ghm] from /127.0.0.1:26914
+[15-10-25 00:29:06:714][Utils.java:68][DEBUG]New private connection[oiw3IoiL] to: /127.0.0.1:8080
+[15-10-25 00:29:06:716][ControllerHandler.java:237][DEBUG]Registering new proxy connection[9DT5YLrZ] for /127.0.0.1:26913[kQk6BzsDrJV0UdWm]
+[15-10-25 00:29:06:820][ControllerHandler.java:237][DEBUG]Registering new proxy connection[leUO7Ghm] for /127.0.0.1:26914[kQk6BzsDrJV0UdWm]
+[15-10-25 00:29:06:822][Utils.java:68][DEBUG]New private connection[R8IGM2In] to: /127.0.0.1:8080
+[15-10-25 00:29:06:822][Utils.java:68][DEBUG]New private connection[dIFQ7vcx] to: /127.0.0.1:8080
+[15-10-25 00:29:06:822][Utils.java:68][DEBUG]New private connection[70HVmT46] to: /127.0.0.1:8080
+[15-10-25 00:29:06:837][Utils.java:68][DEBUG]New private connection[D1I3YXWr] to: /127.0.0.1:8080
+[15-10-25 00:29:06:837][Utils.java:68][DEBUG]New private connection[tOOiahiy] to: /127.0.0.1:8080
+[15-10-25 00:29:27:441][ControlConnection.java:118][INFO]Control connection from /127.0.0.1:26776[kQk6BzsDrJV0UdWm] is closed
+[15-10-25 00:30:14:005][Utils.java:68][DEBUG]New control connection[5gSDOLi0] to: /127.0.0.1:12345
+[15-10-25 00:30:14:006][Controller.java:123][DEBUG]New connection[b1U9rEMR] from /127.0.0.1:26956
+[15-10-25 00:30:14:038][ControllerHandler.java:208][INFO]Success to auth hello[/127.0.0.1:26956][g6KIDEmTe9uYRTFD]
+[15-10-25 00:30:14:046][Controller.java:195][INFO]Authenticated with server[127.0.0.1], client id: g6KIDEmTe9uYRTFD
+[15-10-25 00:30:14:049][ControlConnectionRegistry.java:61][INFO]Register control connection[b1U9rEMR] from /127.0.0.1:26956[g6KIDEmTe9uYRTFD]
+[15-10-25 00:30:14:054][ControlConnection.java:155][INFO]Client /127.0.0.1:26956[g6KIDEmTe9uYRTFD] is requesting tcp://jincheng.link:8000
+[15-10-25 00:30:14:056][PublicTunnelRegistry.java:67][INFO]Register public tunnel tcp://jincheng.link:8000 successfully
+[15-10-25 00:30:14:058][PublicTunnel.java:67][INFO]Bind public tunnel tcp://jincheng.link:8000 successfully
+[15-10-25 00:30:14:068][ControlConnection.java:155][INFO]Client /127.0.0.1:26956[g6KIDEmTe9uYRTFD] is requesting tcp://jincheng.link:8001
+[15-10-25 00:30:14:068][PublicTunnelRegistry.java:67][INFO]Register public tunnel tcp://jincheng.link:8001 successfully
+[15-10-25 00:30:14:069][PublicTunnel.java:67][INFO]Bind public tunnel tcp://jincheng.link:8001 successfully
+[15-10-25 00:30:19:320][PublicTunnel.java:132][DEBUG]New public Connection[lfum2Ctf] from /127.0.0.1:26957
+[15-10-25 00:30:19:325][PublicTunnel.java:132][DEBUG]New public Connection[9Dxm5nfG] from /127.0.0.1:26958
+[15-10-25 00:30:19:326][PublicTunnel.java:132][DEBUG]New public Connection[BwZiM1mR] from /127.0.0.1:26959
+[15-10-25 00:30:19:327][PublicTunnel.java:132][DEBUG]New public Connection[7riy8rKl] from /127.0.0.1:26960
+[15-10-25 00:30:19:333][PublicTunnel.java:132][DEBUG]New public Connection[6xGI2vxz] from /127.0.0.1:26961
+[15-10-25 00:30:19:335][PublicTunnel.java:132][DEBUG]New public Connection[J4PCpODo] from /127.0.0.1:26962
+[15-10-25 00:30:19:340][Controller.java:123][DEBUG]New connection[9mhR90TC] from /127.0.0.1:26963
+[15-10-25 00:30:19:340][Utils.java:68][DEBUG]New proxy connection[i9plkvSW] to: /127.0.0.1:12345
+[15-10-25 00:30:19:340][Utils.java:68][DEBUG]New proxy connection[eC59ovvx] to: /127.0.0.1:12345
+[15-10-25 00:30:19:341][Controller.java:123][DEBUG]New connection[hFdlkL0l] from /127.0.0.1:26964
+[15-10-25 00:30:19:344][Utils.java:68][DEBUG]New proxy connection[LMTMRAkQ] to: /127.0.0.1:12345
+[15-10-25 00:30:19:345][Controller.java:123][DEBUG]New connection[kT9aVOSS] from /127.0.0.1:26965
+[15-10-25 00:30:19:346][Utils.java:68][DEBUG]New proxy connection[l6rlhage] to: /127.0.0.1:12345
+[15-10-25 00:30:19:347][Controller.java:123][DEBUG]New connection[nBULuwwW] from /127.0.0.1:26966
+[15-10-25 00:30:19:348][Utils.java:68][DEBUG]New proxy connection[O0EA1CBn] to: /127.0.0.1:12345
+[15-10-25 00:30:19:348][Controller.java:123][DEBUG]New connection[Gv43RDSm] from /127.0.0.1:26967
+[15-10-25 00:30:19:351][Utils.java:68][DEBUG]New proxy connection[ouaeLCor] to: /127.0.0.1:12345
+[15-10-25 00:30:19:350][Controller.java:123][DEBUG]New connection[E6pJdT52] from /127.0.0.1:26968
+[15-10-25 00:30:19:352][ControllerHandler.java:237][DEBUG]Registering new proxy connection[kT9aVOSS] for /127.0.0.1:26965[g6KIDEmTe9uYRTFD]
+[15-10-25 00:30:19:355][ControllerHandler.java:237][DEBUG]Registering new proxy connection[nBULuwwW] for /127.0.0.1:26966[g6KIDEmTe9uYRTFD]
+[15-10-25 00:30:19:356][ControllerHandler.java:237][DEBUG]Registering new proxy connection[hFdlkL0l] for /127.0.0.1:26964[g6KIDEmTe9uYRTFD]
+[15-10-25 00:30:19:355][ControllerHandler.java:237][DEBUG]Registering new proxy connection[9mhR90TC] for /127.0.0.1:26963[g6KIDEmTe9uYRTFD]
+[15-10-25 00:30:19:358][ControllerHandler.java:237][DEBUG]Registering new proxy connection[Gv43RDSm] for /127.0.0.1:26967[g6KIDEmTe9uYRTFD]
+[15-10-25 00:30:19:359][ControllerHandler.java:237][DEBUG]Registering new proxy connection[E6pJdT52] for /127.0.0.1:26968[g6KIDEmTe9uYRTFD]
+[15-10-25 00:30:19:366][Utils.java:68][DEBUG]New private connection[FHLMRAhq] to: /127.0.0.1:8080
+[15-10-25 00:30:19:376][Utils.java:68][DEBUG]New private connection[3mJlnInf] to: /127.0.0.1:8080
+[15-10-25 00:30:19:389][Utils.java:68][DEBUG]New private connection[hyq0Ypxz] to: /127.0.0.1:8080
+[15-10-25 00:30:19:380][Utils.java:68][DEBUG]New private connection[H6atXBjD] to: /127.0.0.1:8080
+[15-10-25 00:30:19:394][Utils.java:68][DEBUG]New private connection[jfcT0yqX] to: /127.0.0.1:8080
+[15-10-25 00:30:19:398][Utils.java:68][DEBUG]New private connection[fhy1v7zd] to: /127.0.0.1:8080
+[15-10-25 00:31:07:600][ControlConnection.java:118][INFO]Control connection from /127.0.0.1:26956[g6KIDEmTe9uYRTFD] is closed

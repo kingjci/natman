@@ -5,7 +5,7 @@ import jc.command.Command;
 import jc.command.QuitCommand;
 import jc.server.core.ControlConnection.ControlConnectionRegistry;
 import jc.server.core.Controller.Controller;
-import jc.server.core.PublicTunnel.PublicTunnelRegistry;
+import jc.server.core.PublicTunnel.TCP.PublicTCPTunnelRegistry;
 import org.apache.log4j.Logger;
 
 import java.util.concurrent.BlockingQueue;
@@ -18,7 +18,7 @@ public class Main {
     public static Random RANDOM;
     public static Logger RUNTIMELOGGER;
     public static Logger ACCESSLOGGER;
-    public static PublicTunnelRegistry PUBLICTUNNELREGISTRY;
+    public static PublicTCPTunnelRegistry PUBLICTUNNELREGISTRY;
     public static ControlConnectionRegistry CONTROLCONNECTIONREGISTRY;
     public static BlockingQueue<Command> COMMANDS;
     public static Thread CONTROLLER;
@@ -34,7 +34,7 @@ public class Main {
         CONFIG = new Config(args,RUNTIMELOGGER);
         COMMANDS = new LinkedBlockingQueue<>();
         CONTROLCONNECTIONREGISTRY = new ControlConnectionRegistry(RUNTIMELOGGER, ACCESSLOGGER);
-        PUBLICTUNNELREGISTRY = new PublicTunnelRegistry(RUNTIMELOGGER,ACCESSLOGGER,CONFIG);
+        PUBLICTUNNELREGISTRY = new PublicTCPTunnelRegistry(RUNTIMELOGGER,ACCESSLOGGER,CONFIG,RANDOM);
 
         CONTROLLER =  new Controller(
                 CONFIG.getControlPort(),

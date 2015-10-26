@@ -8,28 +8,38 @@ import org.apache.log4j.Logger;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import static jc.Utils.Go;
-import static jc.client.core.Config.LoadConfiguration;
-
-
 public class Main {
 
-    public final static Option OPTION = new Option();
-    public final static Random RANDOM = new Random();
-    public final static Config CONFIG = new Config();
-    public final static Logger RUNTIMELOGGER = Logger.getLogger("Runtime");
-    public final static Logger ACCESSLOGGER = Logger.getLogger("Access");
-    public final static BlockingQueue<Command> COMMANDS = new LinkedBlockingQueue<>();
-    public final static Controller CONTROLLER = new Controller(CONFIG, OPTION,RANDOM, COMMANDS,RUNTIMELOGGER, ACCESSLOGGER );
+    public static Option OPTION;
+    public static Random RANDOM;
+    public static Config CONFIG;
+    public static Logger RUNTIMELOGGER;
+    public static Logger ACCESSLOGGER;
+    public static BlockingQueue<Command> COMMANDS;
+    public static Thread CONTROLLER;
 
 
     public static void main(String[] args) {
 
         Runtime.getRuntime().addShutdownHook(new ExitHandler());
 
-        LoadConfiguration(args, CONFIG ,OPTION,RUNTIMELOGGER);
+        OPTION = new Option();
+        RANDOM = new Random();
+        RUNTIMELOGGER = Logger.getLogger("Runtime");
+        ACCESSLOGGER = Logger.getLogger("Access");
+        CONFIG = new Config(args, OPTION, RUNTIMELOGGER);
+        COMMANDS = new LinkedBlockingQueue<>();
 
-        Go(CONTROLLER);
+        CONTROLLER = new Controller(
+                CONFIG,
+                OPTION,
+                RANDOM,
+                COMMANDS,
+                RUNTIMELOGGER,
+                ACCESSLOGGER
+        );
+
+        CONTROLLER.start();
 
         while (true){
             try{

@@ -10,17 +10,17 @@ import jc.server.core.Config;
 import jc.server.core.ControlConnection.ControlConnection;
 import jc.server.core.ControlConnection.ControlConnectionRegistry;
 import jc.server.core.Option;
-import jc.server.core.PublicTunnel.PublicTunnelRegistry;
+import jc.server.core.PublicTunnel.TCP.PublicTCPTunnelRegistry;
 import jc.server.core.Users.Users;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
-public class ControllerHandler implements Runnable {
+public class ControllerHandler extends Thread {
 
     private final TCPConnection tcpConnection;
     private final ControlConnectionRegistry controlConnectionRegistry;
-    private final PublicTunnelRegistry publicTunnelRegistry;
+    private final PublicTCPTunnelRegistry publicTCPTunnelRegistry;
     private final Random random;
     private final Config config;
     private final Option option;
@@ -33,7 +33,7 @@ public class ControllerHandler implements Runnable {
     ) {
         this.tcpConnection = tcpConnection;
         this.controlConnectionRegistry = controller.getControlConnectionRegistry();
-        this.publicTunnelRegistry = controller.getPublicTunnelRegistry();
+        this.publicTCPTunnelRegistry = controller.getPublicTCPTunnelRegistry();
         this.random = controller.getRandom();
         this.config = controller.getConfig();
         this.option = controller.getOption();
@@ -47,8 +47,8 @@ public class ControllerHandler implements Runnable {
     public ControlConnectionRegistry getControlConnectionRegistry() {
         return controlConnectionRegistry;
     }
-    public PublicTunnelRegistry getPublicTunnelRegistry() {
-        return publicTunnelRegistry;
+    public PublicTCPTunnelRegistry getPublicTCPTunnelRegistry() {
+        return publicTCPTunnelRegistry;
     }
     public Random getRandom() {
         return random;

@@ -16,7 +16,7 @@ import java.util.concurrent.BlockingQueue;
 
 import static jc.Utils.*;
 
-public class Controller implements Runnable {
+public class Controller extends Thread {
 
     private String clientId;
     private Map<String, PrivateTunnel> privateTunnels;
@@ -300,7 +300,7 @@ public class Controller implements Runnable {
 
                 case "ProxyRequest":
 
-                    Go(new Proxy(this));
+                    (new Proxy(this)).start();
 
                     break;
 
